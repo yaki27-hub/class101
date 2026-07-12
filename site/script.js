@@ -6,7 +6,7 @@ const CONTACT_EMAIL = "yaki27@gmail.com";
 document.getElementById("contact-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const data = new FormData(e.target);
-  const subject = `[YAKI STUDIO 문의] ${data.get("type")} - ${data.get("name")}`;
+  const subject = `[CHICHIKA 문의] ${data.get("type")} - ${data.get("name")}`;
   const body = [
     `이름: ${data.get("name")}`,
     `이메일: ${data.get("email")}`,
