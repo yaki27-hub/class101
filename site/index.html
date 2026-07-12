@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YAKI STUDIO — 일상을 바꾸는 작은 앱</title>
+  <meta name="description" content="반려동물 양치 습관 앱 '건치왕 치치카'를 만든 1인 스튜디오. 앱 소개, 사용 방법, 문의를 한곳에서." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦷</text></svg>" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ───── 상단 내비게이션 ───── -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="#top" class="brand"><span class="brand-dot"></span>YAKI STUDIO</a>
+      <nav class="nav-links">
+        <a href="#apps">앱 소개</a>
+        <a href="#chichika">건치왕 치치카</a>
+        <a href="#howto">사용 방법</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact" class="nav-cta">문의하기</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴 열기" onclick="document.body.classList.toggle('menu-open')">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ───── 히어로 ───── -->
+  <section class="hero" id="top">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="hero-eyebrow">🐾 App Maker · Toss Mini App</p>
+        <h1>일상의 작은 습관을<br /><em>앱으로</em> 만듭니다</h1>
+        <p class="hero-sub">
+          안녕하세요! 반려동물과 사람의 하루를 조금 더 건강하게 만드는
+          앱을 기획하고 디자인하고 직접 만드는 1인 스튜디오입니다.
+          첫 번째 앱 <strong>건치왕 치치카</strong>를 소개합니다.
+        </p>
+        <div class="hero-actions">
+          <a href="#chichika" class="btn btn-primary">건치왕 치치카 보러가기</a>
+          <a href="#contact" class="btn btn-ghost">문의하기</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <img src="assets/chichika-icon.jpg" alt="건치왕 치치카 앱 화면" />
+        </div>
+        <span class="deco deco-hw">매일매일 양치!</span>
+        <span class="deco deco-heart">♥</span>
+        <span class="deco deco-star">✦</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── 만든 앱 목록 ───── -->
+  <section class="section" id="apps">
+    <div class="wrap">
+      <p class="eyebrow">My Apps</p>
+      <h2 class="sec-title">지금까지 만든 앱</h2>
+      <p class="sec-sub">하나씩, 꾸준히 늘려가는 중입니다.</p>
+
+      <div class="app-grid">
+        <a href="#chichika" class="app-card app-card-live">
+          <div class="app-thumb"><img src="assets/chichika-icon.jpg" alt="건치왕 치치카" /></div>
+          <div class="app-info">
+            <span class="badge badge-live">출시됨</span>
+            <h3>건치왕 치치카</h3>
+            <p>반려동물 양치 습관 30일 챌린지 · 토스 미니앱</p>
+            <span class="app-meta">2026.06 출시 · Pet Care</span>
+          </div>
+        </a>
+        <div class="app-card app-card-soon">
+          <div class="app-soon-icon">🚧</div>
+          <div class="app-info">
+            <span class="badge badge-soon">준비 중</span>
+            <h3>다음 앱</h3>
+            <p>새로운 앱을 만들고 있어요. 곧 이곳에서 소개할게요!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── 건치왕 치치카 소개 ───── -->
+  <section class="section section-cream" id="chichika">
+    <div class="wrap">
+      <p class="eyebrow">Toss Mini App · Pet Care</p>
+      <h2 class="sec-title">건치왕 치치카 🦷</h2>
+      <p class="sec-sub">반려동물 양치 습관 30일 챌린지 미니 서비스</p>
+
+      <div class="chichi-intro">
+        <div class="chichi-desc">
+          <p>
+            <strong>건치왕 치치카</strong>는 반려동물의 양치 습관을
+            <strong>30일 챌린지</strong>로 만들어 주는 토스 인앱 미니 서비스입니다.
+            매일 체크인과 데일리 케어 팁 카드로 꾸준히 돌아오고 싶게 설계했고,
+            토스 로그인으로 가입 없이 바로 시작할 수 있습니다.
+          </p>
+          <dl class="meta">
+            <div><dt>출시</dt><dd>2026년 6월</dd></div>
+            <div><dt>플랫폼</dt><dd>토스 미니앱 (인앱)</dd></div>
+            <div><dt>카테고리</dt><dd>펫 케어 · 습관 형성</dd></div>
+            <div><dt>바로가기</dt><dd><a class="link" href="https://chikachew.vercel.app" target="_blank" rel="noopener">chikachew.vercel.app ↗</a></dd></div>
+          </dl>
+        </div>
+
+        <div class="feat-grid">
+          <div class="feat-card">
+            <img src="assets/ico-alarm.png" alt="" />
+            <h4>매일 알림</h4>
+            <p>지정한 시간에 양치 리마인더를 보내 잊지 않게 해요.</p>
+          </div>
+          <div class="feat-card">
+            <img src="assets/ico-camera.png" alt="" />
+            <h4>사진 기록</h4>
+            <p>오늘의 양치를 캘린더에 도장처럼 사진으로 남겨요.</p>
+          </div>
+          <div class="feat-card">
+            <img src="assets/ico-coin.png" alt="" />
+            <h4>포인트 보상</h4>
+            <p>7·15·30일 마일스톤마다 토스 포인트를 지급해요.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── 사용 방법 ───── -->
+  <section class="section" id="howto">
+    <div class="wrap">
+      <p class="eyebrow">How to Use</p>
+      <h2 class="sec-title">사용 방법</h2>
+      <p class="sec-sub">30일이면 습관이 됩니다. 시작은 1분이면 충분해요.</p>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num">1</span>
+          <div>
+            <h4>치치카 시작하기</h4>
+            <p>토스 앱에서 <strong>“건치왕 치치카”</strong>를 검색하거나
+            <a class="link" href="https://chikachew.vercel.app" target="_blank" rel="noopener">chikachew.vercel.app</a>에 접속하세요.
+            토스 로그인으로 별도 가입 없이 바로 시작됩니다.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num">2</span>
+          <div>
+            <h4>반려동물 등록 &amp; 알림 설정</h4>
+            <p>우리 아이 이름을 등록하고, 매일 양치할 시간을 정해 리마인더 알림을 켜 주세요.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num">3</span>
+          <div>
+            <h4>매일 양치하고 사진 체크인</h4>
+            <p>양치를 마치면 <strong>‘오늘 양치하기’</strong>에서 사진을 찍어 체크인!
+            캘린더에 도장처럼 기록이 쌓여요.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num">4</span>
+          <div>
+            <h4>포인트 받고, 놓친 날엔 친구 찬스</h4>
+            <p><strong>7일 · 15일 · 30일</strong> 마일스톤마다 토스 포인트를 드려요.
+            하루를 놓쳤다면 친구에게 공유해서 챌린지를 되살릴 수 있어요.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="gallery">
+        <figure>
+          <div class="shot"><img src="assets/chichika-today.png" alt="오늘 양치하기 화면" loading="lazy" /></div>
+          <figcaption>오늘 양치하기</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="assets/chichika-calendar.png" alt="캘린더 기록 화면" loading="lazy" /></div>
+          <figcaption>캘린더 기록</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="assets/chichika-share.png" alt="친구 공유 화면" loading="lazy" /></div>
+          <figcaption>친구 공유로 살리기</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── FAQ ───── -->
+  <section class="section section-cream" id="faq">
+    <div class="wrap wrap-narrow">
+      <p class="eyebrow">FAQ</p>
+      <h2 class="sec-title">자주 묻는 질문</h2>
+
+      <details class="faq">
+        <summary>치치카는 무료인가요?</summary>
+        <p>네, 무료로 사용할 수 있어요. 오히려 챌린지를 완주하면 토스 포인트를 받아요.</p>
+      </details>
+      <details class="faq">
+        <summary>어디서 실행하나요? 앱을 따로 설치해야 하나요?</summary>
+        <p>별도 설치가 필요 없어요. 토스 앱 안에서 실행되는 미니앱이라 토스에서 검색하거나 링크로 바로 접속하면 됩니다.</p>
+      </details>
+      <details class="faq">
+        <summary>하루 체크인을 놓치면 챌린지가 끝나나요?</summary>
+        <p>바로 끝나지 않아요! 친구에게 공유하면 챌린지를 되살릴 수 있는 ‘친구 찬스’가 준비되어 있어요.</p>
+      </details>
+      <details class="faq">
+        <summary>포인트는 언제 받을 수 있나요?</summary>
+        <p>챌린지 7일, 15일, 30일 마일스톤을 달성할 때마다 토스 포인트가 지급됩니다.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ───── 문의 ───── -->
+  <section class="section" id="contact">
+    <div class="wrap wrap-narrow">
+      <p class="eyebrow">Contact</p>
+      <h2 class="sec-title">문의하기</h2>
+      <p class="sec-sub">
+        치치카 사용 중 불편한 점, 제휴·협업 제안, 새 앱 아이디어 — 무엇이든 편하게 남겨 주세요.
+      </p>
+
+      <!--
+        정적 사이트라 서버 없이 동작하도록 메일 앱으로 연결합니다.
+        폼 수신함(Formspree 등)으로 바꾸려면 script.js의 CONTACT_EMAIL /
+        form 처리 부분만 교체하면 됩니다.
+      -->
+      <form class="contact-form" id="contact-form">
+        <div class="form-row">
+          <label>이름
+            <input type="text" name="name" placeholder="홍길동" required />
+          </label>
+          <label>답장 받을 이메일
+            <input type="email" name="email" placeholder="you@example.com" required />
+          </label>
+        </div>
+        <label>문의 유형
+          <select name="type">
+            <option>앱 사용 문의</option>
+            <option>버그 제보</option>
+            <option>제휴 · 협업 제안</option>
+            <option>기타</option>
+          </select>
+        </label>
+        <label>문의 내용
+          <textarea name="message" rows="5" placeholder="문의하실 내용을 적어 주세요." required></textarea>
+        </label>
+        <button type="submit" class="btn btn-primary btn-wide">메일로 문의 보내기 ✉️</button>
+        <p class="form-note">버튼을 누르면 작성한 내용이 담긴 메일 창이 열립니다.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ───── 푸터 ───── -->
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="brand"><span class="brand-dot"></span>YAKI STUDIO</p>
+        <p class="footer-sub">일상의 작은 습관을 앱으로 만듭니다.</p>
+      </div>
+      <nav class="footer-links">
+        <a href="#apps">앱 소개</a>
+        <a href="#howto">사용 방법</a>
+        <a href="#contact">문의</a>
+        <a href="https://chikachew.vercel.app" target="_blank" rel="noopener">건치왕 치치카 ↗</a>
+      </nav>
+    </div>
+    <p class="copyright">© 2026 YAKI STUDIO. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
