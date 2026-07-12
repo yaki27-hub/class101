@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>프로젝트 인트로 · 통일 템플릿</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" />
+<style>
+@font-face{
+  font-family:"Gmarket Sans";
+  src:url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff") format("woff");
+  font-weight:700; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:"Gmarket Sans";
+  src:url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+  font-weight:500; font-style:normal; font-display:swap;
+}
+
+:root{
+  --brand:#3F5BE6;            /* 포트폴리오 공통 브랜드 블루 */
+  --ink:#16181D;
+  --ink-2:#5B616E;
+  --ink-3:#8A909C;
+
+  --type-title:68px;
+  --type-subtitle:29px;
+  --type-body:23px;
+  --type-meta:23px;
+  --type-label:15px;
+  --lh-body:1.62;
+
+  --pad-x:120px;
+  --pad-top:92px;
+  --pad-bottom:84px;
+
+  --font-head:"Gmarket Sans","Pretendard",sans-serif;
+  --font-body:"Pretendard",-apple-system,sans-serif;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#0b0c10;}
+deck-stage:not(:defined){visibility:hidden;}
+
+section{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:#fff;
+  overflow:hidden;
+}
+
+.slide{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:flex;
+}
+
+/* ── running header (공통 블루 시스템) ───────────────── */
+.rh{
+  position:absolute;
+  top:54px; left:var(--pad-x); right:var(--pad-x);
+  display:flex; align-items:center; justify-content:space-between;
+  z-index:5;
+}
+.rh-brand{
+  display:flex; align-items:center; gap:12px;
+  font-family:var(--font-head); font-weight:700;
+  font-size:16px; letter-spacing:.14em;
+  color:var(--brand);
+}
+.rh-brand .dot{ width:11px; height:11px; border-radius:50%; background:var(--brand); }
+.rh-idx{
+  font-family:var(--font-head); font-weight:500;
+  font-size:15px; letter-spacing:.16em; color:var(--ink-3);
+}
+.rh-idx b{ color:var(--brand); font-weight:700; }
+
+/* ── left content column ─────────────────────────────── */
+.left{
+  width:53%;
+  padding:var(--pad-top) 56px var(--pad-bottom) var(--pad-x);
+  display:flex; flex-direction:column;
+  justify-content:center;
+}
+.kicker{
+  font-family:var(--font-head); font-weight:500;
+  font-size:var(--type-label); letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--theme-ink);
+  margin:0 0 22px;
+}
+.title{
+  font-family:var(--font-head); font-weight:700;
+  font-size:var(--type-title); line-height:1.08;
+  letter-spacing:-.01em;
+  margin:0;
+  color:var(--ink);
+}
+.subtitle{
+  font-size:var(--type-subtitle); font-weight:500;
+  line-height:1.4; color:var(--ink-2);
+  margin:18px 0 0;
+  max-width:560px;
+}
+
+/* meta */
+.meta{
+  margin:46px 0 0;
+  display:flex; flex-direction:column; gap:0;
+  border-top:1px solid rgba(22,24,29,.10);
+}
+.meta .row{
+  display:flex; align-items:flex-start; gap:28px;
+  padding:18px 0;
+  border-bottom:1px solid rgba(22,24,29,.10);
+}
+.meta dt{
+  flex:0 0 96px;
+  font-family:var(--font-head); font-weight:500;
+  font-size:var(--type-label); letter-spacing:.08em;
+  color:var(--ink-3); padding-top:5px;
+}
+.meta dd{ margin:0; font-size:var(--type-meta); color:var(--ink); font-weight:500; }
+.chips{ display:flex; flex-wrap:wrap; gap:10px; }
+.chip{
+  display:inline-flex; align-items:center;
+  height:38px; padding:0 18px;
+  border-radius:999px;
+  background:var(--theme-tint-2);
+  color:var(--theme-ink);
+  font-size:18px; font-weight:600; letter-spacing:.01em;
+}
+
+.desc{
+  margin:34px 0 0;
+  font-size:var(--type-body); line-height:var(--lh-body);
+  color:var(--ink-2);
+  max-width:580px;
+  text-wrap:pretty;
+}
+.url{
+  margin:26px 0 0;
+  display:inline-flex; align-items:center; gap:9px;
+  font-size:20px; font-weight:600;
+  color:var(--theme-ink);
+  text-decoration:none;
+}
+.url svg{ width:17px; height:17px; }
+.url .u{ border-bottom:2px solid color-mix(in srgb,var(--theme-ink) 35%,transparent); padding-bottom:2px; }
+
+/* ── right stage (themed) ────────────────────────────── */
+.right{
+  width:47%;
+  position:relative;
+  background:var(--theme-tint);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.right::before{   /* soft glow */
+  content:""; position:absolute;
+  width:680px; height:680px; border-radius:50%;
+  background:radial-gradient(circle, var(--theme-glow) 0%, transparent 68%);
+  filter:blur(8px);
+  opacity:.9;
+}
+.stage{ position:relative; z-index:2; display:flex; align-items:center; justify-content:center; }
+
+/* phone bezel */
+.phone{
+  width:362px; height:770px;
+  background:#0e0f12; border-radius:46px;
+  padding:13px;
+  box-shadow:0 40px 70px -28px rgba(20,24,40,.5), 0 0 0 1px rgba(0,0,0,.04);
+  position:relative;
+}
+.phone .screen{
+  width:100%; height:100%;
+  border-radius:34px; overflow:hidden; background:#fff;
+  position:relative;
+}
+.phone .screen img{ width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+.phone .notch{
+  position:absolute; top:14px; left:50%; transform:translateX(-50%);
+  width:120px; height:30px; background:#0e0f12; border-radius:0 0 16px 16px;
+  z-index:3;
+}
+
+/* browser window */
+.browser{
+  width:660px;
+  background:#fff; border-radius:18px; overflow:hidden;
+  box-shadow:0 44px 80px -34px rgba(20,24,40,.45), 0 0 0 1px rgba(0,0,0,.05);
+}
+.browser .bar{
+  height:50px; background:#f4f5f7; display:flex; align-items:center; gap:9px; padding:0 18px;
+  border-bottom:1px solid rgba(0,0,0,.05);
+}
+.browser .bar i{ width:13px; height:13px; border-radius:50%; background:#dcdee3; }
+.browser .bar .addr{
+  margin-left:14px; height:28px; flex:1; border-radius:8px; background:#fff;
+  border:1px solid rgba(0,0,0,.06);
+  display:flex; align-items:center; padding:0 14px;
+  font-size:14px; color:var(--ink-3);
+}
+.browser .view{ height:520px; overflow:hidden; }
+.browser .view img{ width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+
+/* free device image (iPad composite, transparent png) */
+.device-img{ filter:drop-shadow(0 38px 50px rgba(20,24,40,.28)); display:block; }
+
+/* dual phones (transparent png with baked bezel) */
+.duo{ position:relative; width:620px; height:920px; }
+.duo img{ position:absolute; filter:drop-shadow(0 30px 46px rgba(20,24,40,.32)); }
+.duo .p1{ width:292px; left:14px; top:58px; transform:rotate(-7deg); }
+.duo .p2{ width:300px; right:8px; top:12px; transform:rotate(5deg); z-index:2; }
+
+/* entrance */
+@media (prefers-reduced-motion:no-preference){
+  [data-deck-active] .title,
+  [data-deck-active] .subtitle,
+  [data-deck-active] .meta,
+  [data-deck-active] .desc,
+  [data-deck-active] .url,
+  [data-deck-active] .kicker{ animation:rise .56s cubic-bezier(.22,.7,0,1) both; }
+  [data-deck-active] .kicker{ animation-delay:.02s; }
+  [data-deck-active] .title{ animation-delay:.06s; }
+  [data-deck-active] .subtitle{ animation-delay:.12s; }
+  [data-deck-active] .meta{ animation-delay:.18s; }
+  [data-deck-active] .desc{ animation-delay:.24s; }
+  [data-deck-active] .url{ animation-delay:.30s; }
+  [data-deck-active] .stage{ animation:pop .7s cubic-bezier(.22,.7,0,1) both; animation-delay:.1s; }
+}
+@keyframes rise{ from{transform:translateY(20px);} to{transform:none;} }
+@keyframes pop{ from{transform:translateY(26px) scale(.975);} to{transform:none;} }
+
+/* ── detail slides ─────────────────────────────────── */
+.detail{ position:relative; width:100%; height:100%; background:#fff;
+  padding:150px var(--pad-x) var(--pad-bottom); display:flex; flex-direction:column; }
+.sec-head{ flex:0 0 auto; }
+.eyebrow{ font-family:var(--font-head); font-weight:500; font-size:var(--type-label);
+  letter-spacing:.16em; text-transform:uppercase; color:var(--theme-ink); margin:0 0 14px; }
+.sec-title{ font-family:var(--font-head); font-weight:700; font-size:50px; line-height:1.1;
+  letter-spacing:-.01em; color:var(--ink); margin:0; }
+.sec-sub{ font-size:21px; color:var(--ink-2); margin:16px 0 0; max-width:960px; line-height:1.5; }
+
+.d-body{ flex:1; display:flex; gap:60px; margin-top:46px; min-height:0; align-items:center; }
+.d-col{ flex:1; min-width:0; }
+
+/* problem / AS-IS list */
+.prob{ display:flex; flex-direction:column; gap:30px; }
+.prob .item{ display:flex; gap:20px; }
+.prob .n{ flex:0 0 auto; width:42px; height:42px; border-radius:50%;
+  background:var(--theme-tint-2); color:var(--theme-ink); font-family:var(--font-head);
+  font-weight:700; font-size:18px; display:flex; align-items:center; justify-content:center; margin-top:2px; }
+.prob h4{ font-family:var(--font-head); font-weight:700; font-size:26px; margin:0 0 8px; color:var(--ink); }
+.prob p{ font-size:19px; line-height:1.55; color:var(--ink-2); margin:0; text-wrap:pretty; }
+
+/* screenshot frame */
+.shot{ border-radius:14px; overflow:hidden; background:#fff;
+  box-shadow:0 30px 60px -26px rgba(20,24,40,.42), 0 0 0 1px rgba(0,0,0,.05); }
+.shot .bar{ height:46px; background:#f4f5f7; display:flex; align-items:center; gap:8px; padding:0 16px; border-bottom:1px solid rgba(0,0,0,.05); }
+.shot .bar i{ width:12px; height:12px; border-radius:50%; background:#dcdee3; }
+.shot .bar .addr{ margin-left:12px; height:26px; flex:1; border-radius:7px; background:#fff; border:1px solid rgba(0,0,0,.06); display:flex; align-items:center; padding:0 12px; font-size:13px; color:var(--ink-3); }
+.shot .view{ overflow:hidden; }
+.shot .view img{ width:100%; display:block; object-fit:cover; object-position:top center; }
+
+/* solution / TO-BE grid */
+.sol{ flex:1; display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:46px; }
+.sol .card{ background:var(--theme-tint); border-radius:20px; padding:36px 40px; display:flex; flex-direction:column; justify-content:center; }
+.sol .card .n{ font-family:var(--font-head); font-weight:700; font-size:19px; color:var(--theme-ink); margin-bottom:12px; letter-spacing:.04em; }
+.sol .card h4{ font-family:var(--font-head); font-weight:700; font-size:30px; margin:0 0 12px; color:var(--ink); }
+.sol .card p{ font-size:20px; line-height:1.5; color:var(--ink-2); margin:0; text-wrap:pretty; }
+
+/* screens gallery */
+.gallery{ flex:1; display:flex; gap:38px; justify-content:center; align-items:center; margin-top:30px; }
+.gallery figure{ margin:0; display:flex; flex-direction:column; align-items:center; gap:18px; }
+.gallery .ph{ width:330px; height:646px; background:#0e0f12; border-radius:42px; padding:11px;
+  box-shadow:0 32px 56px -28px rgba(20,24,40,.42); }
+.gallery .ph .scr{ width:100%; height:100%; border-radius:31px; overflow:hidden; background:#fff; }
+.gallery .ph .scr img{ width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+.gallery figcaption{ font-size:18px; font-weight:600; color:var(--ink-2); letter-spacing:.01em; }
+
+/* overview work grid */
+.grid8{ flex:1; display:grid; grid-template-columns:1fr 1fr; gap:18px 32px; margin-top:40px; align-content:center; }
+.grid8 .it{ display:flex; gap:18px; align-items:flex-start; padding:22px 26px; background:var(--theme-tint); border-radius:16px; }
+.grid8 .it .dot{ flex:0 0 auto; width:10px; height:10px; border-radius:50%; background:var(--theme-ink); margin-top:11px; }
+.grid8 .it h4{ font-family:var(--font-head); font-weight:700; font-size:23px; margin:0 0 6px; color:var(--ink); }
+.grid8 .it p{ font-size:17px; line-height:1.5; color:var(--ink-2); margin:0; text-wrap:pretty; }
+
+/* wide landscape gallery */
+.gallery-wide{ flex:1; display:flex; gap:26px; justify-content:center; align-items:center; margin-top:34px; }
+.gallery-wide figure:not(.mob){ max-width:508px; }
+.gallery-wide figure{ margin:0; flex:1; min-width:0; display:flex; flex-direction:column; gap:16px; }
+.gallery-wide .shot .view img{ height:auto; }
+.gallery-wide figcaption{ font-size:17px; font-weight:600; color:var(--ink-2); text-align:center; }
+.gallery-wide .mob{ flex:0 0 238px; align-items:center; }
+.gallery-wide .mob .ph{ width:238px; height:496px; background:#e9ebee; border-radius:34px; padding:9px; box-shadow:0 28px 50px -26px rgba(20,24,40,.3), inset 0 0 0 1px rgba(0,0,0,.04); }
+.gallery-wide .mob .ph .scr{ width:100%; height:100%; border-radius:26px; overflow:hidden; background:#fff; }
+.gallery-wide .mob .ph .scr img{ width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+
+/* feature cards with 3D icon */
+.feat3{ flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:30px; margin-top:40px; align-content:center; }
+.feat3 .card{ background:var(--theme-tint); border-radius:24px; padding:48px 42px; display:flex; flex-direction:column; align-items:flex-start; }
+.feat3 .card img{ width:108px; height:108px; object-fit:contain; margin-bottom:30px; filter:drop-shadow(0 16px 22px rgba(20,24,40,.14)); }
+.feat3 .card h4{ font-family:var(--font-head); font-weight:700; font-size:29px; margin:0 0 13px; color:var(--ink); }
+.feat3 .card p{ font-size:20px; line-height:1.5; color:var(--ink-2); margin:0; text-wrap:pretty; }
+
+/* SWOT quadrants */
+.swot{ flex:1; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:24px; margin-top:38px; }
+.swot .q{ border-radius:18px; padding:30px 36px; display:flex; flex-direction:column; justify-content:center; }
+.swot .q.pos{ background:var(--theme-tint); }
+.swot .q.neg{ background:#F2F4F6; }
+.swot .q .en{ font-family:var(--font-head); font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--theme-ink); font-weight:600; margin-bottom:6px; }
+.swot .q h4{ font-family:var(--font-head); font-weight:700; font-size:26px; margin:0 0 16px; color:var(--ink); }
+.swot .q ul{ margin:0; padding:0; list-style:none; display:flex; flex-wrap:wrap; gap:9px 10px; align-content:flex-start; }
+.swot .q li{ font-size:17px; color:var(--ink-2); background:rgba(0,0,0,.045); padding:7px 15px; border-radius:999px; }
+
+/* design system: colors + type */
+.dsys{ flex:1; display:flex; gap:54px; margin-top:42px; }
+.dsys .half{ flex:1; min-width:0; display:flex; flex-direction:column; }
+.dsys .lab{ font-family:var(--font-head); font-weight:700; font-size:22px; margin:0 0 18px; color:var(--ink); }
+.colstack{ flex:1; display:flex; flex-direction:column; gap:14px; }
+.sw{ border-radius:16px; padding:22px 24px; display:flex; flex-direction:column; justify-content:flex-end; color:#fff; }
+.sw .nm{ font-weight:700; font-size:19px; }
+.sw .hex{ font-size:14px; opacity:.85; margin-top:5px; letter-spacing:.04em; }
+.sw.primary{ flex:1.4; }
+.secs{ flex:1; display:flex; gap:14px; }
+.secs .sw{ flex:1; }
+.typeblk{ background:var(--theme-tint); border-radius:16px; padding:26px 30px; margin-bottom:16px; }
+.typeblk:last-child{ margin-bottom:0; }
+.typeblk .fam{ font-family:var(--font-head); font-weight:700; font-size:30px; color:var(--theme-ink); }
+.typeblk .use{ font-size:16px; color:var(--ink-3); margin-top:5px; letter-spacing:.02em; }
+.typeblk .spec{ font-size:32px; color:var(--ink); margin-top:16px; font-weight:700; }
+
+/* feature point list */
+.rc-h{ font-family:var(--font-head); font-weight:700; font-size:27px; margin:26px 0 0; color:var(--ink); }
+.pts{ list-style:none; margin:20px 0 0; padding:0; display:flex; flex-direction:column; gap:15px; }
+.pts li{ font-size:19px; color:var(--ink-2); padding-left:26px; position:relative; line-height:1.45; }
+.pts li::before{ content:""; position:absolute; left:0; top:9px; width:11px; height:11px; border-radius:50%; background:var(--theme-ink); }
+.pts li b{ color:var(--ink); font-weight:700; }
+
+/* mobile device gallery */
+.mobgal{ flex:1; display:flex; gap:48px; justify-content:center; align-items:center; margin-top:22px; }
+.mobgal figure{ margin:0; display:flex; flex-direction:column; align-items:center; gap:20px; }
+.mobgal img{ height:672px; filter:drop-shadow(0 30px 46px rgba(20,24,40,.26)); }
+.mobgal figcaption{ font-size:18px; font-weight:600; color:var(--ink-2); }
+
+/* white phone bezel variant */
+.gallery.lite .ph{ background:#e9ebee; box-shadow:0 32px 56px -28px rgba(20,24,40,.3), inset 0 0 0 1px rgba(0,0,0,.04); }
+.gallery.lite .ph .scr{ background:#fff; }
+
+/* brand-operation slide: youtube browser + phone cluster */
+.opfig{ margin:0; display:flex; flex-direction:column; gap:20px; align-items:center; width:100%; }
+.opfig figcaption{ font-size:18px; font-weight:600; color:var(--ink-2); }
+.opphones{ display:flex; gap:28px; justify-content:center; align-items:flex-start; }
+.opphones figure{ margin:0; display:flex; flex-direction:column; gap:16px; align-items:center; }
+.opphones .ph{ width:252px; height:494px; background:#e9ebee; border-radius:34px; padding:9px; box-shadow:0 28px 50px -26px rgba(20,24,40,.3), inset 0 0 0 1px rgba(0,0,0,.04); }
+.opphones .ph .scr{ width:100%; height:100%; border-radius:26px; overflow:hidden; background:#fff; }
+.opphones .ph .scr img{ width:100%; height:100%; object-fit:contain; object-position:top center; display:block; }
+.opphones figcaption{ font-size:17px; font-weight:600; color:var(--ink-2); }
+
+/* 치치카 인트로 손글씨·하트·별 꾸밈 */
+.chichi-deco{ position:absolute; inset:0; pointer-events:none; z-index:4; }
+.chichi-deco span{ position:absolute; line-height:1; }
+.chichi-deco .hw{ font-family:'Nanum Pen Script', cursive; font-size:44px; color:#E0573B; transform:rotate(-8deg); }
+.chichi-deco .hb{ color:#FF7B66; }
+.chichi-deco .hs{ color:#FFC84D; }
+
+/* per-project themes */
+.t-shinhan{ --theme-ink:#3550C9; --theme-tint:#EEF1FF; --theme-tint-2:#E2E7FF; --theme-glow:rgba(120,140,255,.42); }
+.t-mirae  { --theme-ink:#E0760F; --theme-tint:#FFF3E7; --theme-tint-2:#FFE6CC; --theme-glow:rgba(255,168,84,.45); }
+.t-cheong { --theme-ink:#4F7D24; --theme-tint:#EFF4E7; --theme-tint-2:#E2EDD2; --theme-glow:rgba(150,196,96,.42); }
+.t-chichi { --theme-ink:#E0573B; --theme-tint:#FFF1ED; --theme-tint-2:#FFE0D7; --theme-glow:rgba(255,140,110,.4); }
+.t-shiny  { --theme-ink:#917536; --theme-tint:#ECE6DA; --theme-tint-2:#E0D6C2; --theme-glow:rgba(180,150,90,.4); }
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+  <!-- ── 01 미래에셋증권 ───────────────────────────────── -->
+  <section data-label="01 미래에셋증권" class="t-mirae">
+    <div class="slide">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 01</b> / 05</div>
+      </div>
+      <div class="left">
+        <p class="kicker">Securities · Internal System</p>
+        <h2 class="title">미래에셋증권</h2>
+        <p class="subtitle">임직원용 MAPIS MTS · 사내 시스템 UI/UX 운영</p>
+        <dl class="meta">
+          <div class="row"><dt>기간</dt><dd>2025.01 – 2026.06</dd></div>
+          <div class="row"><dt>역할</dt><dd>MTS·사내 시스템 운영 (PL)</dd></div>
+          <div class="row"><dt>카테고리</dt><dd><div class="chips"><span class="chip">MOBILE APP</span><span class="chip">WEB DESIGN</span><span class="chip">DESIGN SYSTEM</span></div></dd></div>
+        </dl>
+        <p class="desc">임직원용 MAPIS MTS와 사내 시스템 운영(PL), AI Data Portal 디자인을 맡았습니다. 대용량 데이터 탐색에 최적화된 화면 구조와 공통 컴포넌트 라이브러리를 설계했습니다.</p>
+        <a class="url" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg><span class="u">사내 시스템 · 비공개 프로젝트</span></a>
+      </div>
+      <div class="right">
+        <div class="stage">
+          <img class="device-img" src="assets/mirae-mockup.png" alt="MAPIS 로그인 화면 태블릿 목업" style="width:760px;transform:rotate(-3deg)" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 01 · OVERVIEW ──────────────────────────────────── -->
+  <section data-label="01 미래에셋 · 작업범위" class="t-mirae">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 01</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Overview · 작업 범위</p>
+        <h3 class="sec-title">맡은 8가지 작업</h3>
+        <p class="sec-sub">임직원용 MTS부터 사내 시스템·커뮤니티까지, PL로 설계·운영한 작업 전반입니다.</p>
+      </div>
+      <div class="grid8">
+        <div class="it"><span class="dot"></span><div><h4>MAPIS 모바일 MTS 공통 프로세스</h4><p>펀드매매·장외채권·파생결합증권 UI/UX 구축 및 고도화</p></div></div>
+        <div class="it"><span class="dot"></span><div><h4>디자인 시스템 · 컴포넌트 라이브러리</h4><p>복잡한 금융 상품 간 공통 UX 흐름을 표준화</p></div></div>
+        <div class="it"><span class="dot"></span><div><h4>비대면 WRAP 약정 프로세스</h4><p>온라인 약정 전환을 위한 단계별 프로세스 설계·화면 정의</p></div></div>
+        <div class="it"><span class="dot"></span><div><h4>로그인 화면 프로세스</h4><p>로그인 UI/UX 구축 및 고도화</p></div></div>
+        <div class="it"><span class="dot"></span><div><h4>사내 메신저</h4><p>메시지·채널·알림 등 커뮤니케이션 전반의 인터페이스 설계</p></div></div>
+        <div class="it"><span class="dot"></span><div><h4>사내 커뮤니티 사이트</h4><p>게시판·피드·검색 등 주요 프로세스 화면 설계</p></div></div>
+        <div class="it"><span class="dot"></span><div><h4>Mattermost 캘린더</h4><p>월간/주간 뷰 및 일정 등록·수정 플로우 설계</p></div></div>
+        <div class="it"><span class="dot"></span><div><h4>MI-WEEKLY · 앱 아이콘</h4><p>임직원 주간 정보 사내툴 UX 설계 및 앱 아이콘 디자인</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 01 · MAPIS 화면 ────────────────────────────────── -->
+  <section data-label="01 미래에셋 · 화면" class="t-mirae">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 01</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Mobile MAPIS · 핵심 화면</p>
+        <h3 class="sec-title">대용량 데이터에 최적화한 MTS</h3>
+        <p class="sec-sub">펀드·장외채권·파생결합증권 매매와 비대면 약정까지, 복잡한 금융 흐름을 일관된 화면 구조로 정리했습니다.</p>
+      </div>
+      <div class="gallery-wide">
+        <figure><div class="shot"><div class="bar"><i></i><i></i><i></i><div class="addr">MAPIS · 파생결합증권 청약</div></div><div class="view"><img src="assets/mapis-list.png" alt="파생결합증권 청약 화면" /></div></div><figcaption>파생결합증권 청약</figcaption></figure>
+        <figure><div class="shot"><div class="bar"><i></i><i></i><i></i><div class="addr">MAPIS · 펀드 매수</div></div><div class="view"><img src="assets/mapis-done.png" alt="펀드 매수 완료 화면" /></div></div><figcaption>펀드 매수 완료</figcaption></figure>
+        <figure><div class="shot"><div class="bar"><i></i><i></i><i></i><div class="addr">MAPIS · 비대면 WRAP</div></div><div class="view"><img src="assets/mapis-wrap.png" alt="비대면 WRAP 신청내역 화면" /></div></div><figcaption>비대면 WRAP 신청내역</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 01 · 사내 커뮤니티 ─────────────────────────────── -->
+  <section data-label="01 미래에셋 · 사내 시스템" class="t-mirae">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 01</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">사내 시스템 · 커뮤니티</p>
+        <h3 class="sec-title">사내 커뮤니티 · Mattermost</h3>
+        <p class="sec-sub">임직원 커뮤니티 플랫폼과 Mattermost 캘린더까지, 웹·모바일 주요 화면을 설계했습니다.</p>
+      </div>
+      <div class="gallery-wide">
+        <figure><div class="shot"><div class="bar"><i></i><i></i><i></i><div class="addr">사내 커뮤니티 · 피드</div></div><div class="view"><img src="assets/mapis-comm-feed.png" alt="커뮤니티 피드 화면" /></div></div><figcaption>커뮤니티 피드</figcaption></figure>
+        <figure><div class="shot"><div class="bar"><i></i><i></i><i></i><div class="addr">사내 커뮤니티 · 게시글</div></div><div class="view"><img src="assets/mapis-comm-post.png" alt="게시글 상세 화면" /></div></div><figcaption>게시글 상세</figcaption></figure>
+        <figure class="mob"><div class="ph"><div class="scr"><img src="assets/mattermost-mobile.png" alt="Mattermost 캘린더 모바일" /></div></div><figcaption>Mattermost 캘린더</figcaption></figure>
+        <figure class="mob"><div class="ph"><div class="scr"><img src="assets/mattermost-popup.png" alt="Mattermost 일정 수정" /></div></div><figcaption>일정 수정</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 신한카드 아름인 ─────────────────────────────── -->
+  <section data-label="02 신한카드" class="t-shinhan">
+    <div class="slide">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 02</b> / 05</div>
+      </div>
+      <div class="left">
+        <p class="kicker">Card · Social Impact</p>
+        <h2 class="title">신한카드 아름인</h2>
+        <p class="subtitle">카드 포인트·결제로 잇는 기부 서비스 UI/UX</p>
+        <dl class="meta">
+          <div class="row"><dt>기간</dt><dd>2024.05 – 2024.09</dd></div>
+          <div class="row"><dt>역할</dt><dd>외주 TFT 디자인 PL</dd></div>
+          <div class="row"><dt>카테고리</dt><dd><div class="chips"><span class="chip">MOBILE APP</span><span class="chip">WEB DESIGN</span></div></dd></div>
+        </dl>
+        <p class="desc">신한카드의 사회공헌 브랜드 ‘아름인’. 카드 포인트와 결제로 일시·정기 기부를 실천하는 기부 프로젝트로, 4개월간 외주 TFT 디자인 PL로 참여했습니다.</p>
+        <a class="url" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg><span class="u">shinhancard.com · 아름인</span></a>
+      </div>
+      <div class="right">
+        <div class="stage">
+          <div class="phone" style="transform:rotate(-4deg)">
+            <div class="notch"></div>
+            <div class="screen"><img src="assets/shinhan-mockup.png" alt="신한카드 아름인 앱 화면" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 · AS-IS ─────────────────────────────────────── -->
+  <section data-label="02 신한카드 · AS-IS" class="t-shinhan">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 02</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">AS-IS · 문제 분석</p>
+        <h3 class="sec-title">기존 아름인 서비스의 불편함</h3>
+        <p class="sec-sub">기존 웹 기반 기부 서비스를 분석해, 사용자가 기부를 망설이게 만드는 네 가지 지점을 정의했습니다.</p>
+      </div>
+      <div class="d-body">
+        <div class="d-col">
+          <div class="shot">
+            <div class="bar"><i></i><i></i><i></i><div class="addr">shinhancard.com · 아름인</div></div>
+            <div class="view" style="height:486px"><img src="assets/shinhan-asis.png" alt="기존 아름인 웹사이트" /></div>
+          </div>
+        </div>
+        <div class="d-col">
+          <div class="prob">
+            <div class="item"><div class="n">01</div><div><h4>기부 접근이 어렵다</h4><p>상단 메뉴에 기부 버튼이 있지만, 화면에서 바로 눈에 띄지 않아 진입이 어렵습니다.</p></div></div>
+            <div class="item"><div class="n">02</div><div><h4>소액 기부가 부담스럽다</h4><p>감정적 호소에 기대기보다, 금액적으로도 부담 없이 느껴지는 경험이 필요합니다.</p></div></div>
+            <div class="item"><div class="n">03</div><div><h4>기부금 사용처가 불투명하다</h4><p>내 기부가 좋은 곳에 잘 쓰이고 있는지 언제든 확인할 수 있어야 합니다.</p></div></div>
+            <div class="item"><div class="n">04</div><div><h4>자랑할 방법이 없다</h4><p>순위를 매기면 부담스럽고, 실명·프로필 없이도 가볍게 자랑할 수 있어야 합니다.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 · TO-BE ─────────────────────────────────────── -->
+  <section data-label="02 신한카드 · TO-BE" class="t-shinhan">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 02</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">TO-BE · 개선 방향</p>
+        <h3 class="sec-title">네 가지 기부 경험으로 재정의</h3>
+      </div>
+      <div class="sol">
+        <div class="card"><div class="n">01 · EASY</div><h4>손쉬운 기부</h4><p>첫 화면 하단에서 바로, 어느 페이지에서나 손쉽게 기부할 수 있어요.</p></div>
+        <div class="card"><div class="n">02 · LIGHT</div><h4>부담 없는 기부</h4><p>언제든 쓸 수 있는 포인트로, 한결 가벼운 마음으로 기부할 수 있어요.</p></div>
+        <div class="card"><div class="n">03 · WORTH</div><h4>보람 있는 기부</h4><p>내 기부가 좋은 곳에 잘 쓰이고 있는지 찾아보고 뿌듯해할 수 있어요.</p></div>
+        <div class="card"><div class="n">04 · SHARE</div><h4>힙하게 티내는 기부</h4><p>실명·프로필 없이도 멋진 나를 힙하게 자랑하고 공유할 수 있어요.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 · MAIN CONCEPT ──────────────────────────────── -->
+  <section data-label="02 신한카드 · 화면" class="t-shinhan">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 02</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Live Service · 오픈 화면</p>
+        <h3 class="sec-title">현재 운영 중인 아름인 서비스</h3>
+      </div>
+      <div class="gallery">
+        <figure><div class="ph"><div class="scr"><img src="assets/shinhan-live-hero.png" alt="아름인 홈" /></div></div><figcaption>홈 · 기부 현황</figcaption></figure>
+        <figure><div class="ph"><div class="scr"><img src="assets/shinhan-live-campaign.png" alt="기부 캠페인" /></div></div><figcaption>기부 캠페인</figcaption></figure>
+        <figure><div class="ph"><div class="scr"><img src="assets/shinhan-live-orgs.png" alt="기부처" /></div></div><figcaption>기부처 · 추천</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 건치왕 치치카 ──────────────────────────────── -->
+  <section data-label="03 건치왕 치치카" class="t-chichi">
+    <div class="slide">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 03</b> / 05</div>
+      </div>
+      <div class="left">
+        <p class="kicker">Toss Mini App · Pet Care</p>
+        <h2 class="title">건치왕 치치카</h2>
+        <p class="subtitle">반려동물 양치 습관 30일 챌린지 미니 서비스</p>
+        <dl class="meta">
+          <div class="row"><dt>기간</dt><dd>2026.06 출시</dd></div>
+          <div class="row"><dt>역할</dt><dd>기획 · UX · UI · 프론트 구현</dd></div>
+          <div class="row"><dt>카테고리</dt><dd><div class="chips"><span class="chip">TOSS MINI APP</span><span class="chip">PET CARE</span></div></dd></div>
+        </dl>
+        <p class="desc">반려동물 양치 습관을 30일 챌린지로 만든 토스 인앱 미니 서비스. 매일 체크인과 데일리 케어 팁 카드로 리텐션을 설계하고, 토스 OAuth 로그인을 연동했습니다.</p>
+        <a class="url" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg><span class="u">chikachew.vercel.app</span></a>
+      </div>
+      <div class="right">
+        <div class="chichi-deco">
+          <span class="hw" style="top:14%; left:7%;">매일매일 양치!</span>
+          <span class="hb" style="top:25%; right:13%; font-size:28px; transform:rotate(10deg);">♥</span>
+          <span class="hs" style="top:35%; left:15%; font-size:26px;">✦</span>
+          <span class="hb" style="bottom:19%; left:11%; font-size:22px;">♥</span>
+          <span class="hs" style="bottom:27%; right:16%; font-size:20px; transform:rotate(-8deg);">✧</span>
+        </div>
+        <div class="stage">
+          <div class="phone" style="transform:rotate(-4deg)">
+            <div class="notch"></div>
+            <div class="screen"><img src="assets/chichika-icon.jpg" alt="건치왕 치치카 토스 미니앱 화면" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 · FEATURE ───────────────────────────────────── -->
+  <section data-label="03 치치카 · 기능" class="t-chichi">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 03</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Feature · 습관 설계</p>
+        <h3 class="sec-title">30일이면 습관이 됩니다</h3>
+        <p class="sec-sub">매일 돌아오게 만드는 세 가지 장치로 양치 습관의 리텐션을 설계했습니다.</p>
+      </div>
+      <div class="feat3">
+        <div class="card"><img src="assets/ico-alarm.png" alt="알림" /><h4>매일 알림</h4><p>지정한 시간에 양치 리마인더를 보내 잊지 않게 해요.</p></div>
+        <div class="card"><img src="assets/ico-camera.png" alt="사진" /><h4>사진 기록</h4><p>오늘의 양치를 캘린더에 도장처럼 사진으로 남겨요.</p></div>
+        <div class="card"><img src="assets/ico-coin.png" alt="포인트" /><h4>포인트 보상</h4><p>7·15·30일 마일스톤마다 토스 포인트를 지급해요.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 · 기본화면 ──────────────────────────────────── -->
+  <section data-label="03 치치카 · 화면" class="t-chichi">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 03</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Main Screens · 기본 화면</p>
+        <h3 class="sec-title">매일 체크하고 포인트 받기</h3>
+      </div>
+      <div class="gallery">
+        <figure><div class="ph"><div class="scr"><img src="assets/chichika-today.png" alt="오늘 양치하기" /></div></div><figcaption>오늘 양치하기</figcaption></figure>
+        <figure><div class="ph"><div class="scr"><img src="assets/chichika-calendar.png" alt="캘린더 기록" /></div></div><figcaption>캘린더 기록</figcaption></figure>
+        <figure><div class="ph"><div class="scr"><img src="assets/chichika-share.png" alt="친구 공유로 살리기" /></div></div><figcaption>친구 공유로 살리기</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 청양산채 ───────────────────────────────────── -->
+  <section data-label="04 청양산채" class="t-cheong">
+    <div class="slide">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 04</b> / 05</div>
+      </div>
+      <div class="left">
+        <p class="kicker">Local Brand · Commerce</p>
+        <h2 class="title">청양산채</h2>
+        <p class="subtitle">지역 특산물 브랜드 사이트 기획·디자인·구축</p>
+        <dl class="meta">
+          <div class="row"><dt>기간</dt><dd>2023.06</dd></div>
+          <div class="row"><dt>역할</dt><dd>기획·디자인·퍼블리싱·운영 (단독)</dd></div>
+          <div class="row"><dt>카테고리</dt><dd><div class="chips"><span class="chip">WEB DESIGN</span><span class="chip">HTML5</span><span class="chip">CAFE24</span></div></dd></div>
+        </dl>
+        <p class="desc">충남 청양군의 산채·구기자 등 지역 특산물 브랜드 사이트. 기획부터 디자인, 퍼블리싱, 운영까지 개인사업자로 단독 구축했습니다.</p>
+        <a class="url" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg><span class="u">청양산채.com</span></a>
+      </div>
+      <div class="right">
+        <div class="stage">
+          <img src="assets/cheongyang-laptop.png" alt="청양산채 메인 화면" style="width:92%; display:block; border-radius:10px; filter:drop-shadow(0 32px 52px rgba(20,24,40,.2));" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · SWOT ──────────────────────────────────────── -->
+  <section data-label="04 청양산채 · SWOT" class="t-cheong">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 04</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Strategy · SWOT 분석</p>
+        <h3 class="sec-title">청양산채 사이트 SWOT 분석</h3>
+        <p class="sec-sub">브랜드의 강점과 기회를 사이트 전략으로 연결하기 위해, 내·외부 환경을 정리했습니다.</p>
+      </div>
+      <div class="swot">
+        <div class="q pos"><div class="en">Strength</div><h4>강점</h4><ul><li>뛰어난 품질의 산채·구기자</li><li>청양의 깨끗한 자연</li><li>역사와 전통의 먹거리</li><li>다양한 상품성</li><li>비건 트렌드</li></ul></div>
+        <div class="q neg"><div class="en">Weakness</div><h4>약점</h4><ul><li>시장 인지도 부족</li><li>온라인 마케팅 부족</li><li>제한된 유통 채널</li></ul></div>
+        <div class="q pos"><div class="en">Opportunity</div><h4>기회</h4><ul><li>디지털 마케팅 강화</li><li>온라인 판매 확대</li><li>제품 다양화</li></ul></div>
+        <div class="q neg"><div class="en">Threat</div><h4>위협</h4><ul><li>경쟁 심화</li><li>비건 선호 트렌드 강세</li><li>식품 안정성·물량 확보</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · 메인 페이지 ───────────────────────────────── -->
+  <section data-label="04 청양산채 · 화면" class="t-cheong">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 04</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Main Page · 화면</p>
+        <h3 class="sec-title">자연을 담은 브랜드 메인</h3>
+      </div>
+      <div class="d-body">
+        <div class="d-col">
+          <div class="shot">
+            <div class="bar"><i></i><i></i><i></i><div class="addr">청양산채.com</div></div>
+            <div class="view" style="height:480px"><img src="assets/cheongyang-main.jpg" alt="청양산채 메인 페이지" /></div>
+          </div>
+        </div>
+        <div class="d-col">
+          <div class="shot" style="max-width:498px;">
+            <div class="view"><img src="assets/cheongyang-series.jpg" alt="청양별:미 제품 시리즈" /></div>
+          </div>
+          <h4 class="rc-h">기획부터 운영까지 단독 구축</h4>
+          <ul class="pts">
+            <li><b>메인 히어로 · 제품 스토리</b>로 브랜드 인상 강화</li>
+            <li><b>소비자체험프로그램</b> 운영 섹션 구성</li>
+            <li>Cafe24 기반 <b>반응형 퍼블리싱</b>으로 운영</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · 서브 페이지 ───────────────────────────────── -->
+  <section data-label="04 청양산채 · 서브" class="t-cheong">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 04</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Sub Page · 서브 페이지</p>
+        <h3 class="sec-title">브랜드 스토리를 담은 회사 소개</h3>
+      </div>
+      <div class="d-body">
+        <div class="d-col">
+          <div class="shot">
+            <div class="bar"><i></i><i></i><i></i><div class="addr">청양산채.com / about</div></div>
+            <div class="view" style="height:486px"><img src="assets/cheongyang-sub.png" alt="청양산채 회사소개 서브 페이지" /></div>
+          </div>
+        </div>
+        <div class="d-col">
+          <h4 class="rc-h">자연과 신뢰를 전하는 구성</h4>
+          <ul class="pts">
+            <li><b>청정 자연·재배 환경</b>을 이미지로 강조</li>
+            <li>산채·구기자 등 <b>제품 라인업</b> 소개</li>
+            <li>브랜드 <b>VISION</b> 섹션으로 신뢰감 형성</li>
+            <li>메인과 동일한 <b>그린 컬러 시스템</b>으로 일관성 유지</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · 브랜드 운영 ───────────────────────────────── -->
+  <section data-label="04 청양산채 · 운영" class="t-cheong">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 04</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Brand Operation · 운영 참여</p>
+        <h3 class="sec-title">직접 운영한 SNS·유튜브 채널</h3>
+        <p class="sec-sub">콘텐츠 기획·운영부터 제품·광고 촬영, 행사 참여까지 브랜드와 함께했습니다.</p>
+      </div>
+      <div class="d-body">
+        <div class="d-col">
+          <figure class="opfig">
+            <div class="shot"><div class="bar"><i></i><i></i><i></i><div class="addr">youtube.com · 청양산채</div></div><div class="view"><img src="assets/op-youtube.jpg" alt="청양산채 유튜브 채널" /></div></div>
+            <figcaption>유튜브 채널 운영 · 영상 22개</figcaption>
+          </figure>
+        </div>
+        <div class="d-col">
+          <div class="opphones">
+            <figure><div class="ph"><div class="scr"><img src="assets/op-insta.jpeg" alt="인스타그램 운영" /></div></div><figcaption>인스타그램 운영</figcaption></figure>
+            <figure><div class="ph"><div class="scr"><img src="assets/op-megashow.png" alt="메가쇼 행사 참여" /></div></div><figcaption>메가쇼 행사 참여</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 신영증권 ───────────────────────────────────── -->
+  <section data-label="05 신영증권" class="t-shiny">
+    <div class="slide">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 05</b> / 05</div>
+      </div>
+      <div class="left">
+        <p class="kicker">Securities · MTS</p>
+        <h2 class="title">신영증권 MTS 고도화</h2>
+        <p class="subtitle">해외주식 · 공모주Q 기능 추가 및 고도화</p>
+        <dl class="meta">
+          <div class="row"><dt>기간</dt><dd>2021.03</dd></div>
+          <div class="row"><dt>역할</dt><dd>파견 · 모바일 디자인</dd></div>
+          <div class="row"><dt>카테고리</dt><dd><div class="chips"><span class="chip">MOBILE DESIGN</span><span class="chip">ZEPLIN</span></div></dd></div>
+        </dl>
+        <p class="desc">신영증권 MTS 고도화 파견 근무. 해외주식·공모주Q 기능을 추가하고, 기존 MTS를 확장해 해외 주식 거래와 공모주 투자 흐름을 더 효과적으로 재설계했습니다.</p>
+        <a class="url" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span class="u">신영증권 모바일 · 해외주식 / 공모주Q</span></a>
+      </div>
+      <div class="right">
+        <div class="stage">
+          <div class="phone" style="transform:rotate(-4deg)">
+            <div class="notch"></div>
+            <div class="screen" style="background:#0e0f12"><img src="assets/sy-q-rate.png" alt="공모주Q 화면" style="object-fit:contain; object-position:center;" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 · 공모주Q ───────────────────────────────────── -->
+  <section data-label="05 신영증권 · 공모주Q" class="t-shiny">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 05</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">공모주Q · 청약 흐름</p>
+        <h3 class="sec-title">한눈에 들어오는 공모주 청약</h3>
+        <p class="sec-sub">종목 선택부터 청약, 경쟁률 확인까지. 다크 테마 위에 골드 포인트로 핵심 정보의 위계를 잡았습니다.</p>
+      </div>
+      <div class="gallery">
+        <figure><div class="ph"><div class="scr"><img src="assets/sy-q-rate.png" alt="공모주Q 메뉴" /></div></div><figcaption>공모주Q 메뉴</figcaption></figure>
+        <figure><div class="ph"><div class="scr"><img src="assets/sy-q-select.png" alt="공모주 종목 선택" /></div></div><figcaption>종목 선택</figcaption></figure>
+        <figure><div class="ph"><div class="scr"><img src="assets/sy-q-apply.png" alt="공모주 청약" /></div></div><figcaption>청약 신청</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 · 해외주식 ──────────────────────────────────── -->
+  <section data-label="05 신영증권 · 해외주식" class="t-shiny">
+    <div class="detail">
+      <div class="rh">
+        <div class="rh-brand"><span class="dot"></span>WEB DESIGNER PORTFOLIO</div>
+        <div class="rh-idx"><b>PROJECT 05</b> / 05</div>
+      </div>
+      <div class="sec-head">
+        <p class="eyebrow">Global · 해외주식</p>
+        <h3 class="sec-title">해외주식 거래·주문 화면</h3>
+        <p class="sec-sub">현재가·차트·주문·관심종목까지, 기존 MTS를 확장해 해외 주식 거래 흐름을 새로 설계했습니다.</p>
+      </div>
+      <div class="gallery">
+        <figure><div class="ph"><div class="scr"><img src="assets/sy-h-order.png" alt="AAPL 주문" /></div></div><figcaption>매도·매수 주문</figcaption></figure>
+        <figure><div class="ph"><div class="scr"><img src="assets/sy-h-chart.png" alt="AAPL 차트·종목개요" /></div></div><figcaption>현재가·차트</figcaption></figure>
+        <figure><div class="ph"><div class="scr"><img src="assets/sy-h-watch.png" alt="해외주식 관심종목" /></div></div><figcaption>관심종목</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+</deck-stage>
+<script src="deck-stage.js"></script>
+</body>
+</html>
