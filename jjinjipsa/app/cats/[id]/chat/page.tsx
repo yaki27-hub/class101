@@ -12,6 +12,7 @@ import {
   type ChatMessage,
 } from "@/lib/storage";
 import { llm } from "@/lib/llm";
+import { getSuggestedQuestions } from "@/lib/suggestedQuestions";
 
 export default function ChatPage() {
   const { id: catId } = useParams<{ id: string }>();
@@ -41,8 +42,8 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streaming]);
 
-  async function send() {
-    const q = draft.trim();
+  async function send(text?: string) {
+    const q = (text ?? draft).trim();
     if (!q || !cat || streaming !== null) return;
     setDraft("");
 
@@ -127,15 +128,32 @@ export default function ChatPage() {
       {/* 메시지 리스트 */}
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-5">
         {messages.length === 0 && streaming === null && (
-          <div className="rounded-xl bg-brand-lavender p-5 text-ink">
-            <p className="text-sm font-semibold">
-              안녕하세요 집사님! 🐾
-            </p>
-            <p className="mt-1 text-sm leading-relaxed">
-              {cat.name}에 대해 궁금한 걸 편하게 물어보세요.
-              사료·행동·건강 신호, 뭐든 좋아요.
-            </p>
-          </div>
+          <>
+            <div className="rounded-xl bg-brand-lavender p-5 text-ink">
+              <p className="text-sm font-semibold">
+                안녕하세요 집사님! 🐾
+              </p>
+              <p className="mt-1 text-sm leading-relaxed">
+                {cat.name}에 대해 궁금한 걸 편하게 물어보세요.
+                사료·행동·건강 신호, 뭐든 좋아요.
+              </p>
+            </div>
+            {/* 추천 질문 칩 — 프로필 기반 (T-08) */}
+            <div className="space-y-2 pt-1">
+              <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
+                이런 게 궁금하다면
+              </p>
+              {getSuggestedQuestions(cat).map((q) => (
+                <button
+                  key={q}
+                  onClick={() => void send(q)}
+                  className="block w-full rounded-full bg-surface-card px-4 py-2.5 text-left text-[13px] font-medium text-ink active:bg-surface-strong"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          </>
         )}
         {messages.map((m) => (
           <div
