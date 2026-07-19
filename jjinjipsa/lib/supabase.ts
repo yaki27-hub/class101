@@ -13,7 +13,11 @@ if (!url || !anonKey) {
   console.warn("[supabase] NEXT_PUBLIC_SUPABASE_URL / ANON_KEY가 비어 있습니다.");
 }
 
-export const supabase = createClient(url ?? "", anonKey ?? "");
+// createClient는 빈 URL을 받으면 throw하므로, 미설정 시 자리표시자로 빌드를 통과시킨다
+export const supabase = createClient(
+  url ?? "https://placeholder.supabase.co",
+  anonKey ?? "placeholder-anon-key",
+);
 
 /** 샌드박스 등 OAuth 불가 환경에서 로그인 게이트를 끄는 개발용 플래그 */
 export const ALLOW_GUEST = process.env.NEXT_PUBLIC_ALLOW_GUEST === "1";
