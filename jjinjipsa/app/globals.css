@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/*
+ * 색상 토큰은 킥오프킷의 목업 팔레트 기준 (정식 적용·폰트 로드는 T-02).
+ * shell = 데스크톱에서 420px 프레임 바깥 배경.
+ */
+@theme {
+  --color-pine: #1e5c4f;
+  --color-pine-deep: #123b32;
+  --color-pine-soft: #dceae4;
+  --color-churu: #f5c956;
+  --color-churu-soft: #fbefd2;
+  --color-salmon: #f08a72;
+  --color-bg: #f2f6f3;
+  --color-ink: #1c2b27;
+  --color-shell: #e6eeea;
+}
+
+body {
+  font-family:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
