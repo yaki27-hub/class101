@@ -5,6 +5,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { storage, type Cat } from "@/lib/storage";
+import DailyCheck from "@/components/DailyCheck";
 
 export default function Home() {
   const [cats, setCats] = useState<Cat[] | null>(null);
@@ -49,6 +50,8 @@ export default function Home() {
         </div>
       ) : (
         <div className="space-y-3">
+          {/* 오늘의 체크 — 첫째 아이 기준 (다묘 회전은 추후) */}
+          <DailyCheck cat={cats[0]} />
           {cats.map((cat) => (
             <Link
               key={cat.id}
