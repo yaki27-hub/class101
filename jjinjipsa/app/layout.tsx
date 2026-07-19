@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import AuthGate from "@/components/AuthGate";
 
 export const metadata: Metadata = {
   title: "찐집사 — 내 고양이를 기억하는 건강 챗봇",
@@ -30,7 +31,7 @@ export default function RootLayout({
       <body className="min-h-full bg-surface-strong text-ink">
         {/* 모바일: 전체 화면 / 데스크톱: 420px 중앙 폰 프레임 (내부는 크림 캔버스) */}
         <div className="mx-auto flex min-h-dvh w-full max-w-[420px] flex-col bg-canvas sm:border-x sm:border-hairline">
-          {children}
+          <AuthGate>{children}</AuthGate>
         </div>
       </body>
     </html>

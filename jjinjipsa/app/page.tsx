@@ -6,20 +6,35 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { storage, type Cat } from "@/lib/storage";
 import DailyCheck from "@/components/DailyCheck";
+import { supabase } from "@/lib/supabase";
 
 export default function Home() {
   const [cats, setCats] = useState<Cat[] | null>(null);
+  const [hasSession, setHasSession] = useState(false);
 
   useEffect(() => {
     void storage.listCats().then(setCats);
+    void supabase.auth
+      .getSession()
+      .then(({ data }) => setHasSession(!!data.session));
   }, []);
 
   return (
     <main className="flex flex-1 flex-col px-5 py-10">
       <header className="mb-8">
-        <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
-          Jjinjipsa
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
+            Jjinjipsa
+          </p>
+          {hasSession && (
+            <button
+              onClick={() => void supabase.auth.signOut()}
+              className="text-[12px] font-medium text-muted underline"
+            >
+              로그아웃
+            </button>
+          )}
+        </div>
         <h1 className="display mt-2 text-[28px] text-ink">
           갑자기 시작된 인연도,
           <br />
