@@ -5,7 +5,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { storage, type Cat } from "@/lib/storage";
+import { storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
 
 const SEGMENT_COLORS: Record<string, string> = {
@@ -19,9 +19,11 @@ const SEGMENT_COLORS: Record<string, string> = {
 export default function CatResultPage() {
   const { id } = useParams<{ id: string }>();
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
+  const [logs, setLogs] = useState<SymptomLog[]>([]);
 
   useEffect(() => {
     void storage.getCat(id).then(setCat);
+    void storage.listSymptoms(id).then(setLogs);
   }, [id]);
 
   if (cat === undefined) return null;
@@ -122,7 +124,49 @@ export default function CatResultPage() {
         >
           궁금한 거 물어보기 💬
         </Link>
+        <Link
+          href={`/cats/${cat.id}/log`}
+          className="mt-2 flex h-11 w-full items-center justify-center rounded-md border border-hairline bg-canvas text-sm font-semibold text-body"
+        >
+          증상 기록하기 ✍️
+        </Link>
       </section>
+
+      {/* 최근 증상 기록 */}
+      {logs.length > 0 && (
+        <section className="rounded-lg border border-hairline bg-canvas p-5">
+          <h2 className="text-sm font-semibold text-ink">
+            최근 증상 기록 · {logs.length}건
+          </h2>
+          <ul className="mt-3 space-y-2.5">
+            {[...logs]
+              .reverse()
+              .slice(0, 3)
+              .map((l) => (
+                <li key={l.id} className="flex items-start gap-2.5">
+                  <span className="mt-0.5 text-[11px] font-medium whitespace-nowrap text-muted">
+                    {l.occurredAt.slice(5, 10).replace("-", "/")}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="flex flex-wrap gap-1">
+                      {l.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-full bg-surface-card px-2 py-0.5 text-[11px] font-medium text-ink"
+                        >
+                          #{t}
+                        </span>
+                      ))}
+                    </p>
+                    <p className="mt-0.5 truncate text-[12px] text-muted">
+                      {l.summary}
+                    </p>
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </section>
+      )}
 
       <p className="text-center text-xs text-muted-soft">
         나이 환산은 통용 공식 기준의 참고값이에요. 정확한 진단은 수의사 상담이

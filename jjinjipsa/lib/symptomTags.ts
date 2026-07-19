@@ -37,3 +37,15 @@ export function extractSymptomTags(text: string): string[] {
   }
   return tags;
 }
+
+/** 수동 기록 화면의 일반 태그 칩 목록 (F-05) */
+export const SYMPTOM_TAG_LIST: string[] = TAG_PATTERNS.map((t) => t.tag);
+
+/** 선택 즉시 병원 안내 모달을 띄우는 응급 태그 (F-05 레드플래그 연동) */
+export const EMERGENCY_TAG_LIST: string[] = [
+  "호흡 곤란",
+  "소변을 못 봐요",
+  "혈뇨 · 혈변 · 토혈",
+  "경련 · 마비",
+  "24시간 이상 절식",
+];
