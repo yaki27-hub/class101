@@ -13,6 +13,11 @@ import {
 } from "@/lib/storage";
 import { llm } from "@/lib/llm";
 import { getSuggestedQuestions } from "@/lib/suggestedQuestions";
+import {
+  EMERGENCY_MAP_URL,
+  buildRedFlagResponse,
+  checkRedFlags,
+} from "@/lib/redFlags";
 
 export default function ChatPage() {
   const { id: catId } = useParams<{ id: string }>();
@@ -72,7 +77,24 @@ export default function ChatPage() {
     await storage.addMessage(userMsg);
     setMessages((prev) => [...prev, userMsg]);
 
-    // LLM 호출 (지금은 mock) + 스트리밍 렌더
+    // 1단계: 레드플래그 룰 엔진 — 매칭 시 AI 호출 없이 즉시 응답 (F-09)
+    const flag = checkRedFlags(q);
+    if (flag) {
+      const alertMsg: ChatMessage = {
+        id: newId(),
+        sessionId: sid,
+        role: "assistant",
+        content: buildRedFlagResponse(flag, cat.name),
+        imageUrl: null,
+        model: "rule-engine",
+        createdAt: new Date().toISOString(),
+      };
+      await storage.addMessage(alertMsg);
+      setMessages((prev) => [...prev, alertMsg]);
+      return;
+    }
+
+    // 2단계: LLM 호출 + 스트리밍 렌더
     const history = messages.map((m) => ({
       role: m.role,
       content: m.content,
@@ -155,22 +177,41 @@ export default function ChatPage() {
             </div>
           </>
         )}
-        {messages.map((m) => (
-          <div
-            key={m.id}
-            className={m.role === "user" ? "flex justify-end" : "flex"}
-          >
-            <div
-              className={
-                m.role === "user"
-                  ? "max-w-[80%] rounded-lg rounded-br-xs bg-ink px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap text-white"
-                  : "max-w-[88%] rounded-lg rounded-bl-xs border border-hairline bg-canvas px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body"
-              }
-            >
-              {m.content}
+        {messages.map((m) =>
+          m.model === "rule-engine" ? (
+            /* 레드플래그 고정 응답 — 룰 엔진이 AI 없이 낸 응급 안내 (F-09) */
+            <div key={m.id} className="flex">
+              <div className="max-w-[92%] space-y-3 rounded-lg border-2 border-error/50 bg-error/5 px-4 py-3.5">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-body">
+                  {m.content}
+                </p>
+                <a
+                  href={EMERGENCY_MAP_URL}
+                  target="_blank"
+                  rel="noopener"
+                  className="flex h-11 items-center justify-center rounded-md bg-error text-sm font-semibold text-white"
+                >
+                  🗺️ 가까운 24시 동물병원 찾기
+                </a>
+              </div>
             </div>
-          </div>
-        ))}
+          ) : (
+            <div
+              key={m.id}
+              className={m.role === "user" ? "flex justify-end" : "flex"}
+            >
+              <div
+                className={
+                  m.role === "user"
+                    ? "max-w-[80%] rounded-lg rounded-br-xs bg-ink px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap text-white"
+                    : "max-w-[88%] rounded-lg rounded-bl-xs border border-hairline bg-canvas px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body"
+                }
+              >
+                {m.content}
+              </div>
+            </div>
+          ),
+        )}
         {streaming !== null && (
           <div className="flex">
             <div className="max-w-[88%] rounded-lg rounded-bl-xs border border-hairline bg-canvas px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body">
