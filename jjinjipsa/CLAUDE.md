@@ -23,9 +23,13 @@
 ## 스택 & 컨벤션 (D-01: PWA 먼저)
 - Next.js 16 App Router + TypeScript + Tailwind v4. 배포 Vercel. PMF 후 Expo 전환 예정
 - 모바일 퍼스트. 데스크톱에선 420px 중앙 셸 (app/layout.tsx의 프레임)
-- 디자인 토큰 (app/globals.css @theme): pine #1E5C4F, pine-deep #123B32,
-  pine-soft #DCEAE4, churu #F5C956, churu-soft #FBEFD2, salmon #F08A72,
-  bg #F2F6F3, ink #1C2B27. 폰트: Pretendard Variable
+- **디자인 시스템 = docs/디자인시스템_Clay.md (D-03)**. 토큰은 app/globals.css @theme:
+  크림 캔버스(canvas #FFFAF0)·니어블랙 잉크/CTA(ink #0A0A0A)·브랜드 카드 6색
+  (brand-pink/teal/lavender/peach/ochre + surface-card) 순환 — 같은 색 연속 금지.
+  라운드 xs6/sm8/md12/lg16/xl24. 다크 푸터 금지, 무거운 그림자 금지(색 대비로 깊이).
+  🚦 판정 색: 🔴error 🟡warning 🟢success (브랜드색과 분리)
+  폰트: Pretendard Variable — 디스플레이는 `.display`(600 + 타이트 자간), 700 이상 금지
+  스타일 QA: /dev/style 페이지에서 토큰 눈으로 확인
 - UI 카피는 한국어. 아바타 시스템(털색×무늬×눈 SVG)은 핵심 브랜드 자산
 - 모든 건강 정보에 source_name(출처) 렌더링. 하단 고정 면책:
   "이 정보는 참고용이며, 정확한 진단은 수의사 상담이 필요합니다."

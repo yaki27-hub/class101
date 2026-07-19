@@ -1,25 +1,59 @@
 @import "tailwindcss";
 
 /*
- * 색상 토큰은 킥오프킷의 목업 팔레트 기준 (정식 적용·폰트 로드는 T-02).
- * shell = 데스크톱에서 420px 프레임 바깥 배경.
+ * 찐집사 디자인 토큰 — docs/디자인시스템_Clay.md (D-03)
+ * 크림 캔버스 + 니어블랙 잉크 + 채도 높은 브랜드 카드 6색.
+ * 폰트는 한국어 서비스 조정: Inter/Plain Black → Pretendard Variable.
+ * 원칙: 다크 푸터 금지 · 무거운 그림자 금지(색 대비로 깊이) · 디스플레이 700 이상 금지.
  */
 @theme {
-  --color-pine: #1e5c4f;
-  --color-pine-deep: #123b32;
-  --color-pine-soft: #dceae4;
-  --color-churu: #f5c956;
-  --color-churu-soft: #fbefd2;
-  --color-salmon: #f08a72;
-  --color-bg: #f2f6f3;
-  --color-ink: #1c2b27;
-  --color-shell: #e6eeea;
+  /* Surface */
+  --color-canvas: #fffaf0;
+  --color-surface-soft: #faf5e8;
+  --color-surface-card: #f5f0e0;
+  --color-surface-strong: #ebe6d6;
+  --color-surface-dark: #0a1a1a;
+
+  /* Text */
+  --color-ink: #0a0a0a;
+  --color-body: #3a3a3a;
+  --color-muted: #6a6a6a;
+  --color-muted-soft: #9a9a9a;
+  --color-hairline: #e5e5e5;
+
+  /* Brand accents (피처 카드 순환용 — 같은 색 연속 사용 금지) */
+  --color-brand-pink: #ff4d8b;
+  --color-brand-teal: #1a3a3a;
+  --color-brand-lavender: #b8a4ed;
+  --color-brand-peach: #ffb084;
+  --color-brand-ochre: #e8b94a;
+  --color-brand-mint: #a4d4c5;
+  --color-brand-coral: #ff6b5a;
+
+  /* Semantic (🚦 판정과 매핑) */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* Radius — Clay 스케일 */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
 }
 
 body {
   font-family:
     "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
     "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+/* 디스플레이 타이포 — Pretendard 500~600 + 타이트 자간 (Plain Black 대체 규칙) */
+.display {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 @media (prefers-reduced-motion: reduce) {
