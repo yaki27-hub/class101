@@ -10,7 +10,9 @@ import {
   storage,
   type Cat,
   type ChatMessage,
+  type SymptomLog,
 } from "@/lib/storage";
+import { extractSymptomTags } from "@/lib/symptomTags";
 import { llm } from "@/lib/llm";
 import { getSuggestedQuestions } from "@/lib/suggestedQuestions";
 import {
@@ -26,6 +28,13 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [streaming, setStreaming] = useState<string | null>(null);
+  /** 대화→기록 원탭 제안 (F-05, §5-2) */
+  const [pendingLog, setPendingLog] = useState<{
+    tags: string[];
+    summary: string;
+    sessionId: string;
+  } | null>(null);
+  const [logSaved, setLogSaved] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // 고양이 + 최근 세션 이어보기
@@ -51,6 +60,8 @@ export default function ChatPage() {
     const q = (text ?? draft).trim();
     if (!q || !cat || streaming !== null) return;
     setDraft("");
+    setPendingLog(null);
+    setLogSaved(false);
 
     // 세션 없으면 생성
     let sid = sessionId;
@@ -91,6 +102,14 @@ export default function ChatPage() {
       };
       await storage.addMessage(alertMsg);
       setMessages((prev) => [...prev, alertMsg]);
+      // 응급 대화도 기록 제안 (병원 방문 후 회고에 쓰임)
+      setPendingLog({
+        tags: extractSymptomTags(q).length
+          ? extractSymptomTags(q)
+          : [flag.label],
+        summary: q,
+        sessionId: sid,
+      });
       return;
     }
 
@@ -118,6 +137,27 @@ export default function ChatPage() {
     await storage.addMessage(botMsg);
     setMessages((prev) => [...prev, botMsg]);
     setStreaming(null);
+
+    // 증상성 대화면 기록 제안 (F-05 주 입력 경로)
+    const tags = extractSymptomTags(q);
+    if (tags.length > 0) setPendingLog({ tags, summary: q, sessionId: sid });
+  }
+
+  async function saveSymptomLog() {
+    if (!pendingLog || !cat) return;
+    const log: SymptomLog = {
+      id: newId(),
+      catId: cat.id,
+      tags: pendingLog.tags,
+      summary: pendingLog.summary,
+      source: "chat",
+      chatSessionId: pendingLog.sessionId,
+      occurredAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    };
+    await storage.addSymptom(log);
+    setPendingLog(null);
+    setLogSaved(true);
   }
 
   if (cat === undefined) return null;
@@ -218,6 +258,47 @@ export default function ChatPage() {
               {streaming || "…"}
             </div>
           </div>
+        )}
+
+        {/* 대화→증상 기록 원탭 제안 (T-10) */}
+        {pendingLog && streaming === null && (
+          <div className="rounded-xl bg-brand-peach p-4">
+            <p className="text-sm font-semibold text-ink">
+              오늘 대화를 {cat.name}의 증상 기록으로 남길까요?
+            </p>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {pendingLog.tags.map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full bg-canvas px-2.5 py-1 text-[12px] font-medium text-ink"
+                >
+                  #{t}
+                </span>
+              ))}
+            </div>
+            <p className="mt-1.5 text-[12px] text-ink/60">
+              기록이 쌓이면 "평소랑 다른지"를 알려드릴 수 있어요.
+            </p>
+            <div className="mt-3 flex gap-2">
+              <button
+                onClick={() => void saveSymptomLog()}
+                className="h-10 flex-1 rounded-md bg-ink text-sm font-semibold text-white"
+              >
+                기록 남기기
+              </button>
+              <button
+                onClick={() => setPendingLog(null)}
+                className="h-10 rounded-md border border-ink/20 px-4 text-sm font-semibold text-ink/70"
+              >
+                괜찮아요
+              </button>
+            </div>
+          </div>
+        )}
+        {logSaved && (
+          <p className="rounded-lg bg-surface-soft px-4 py-2.5 text-center text-[13px] font-medium text-body">
+            🐾 기록했어요! 다음 답변부터 이 기록을 함께 볼게요.
+          </p>
         )}
         <div ref={bottomRef} />
       </div>
