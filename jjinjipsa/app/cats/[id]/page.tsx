@@ -116,12 +116,12 @@ export default function CatResultPage() {
         <p className="mt-1 text-sm text-body">
           나이·품종·기록을 아는 챗봇이 {cat.name} 기준으로 답해드려요.
         </p>
-        <button
-          disabled
-          className="mt-4 h-12 w-full cursor-not-allowed rounded-md bg-ink/20 text-sm font-semibold text-white"
+        <Link
+          href={`/cats/${cat.id}/chat`}
+          className="mt-4 flex h-12 w-full items-center justify-center rounded-md bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f]"
         >
-          궁금한 거 물어보기 (곧 열려요)
-        </button>
+          궁금한 거 물어보기 💬
+        </Link>
       </section>
 
       <p className="text-center text-xs text-muted-soft">
