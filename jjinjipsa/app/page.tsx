@@ -50,9 +50,10 @@ export default function Home() {
       ) : (
         <div className="space-y-3">
           {cats.map((cat) => (
-            <div
+            <Link
               key={cat.id}
-              className="rounded-lg border border-hairline bg-canvas p-4"
+              href={`/cats/${cat.id}`}
+              className="block rounded-lg border border-hairline bg-canvas p-4"
             >
               <p className="text-base font-semibold text-ink">🐈 {cat.name}</p>
               <p className="mt-0.5 text-xs text-muted">
@@ -62,7 +63,7 @@ export default function Home() {
                   ? ` · ${cat.conditions.join(", ")}`
                   : ""}
               </p>
-            </div>
+            </Link>
           ))}
           <Link
             href="/profile/new"

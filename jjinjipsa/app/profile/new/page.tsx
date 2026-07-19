@@ -49,7 +49,7 @@ export default function NewProfilePage() {
       updatedAt: now,
     };
     await storage.saveCat(cat);
-    router.push("/");
+    router.push(`/cats/${cat.id}`);
   }
 
   const label = "text-sm font-semibold text-ink";
