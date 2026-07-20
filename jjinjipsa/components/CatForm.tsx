@@ -39,7 +39,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
       // 저장 전 압축: 최대 800px, JPEG — localStorage 한도(≈5MB) 초과 방지
       const img = new Image();
       img.onload = () => {
-        const max = 800;
+        const max = 600;
         const scale = Math.min(1, max / Math.max(img.width, img.height));
         const w = Math.round(img.width * scale);
         const h = Math.round(img.height * scale);
