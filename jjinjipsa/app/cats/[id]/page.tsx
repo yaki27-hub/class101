@@ -38,7 +38,6 @@ export default function CatResultPage() {
     );
 
   const age = getCatAge(cat.birthDate);
-  const TOTAL = 20;
 
   return (
     <main className="flex-1 space-y-6 px-5 py-8">
@@ -80,26 +79,25 @@ export default function CatResultPage() {
                 className={`${SEGMENT_COLORS[s.stage]} ${
                   s.stage === age.stage ? "" : "opacity-40"
                 }`}
-                style={{ width: `${((s.to - s.from) / TOTAL) * 100}%` }}
+                style={{ width: `${100 / CLOCK_SEGMENTS.length}%` }}
               />
             ))}
           </div>
-          {/* 현재 위치 마커 */}
+          {/* 현재 위치 마커 — 균등 단계 바에서 현재 단계 안 진행도로 배치 */}
           <div
             className="absolute -top-1.5 h-6 w-1.5 -translate-x-1/2 rounded-full bg-ink"
-            style={{ left: `${age.clockRatio * 100}%` }}
+            style={{ left: `${age.markerRatio * 100}%` }}
             aria-hidden
           />
         </div>
-        <div className="mt-2 flex justify-between text-[11px] text-muted">
+        <div className="mt-2 flex text-[11px] text-muted">
           {CLOCK_SEGMENTS.map((s) => (
             <span
               key={s.stage}
-              className={`whitespace-nowrap ${
-                s.stage === age.stage
-                  ? "rounded-full bg-surface-card px-2 py-0.5 font-semibold text-ink"
-                  : "py-0.5"
+              className={`text-center ${
+                s.stage === age.stage ? "font-semibold text-ink" : ""
               }`}
+              style={{ width: `${100 / CLOCK_SEGMENTS.length}%` }}
             >
               {s.label}
             </span>
