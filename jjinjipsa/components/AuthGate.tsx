@@ -25,8 +25,15 @@ export default function AuthGate({
   const router = useRouter();
   const [ready, setReady] = useState(false);
 
-  // 동기화용 Supabase 신원 확보: 세션 없으면 익명 로그인 (D-09)
+  // 동기화용 Supabase 신원 확보: 세션 없으면 익명 로그인 (D-09).
+  // 단, OAuth 콜백 처리 중(URL에 토큰/코드)에는 건너뛴다 — 카카오 로그인이
+  // 완료되기 전에 익명 로그인이 덮어쓰는 경쟁 상태 방지 (T-15).
   useEffect(() => {
+    const inOAuthCallback =
+      typeof window !== "undefined" &&
+      (window.location.hash.includes("access_token") ||
+        new URLSearchParams(window.location.search).has("code"));
+    if (inOAuthCallback) return;
     void supabase.auth.getSession().then(({ data }) => {
       if (!data.session) void supabase.auth.signInAnonymously().catch(() => {});
     });
