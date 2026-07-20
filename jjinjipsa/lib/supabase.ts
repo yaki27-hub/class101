@@ -19,10 +19,13 @@ function sane(value: string | undefined, fallback: string): string {
   return value.trim();
 }
 
-export const supabase = createClient(
-  sane(process.env.NEXT_PUBLIC_SUPABASE_URL, DEFAULT_URL),
-  sane(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, DEFAULT_ANON_KEY),
+export const SUPABASE_URL = sane(process.env.NEXT_PUBLIC_SUPABASE_URL, DEFAULT_URL);
+export const SUPABASE_ANON_KEY = sane(
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  DEFAULT_ANON_KEY,
 );
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /** 샌드박스 등 OAuth 불가 환경에서 로그인 게이트를 끄는 개발용 플래그 */
 export const ALLOW_GUEST = process.env.NEXT_PUBLIC_ALLOW_GUEST === "1";
