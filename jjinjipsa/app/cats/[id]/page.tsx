@@ -3,7 +3,7 @@
 /* F-02 첫 결과 화면 — 나이 환산 + 생애 시계 + 챗봇 진입 CTA (T-05) */
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
@@ -17,14 +17,58 @@ const SEGMENT_COLORS: Record<string, string> = {
 };
 
 export default function CatResultPage() {
+  const router = useRouter();
   const { id } = useParams<{ id: string }>();
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
   const [logs, setLogs] = useState<SymptomLog[]>([]);
+  const [illustrating, setIllustrating] = useState(false);
+  const [illustError, setIllustError] = useState("");
+  const [confirmDel, setConfirmDel] = useState(false);
 
   useEffect(() => {
     void storage.getCat(id).then(setCat);
     void storage.listSymptoms(id).then(setLogs);
   }, [id]);
+
+  async function makeIllustration() {
+    if (!cat?.photo) return;
+    setIllustrating(true);
+    setIllustError("");
+    try {
+      const res = await fetch("/api/illustrate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          photo: cat.photo,
+          name: cat.name,
+          birthDate: cat.birthDate,
+          breedGroup: cat.breedGroup,
+        }),
+      });
+      if (res.status === 429) {
+        setIllustError(
+          "지금은 AI 일러스트 생성이 잠시 막혀 있어요 (무료 등급 한도). 잠시 후 다시 시도하거나 관리자에게 문의해 주세요.",
+        );
+        return;
+      }
+      if (!res.ok) {
+        setIllustError("일러스트 생성에 실패했어요. 잠시 후 다시 시도해 주세요.");
+        return;
+      }
+      const { image } = (await res.json()) as { image: string };
+      const updated = { ...cat, illust: image };
+      await storage.saveCat(updated);
+      setCat(updated);
+    } finally {
+      setIllustrating(false);
+    }
+  }
+
+  async function deleteCat() {
+    if (!cat) return;
+    await storage.deleteCat(cat.id);
+    router.push("/");
+  }
 
   if (cat === undefined) return null;
   if (cat === null)
@@ -51,19 +95,29 @@ export default function CatResultPage() {
       </header>
 
       {/* 와우 모먼트 — 나이 환산 */}
-      <section className="rounded-xl bg-brand-pink p-6 text-white">
-        <p className="text-[12px] font-semibold uppercase tracking-[1.5px] opacity-80">
-          {cat.name} · {age.ageLabel}
-          {cat.birthEstimated ? " (추정)" : ""}
-        </p>
-        <p className="display mt-2 text-[32px] leading-[1.15]">
-          사람 나이로
-          <br />
-          {age.humanAge}세예요
-        </p>
-        <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1.5 text-[13px] font-medium">
-          {age.stageEmoji} {age.stageLabel} · {cat.breedGroup}
-        </p>
+      <section className="flex items-center gap-4 rounded-xl bg-brand-pink p-6 text-white">
+        <div className="flex-1">
+          <p className="text-[12px] font-semibold uppercase tracking-[1.5px] opacity-80">
+            {cat.name} · {age.ageLabel}
+            {cat.birthEstimated ? " (추정)" : ""}
+          </p>
+          <p className="display mt-2 text-[28px] leading-[1.15]">
+            사람 나이로
+            <br />
+            {age.humanAge}세예요
+          </p>
+          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1.5 text-[12px] font-medium">
+            {age.stageEmoji} {age.stageLabel}
+          </p>
+        </div>
+        {cat.photo && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={cat.photo}
+            alt={`${cat.name} 사진`}
+            className="size-[92px] flex-none rounded-[20px] border-[3px] border-white/50 object-cover"
+          />
+        )}
       </section>
 
       {/* 생애 시계 */}
@@ -106,6 +160,47 @@ export default function CatResultPage() {
         <p className="mt-4 rounded-md bg-surface-soft p-3.5 text-sm leading-relaxed text-body">
           {age.stageMessage}
         </p>
+      </section>
+
+      {/* AI 일러스트 (T-25) — 사진 반영 개인화 */}
+      <section className="rounded-xl bg-surface-strong p-5">
+        <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
+          AI 일러스트
+        </p>
+        <p className="mt-1 text-base font-semibold text-ink">
+          {cat.name}의 아늑한 초상화
+        </p>
+        <p className="mt-1 text-[13px] text-body">
+          나이({age.stageLabel})와 사진을 반영해 따뜻한 일러스트로 그려드려요.
+        </p>
+        {cat.illust && (
+          <div className="mt-3 overflow-hidden rounded-2xl border-4 border-brand-ochre">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={cat.illust} alt={`${cat.name} 일러스트`} className="w-full" />
+          </div>
+        )}
+        {illustError && (
+          <p className="mt-3 rounded-md border border-hairline bg-canvas p-3 text-[13px] text-muted">
+            {illustError}
+          </p>
+        )}
+        {!cat.photo ? (
+          <p className="mt-3 rounded-2xl border border-dashed border-hairline bg-canvas p-4 text-center text-[13px] text-muted">
+            먼저 프로필 수정에서 사진을 올려주세요 📷
+          </p>
+        ) : (
+          <button
+            onClick={() => void makeIllustration()}
+            disabled={illustrating}
+            className="mt-3.5 h-12 w-full rounded-md bg-brand-teal text-sm font-semibold text-white disabled:opacity-60"
+          >
+            {illustrating
+              ? "그리는 중… 🎨"
+              : cat.illust
+                ? "다시 그리기 🎨"
+                : "일러스트 만들기 🎨"}
+          </button>
+        )}
       </section>
 
       {/* 챗봇 진입 CTA (F-08은 T-06~08에서 열림) */}
@@ -166,10 +261,54 @@ export default function CatResultPage() {
         </section>
       )}
 
+      {/* 수정 / 삭제 (T-23·T-24) */}
+      <div className="flex gap-2">
+        <Link
+          href={`/cats/${cat.id}/edit`}
+          className="flex h-11 flex-1 items-center justify-center rounded-md border border-hairline bg-canvas text-sm font-semibold text-body"
+        >
+          프로필 수정 ✏️
+        </Link>
+        <button
+          onClick={() => setConfirmDel(true)}
+          className="flex h-11 items-center justify-center rounded-md border border-error/40 bg-canvas px-4 text-sm font-semibold text-error"
+        >
+          삭제 🗑️
+        </button>
+      </div>
+
       <p className="text-center text-xs text-muted-soft">
         나이 환산은 통용 공식 기준의 참고값이에요. 정확한 진단은 수의사 상담이
         필요합니다.
       </p>
+
+      {/* 삭제 확인 */}
+      {confirmDel && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/50 px-6">
+          <div className="w-full max-w-[340px] rounded-2xl bg-canvas p-6">
+            <p className="text-lg font-semibold text-ink">
+              {cat.name}를 삭제할까요?
+            </p>
+            <p className="mt-2 text-sm text-body">
+              프로필·사진·증상 기록·대화가 모두 지워지고 되돌릴 수 없어요.
+            </p>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setConfirmDel(false)}
+                className="h-11 flex-1 rounded-md border border-hairline text-sm font-semibold text-body"
+              >
+                취소
+              </button>
+              <button
+                onClick={() => void deleteCat()}
+                className="h-11 flex-1 rounded-md bg-error text-sm font-semibold text-white"
+              >
+                삭제
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
