@@ -34,7 +34,26 @@ export default function CatForm({ existing }: { existing?: Cat }) {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => setPhoto(String(ev.target?.result ?? ""));
+    reader.onload = (ev) => {
+      const src = String(ev.target?.result ?? "");
+      // 저장 전 압축: 최대 800px, JPEG — localStorage 한도(≈5MB) 초과 방지
+      const img = new Image();
+      img.onload = () => {
+        const max = 800;
+        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return setPhoto(src);
+        ctx.drawImage(img, 0, 0, w, h);
+        setPhoto(canvas.toDataURL("image/jpeg", 0.82));
+      };
+      img.onerror = () => setPhoto(src);
+      img.src = src;
+    };
     reader.readAsDataURL(file);
   }
 
@@ -69,7 +88,13 @@ export default function CatForm({ existing }: { existing?: Cat }) {
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
     };
-    await storage.saveCat(cat);
+    try {
+      await storage.saveCat(cat);
+    } catch {
+      return setError(
+        "저장 공간이 부족해요. 사진을 빼고 등록하거나, 다른 아이의 사진을 정리해 주세요.",
+      );
+    }
     router.push(`/cats/${cat.id}`);
   }
 
