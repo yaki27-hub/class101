@@ -9,8 +9,9 @@ import { createClient } from "@supabase/supabase-js";
 import { buildSystemPrompt, type PromptContext } from "@/lib/llm/systemPrompt";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase";
 
-// 모델 라우팅(T-18) 전 기본 모델 — D-04에서 확정한 상위 모델
-const MODEL = process.env.GEMINI_MODEL ?? "gemini-3.5-flash";
+// 모델 라우팅(T-18, D-04): 텍스트=경량 / 사진 첨부=상위 멀티모달
+const TEXT_MODEL = process.env.GEMINI_TEXT_MODEL ?? "gemini-3.1-flash-lite";
+const VISION_MODEL = process.env.GEMINI_VISION_MODEL ?? "gemini-3.5-flash";
 // 비용 통제(T-17) — 유저당 하루 챗봇 호출 한도
 const DAILY_LIMIT = Number(process.env.DAILY_CHAT_LIMIT ?? "10");
 
@@ -33,6 +34,8 @@ async function overLimit(authHeader: string | null): Promise<boolean> {
 interface ChatBody extends PromptContext {
   history: Array<{ role: "user" | "assistant"; content: string }>;
   question: string;
+  /** 첨부 사진 dataURL (토사물·피부·검진지 등) — 있으면 상위 멀티모달 모델로 라우팅 */
+  image?: string | null;
 }
 
 export async function POST(req: Request): Promise<Response> {
@@ -47,16 +50,31 @@ export async function POST(req: Request): Promise<Response> {
   const body = (await req.json()) as ChatBody;
   const system = buildSystemPrompt(body);
 
+  // 사진 첨부 여부로 모델 라우팅
+  const imgMatch = body.image
+    ? /^data:(image\/[a-z.+-]+);base64,(.+)$/i.exec(body.image)
+    : null;
+  const model = imgMatch ? VISION_MODEL : TEXT_MODEL;
+
+  const userParts: Array<
+    { text: string } | { inlineData: { mimeType: string; data: string } }
+  > = [{ text: body.question }];
+  if (imgMatch) {
+    userParts.push({ inlineData: { mimeType: imgMatch[1], data: imgMatch[2] } });
+  }
+
   const contents = [
     ...body.history.map((m) => ({
       role: m.role === "user" ? "user" : "model",
       parts: [{ text: m.content }],
     })),
-    { role: "user", parts: [{ text: body.question }] },
+    { role: "user", parts: userParts },
   ];
 
+  console.log(`[api/chat] model=${model} image=${!!imgMatch}`);
+
   const upstream = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse`,
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`,
     {
       method: "POST",
       headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
@@ -134,7 +152,7 @@ export async function POST(req: Request): Promise<Response> {
   return new Response(stream, {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
-      "x-model": MODEL,
+      "x-model": model,
     },
   });
 }

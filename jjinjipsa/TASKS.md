@@ -33,7 +33,7 @@
   - 진행: 콘솔 셋업(비즈앱·Redirect URI·Supabase Provider) + 코드(로그인 화면·AuthGate·로그아웃) 완료 2026-07-19. ⏳ 실 로그인 검증은 Vercel 배포 후 (샌드박스는 외부 OAuth 불가)
 - [x] T-16 로컬→Supabase 동기화 — SupabaseStorageAdapter + 익명 로그인, 플래그(NEXT_PUBLIC_USE_SUPABASE=1)로 전환. 배포본에서 등록→Supabase cats 테이블 저장 확인 ✅ 2026-07-20
 - [x] T-17 비용 통제 — bump_chat_usage RPC + /api/chat 서버 카운트, 10회 초과 시 AI 미호출·안내. 레드플래그 제외. RPC 배포·생성 확인 ✅ 2026-07-20
-- [ ] T-18 모델 라우팅 — 완료 기준: 텍스트=Haiku급, 사진 첨부=Sonnet급으로 갈리는 로그 확인
+- [x] T-18 모델 라우팅 — 텍스트=gemini-3.1-flash-lite / 사진첨부=gemini-3.5-flash, image 유무로 분기(로그 확인). env 오버라이드 가능 ✅ 2026-07-20
 - [ ] T-19 아바타 빌더 (털색×무늬×눈) + 프로필 6스텝 완성 ⛔미정-2 — 완료 기준: 조합 그리드 QA 페이지에서 전 조합 정상 렌더
 - [ ] T-20 케어 카드 16장 시드 + "관련 카드 보기" ⛔미정-2 — 완료 기준: 챗봇 답변 하단에 관련 카드 첨부, source_name 표기
 - [ ] T-21 면책 문구·온보딩 마감 — 완료 기준: 전 화면 하단 고지 + 유저 테스트 배포 채널(⛔미정-7)로 설치/접속 가능
