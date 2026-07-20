@@ -51,6 +51,13 @@
 - 카카오 개발자 앱 미보유 → T-15 착수 전 생성 가이드 제공 예정 (kakao developers 앱 생성 + Supabase Auth 연동 설정)
 - 영향받는 태스크: T-14(진행 가능, 미정-5 해소 후), T-15(카카오 앱 생성 선행)
 
+## D-07 (2026-07-19) 로그인 게이트 임시 OFF + main 브랜치 배포
+
+- 배경: Vercel 환경 변수 오염(placeholder)으로 카카오 로그인 검증이 반복 실패 → 사용자가 "일단 로그인 빼고 구동 확인" 결정
+- 조치: AuthGate 기본 OFF (NEXT_PUBLIC_REQUIRE_AUTH=1로 재활성). 새 Vercel 프로젝트(jjipsa, main 추적)에 연결하기 위해 작업 브랜치를 main에 병합
+- 복귀 조건: 구동 확인 후 T-15 검증 재개 시 REQUIRE_AUTH=1 + 카카오/Supabase 설정 점검
+- 영향: T-15 검증 보류, T-17(비용 통제)은 로그인 재활성 후 의미 있음
+
 ## D-06 (2026-07-19) 가족 공유 → **MVP는 개인용, 구조만 대비**
 
 - 선택: MVP RLS는 본인 소유 행만 접근하는 단순 정책. cats에 nullable `household_id` 컬럼만 미리 두어 v1.1 가족 공유 도입 시 마이그레이션 없이 확장
