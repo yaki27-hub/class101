@@ -11,22 +11,50 @@ import { supabase } from "@/lib/supabase";
 export default function Home() {
   const [cats, setCats] = useState<Cat[] | null>(null);
   const [linked, setLinked] = useState(false); // 카카오 연결된 계정 여부
+  const [diag, setDiag] = useState(""); // 로그인 진단(임시)
 
   useEffect(() => {
     void storage.listCats().then(setCats);
     const check = (user: { is_anonymous?: boolean } | null | undefined) =>
       setLinked(!!user && user.is_anonymous === false);
-    void supabase.auth.getUser().then(({ data }) => check(data.user));
-    // OAuth 콜백 완료(SIGNED_IN 등) 시 로그인 상태 즉시 반영
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+
+    // ── 로그인 진단(임시): URL 에러 + 세션 상태 표시 ──
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const qs = new URLSearchParams(window.location.search);
+    const err =
+      hash.get("error_description") ||
+      hash.get("error") ||
+      qs.get("error_description") ||
+      qs.get("error") ||
+      (qs.get("code") ? "code=있음(교환대기)" : "");
+
+    void supabase.auth.getUser().then(({ data }) => {
+      check(data.user);
+      const u = data.user;
+      setDiag(
+        `세션:${u ? "있음" : "없음"} / 익명:${u?.is_anonymous ?? "-"} / ` +
+          `provider:${u?.app_metadata?.provider ?? "-"} / URL에러:${err || "없음"}`,
+      );
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((e, session) => {
       check(session?.user);
       void storage.listCats().then(setCats);
+      const u = session?.user;
+      setDiag(
+        `[${e}] 세션:${u ? "있음" : "없음"} / 익명:${u?.is_anonymous ?? "-"} / ` +
+          `provider:${u?.app_metadata?.provider ?? "-"} / URL에러:${err || "없음"}`,
+      );
     });
     return () => sub.subscription.unsubscribe();
   }, []);
 
   return (
     <main className="flex flex-1 flex-col px-5 py-10">
+      {diag && (
+        <div className="mb-3 rounded-md border border-hairline bg-surface-soft p-2.5 text-[11px] break-all text-body">
+          🔎 로그인 진단: {diag}
+        </div>
+      )}
       <header className="mb-8">
         <div className="flex items-center justify-between">
           <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
