@@ -14,9 +14,15 @@ export default function Home() {
 
   useEffect(() => {
     void storage.listCats().then(setCats);
-    void supabase.auth
-      .getUser()
-      .then(({ data }) => setLinked(!!data.user && !data.user.is_anonymous));
+    const check = (user: { is_anonymous?: boolean } | null | undefined) =>
+      setLinked(!!user && user.is_anonymous === false);
+    void supabase.auth.getUser().then(({ data }) => check(data.user));
+    // OAuth 콜백 완료(SIGNED_IN 등) 시 로그인 상태 즉시 반영
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      check(session?.user);
+      void storage.listCats().then(setCats);
+    });
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   return (
