@@ -71,16 +71,30 @@ export default function Home() {
             <Link
               key={cat.id}
               href={`/cats/${cat.id}`}
-              className="block rounded-lg border border-hairline bg-canvas p-4"
+              className="flex items-center gap-3.5 rounded-lg border border-hairline bg-canvas p-4"
             >
-              <p className="text-base font-semibold text-ink">🐈 {cat.name}</p>
-              <p className="mt-0.5 text-xs text-muted">
-                {cat.breedGroup}
-                {cat.weightKg ? ` · ${cat.weightKg}kg` : ""}
-                {cat.conditions.length > 0
-                  ? ` · ${cat.conditions.join(", ")}`
-                  : ""}
-              </p>
+              {cat.photo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={cat.photo}
+                  alt=""
+                  className="size-[52px] flex-none rounded-[14px] object-cover"
+                />
+              ) : (
+                <span className="flex size-[52px] flex-none items-center justify-center rounded-[14px] bg-surface-card text-2xl">
+                  🐈
+                </span>
+              )}
+              <div>
+                <p className="text-base font-semibold text-ink">{cat.name}</p>
+                <p className="mt-0.5 text-xs text-muted">
+                  {cat.breedGroup}
+                  {cat.weightKg ? ` · ${cat.weightKg}kg` : ""}
+                  {cat.conditions.length > 0
+                    ? ` · ${cat.conditions.join(", ")}`
+                    : ""}
+                </p>
+              </div>
             </Link>
           ))}
           <Link

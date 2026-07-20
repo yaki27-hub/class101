@@ -19,7 +19,18 @@ export interface CatAgeInfo {
   stageMessage: string;
   /** 생애 시계 진행률 0~1 (기대 수명 20년 기준) */
   clockRatio: number;
+  /** 균등 5단계 바에서의 마커 위치 0~1 (현재 단계 + 단계 내 진행도) */
+  markerRatio: number;
 }
+
+/** 단계별 [시작년, 끝년, 순서] — 균등 바 마커 계산용 */
+const STAGE_BOUNDS: Record<LifeStage, [number, number, number]> = {
+  kitten: [0, 1, 0],
+  junior: [1, 3, 1],
+  adult: [3, 7, 2],
+  mature: [7, 11, 3],
+  senior: [11, 20, 4],
+};
 
 const STAGES: Record<
   LifeStage,
@@ -75,6 +86,8 @@ export function getCatAge(birthDate: string, now = new Date()): CatAgeInfo {
   else stage = "senior";
 
   const meta = STAGES[stage];
+  const [from, to, idx] = STAGE_BOUNDS[stage];
+  const progress = Math.min(1, Math.max(0, (years - from) / (to - from)));
   return {
     years,
     ageLabel,
@@ -84,6 +97,7 @@ export function getCatAge(birthDate: string, now = new Date()): CatAgeInfo {
     stageEmoji: meta.emoji,
     stageMessage: meta.message,
     clockRatio: Math.min(1, years / 20),
+    markerRatio: (idx + progress) / 5,
   };
 }
 

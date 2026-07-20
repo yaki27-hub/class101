@@ -25,6 +25,10 @@ export interface Cat {
   conditions: string[];
   indoor: boolean;
   avatar: CatAvatar | null;
+  /** 업로드한 사진 (MVP: dataURL, v1.1: Supabase Storage URL) */
+  photo: string | null;
+  /** 생성된 AI 일러스트 (dataURL 또는 URL) */
+  illust: string | null;
   createdAt: string;
   updatedAt: string;
 }

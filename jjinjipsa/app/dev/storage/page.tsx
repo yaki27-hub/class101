@@ -39,6 +39,8 @@ export default function StorageDevPage() {
       conditions: [],
       indoor: true,
       avatar: null,
+      photo: null,
+      illust: null,
       createdAt: now,
       updatedAt: now,
     };
