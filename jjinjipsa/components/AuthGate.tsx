@@ -25,6 +25,13 @@ export default function AuthGate({
   const router = useRouter();
   const [ready, setReady] = useState(false);
 
+  // 동기화용 Supabase 신원 확보: 세션 없으면 익명 로그인 (D-09)
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) void supabase.auth.signInAnonymously().catch(() => {});
+    });
+  }, []);
+
   useEffect(() => {
     if (!REQUIRE_AUTH || ALLOW_GUEST) {
       setReady(true);

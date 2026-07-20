@@ -4,14 +4,29 @@
  */
 
 import { LocalStorageAdapter } from "./local";
+import { SupabaseStorageAdapter } from "./supabase";
 import type { StorageAdapter } from "./adapter";
 
-export const storage: StorageAdapter = new LocalStorageAdapter();
+/*
+ * 저장소 선택 (T-16): NEXT_PUBLIC_USE_SUPABASE=1 이면 Supabase 동기화, 아니면 localStorage.
+ * 검증 전까지 기본은 localStorage — 플래그로 안전하게 전환/롤백.
+ */
+export const storage: StorageAdapter =
+  process.env.NEXT_PUBLIC_USE_SUPABASE === "1"
+    ? new SupabaseStorageAdapter()
+    : new LocalStorageAdapter();
 
 export * from "./types";
 export type { StorageAdapter } from "./adapter";
 
-/** 간단 id 생성 (Supabase 전환 시 uuid로 대체 가능) */
+/** UUID 생성 — Supabase uuid 컬럼과 호환 */
 export function newId(): string {
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // 폴백 (구형 환경)
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
 }
