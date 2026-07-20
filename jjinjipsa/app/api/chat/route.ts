@@ -5,10 +5,30 @@
  * 키가 없으면 503 → 클라이언트 어댑터가 mock으로 폴백 (D-04).
  */
 
+import { createClient } from "@supabase/supabase-js";
 import { buildSystemPrompt, type PromptContext } from "@/lib/llm/systemPrompt";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase";
 
 // 모델 라우팅(T-18) 전 기본 모델 — D-04에서 확정한 상위 모델
 const MODEL = process.env.GEMINI_MODEL ?? "gemini-3.5-flash";
+// 비용 통제(T-17) — 유저당 하루 챗봇 호출 한도
+const DAILY_LIMIT = Number(process.env.DAILY_CHAT_LIMIT ?? "10");
+
+/** 로그인 사용자면 사용량 +1 후 한도 초과 여부 반환. 비로그인/오류 시 통과(허용). */
+async function overLimit(authHeader: string | null): Promise<boolean> {
+  const token = authHeader?.replace(/^Bearer\s+/i, "");
+  if (!token) return false;
+  try {
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      global: { headers: { Authorization: `Bearer ${token}` } },
+    });
+    const { data, error } = await sb.rpc("bump_chat_usage");
+    if (error || typeof data !== "number") return false;
+    return data > DAILY_LIMIT;
+  } catch {
+    return false;
+  }
+}
 
 interface ChatBody extends PromptContext {
   history: Array<{ role: "user" | "assistant"; content: string }>;
@@ -18,6 +38,11 @@ interface ChatBody extends PromptContext {
 export async function POST(req: Request): Promise<Response> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return new Response("no-key", { status: 503 });
+
+  // 비용 통제(T-17): 하루 한도 초과 시 AI 호출 없이 차단
+  if (await overLimit(req.headers.get("Authorization"))) {
+    return new Response("daily-limit", { status: 429 });
+  }
 
   const body = (await req.json()) as ChatBody;
   const system = buildSystemPrompt(body);

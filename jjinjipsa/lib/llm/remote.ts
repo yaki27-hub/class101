@@ -5,8 +5,17 @@
  */
 
 import { storage } from "@/lib/storage";
+import { supabase } from "@/lib/supabase";
 import { MockLlmAdapter } from "./mock";
 import type { LlmAdapter, LlmChunkedResponse, LlmRequest } from "./types";
+
+const LIMIT_MESSAGE =
+  "오늘은 여기까지예요 🐾 하루에 물어볼 수 있는 횟수를 다 썼어요.\n" +
+  "내일 다시 만나요! 그동안 케어 카드나 오늘의 체크를 살펴보는 것도 좋아요.";
+
+async function* once(text: string): AsyncIterable<string> {
+  yield text;
+}
 
 async function* streamBody(body: ReadableStream<Uint8Array>): AsyncIterable<string> {
   const reader = body.getReader();
@@ -27,9 +36,14 @@ export class RemoteLlmAdapter implements LlmAdapter {
         storage.listTraits(req.cat.id),
         storage.listSymptoms(req.cat.id),
       ]);
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
       const res = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           cat: req.cat,
           traits,
@@ -38,6 +52,10 @@ export class RemoteLlmAdapter implements LlmAdapter {
           question: req.question,
         }),
       });
+      // 하루 한도 초과 → mock 폴백 대신 안내 메시지
+      if (res.status === 429) {
+        return { stream: once(LIMIT_MESSAGE), model: "limit" };
+      }
       if (!res.ok || !res.body) throw new Error(`api/chat ${res.status}`);
       return {
         stream: streamBody(res.body),
