@@ -10,13 +10,13 @@ import { supabase } from "@/lib/supabase";
 
 export default function Home() {
   const [cats, setCats] = useState<Cat[] | null>(null);
-  const [hasSession, setHasSession] = useState(false);
+  const [linked, setLinked] = useState(false); // 카카오 연결된 계정 여부
 
   useEffect(() => {
     void storage.listCats().then(setCats);
     void supabase.auth
-      .getSession()
-      .then(({ data }) => setHasSession(!!data.session));
+      .getUser()
+      .then(({ data }) => setLinked(!!data.user && !data.user.is_anonymous));
   }, []);
 
   return (
@@ -26,13 +26,17 @@ export default function Home() {
           <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
             Jjinjipsa
           </p>
-          {hasSession && (
+          {linked ? (
             <button
               onClick={() => void supabase.auth.signOut()}
               className="text-[12px] font-medium text-muted underline"
             >
               로그아웃
             </button>
+          ) : (
+            <Link href="/login" className="text-[12px] font-medium text-muted underline">
+              카카오로 로그인
+            </Link>
           )}
         </div>
         <h1 className="display mt-2 text-[28px] text-ink">
