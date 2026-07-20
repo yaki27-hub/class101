@@ -1,22 +1,27 @@
 /*
  * Supabase 클라이언트 (T-15) — 인증 + (T-16부터) 데이터 동기화.
- * anon 키는 공개용 키이며, 데이터 보호는 RLS(0001_init.sql)가 담당한다.
+ *
+ * URL과 anon 키는 원래 브라우저에 공개되는 값이라 코드에 내장한다 (보호는 RLS가 담당).
+ * 환경 변수가 있으면 우선하되, 비었거나 placeholder 오염값이면 내장값으로 폴백 —
+ * Vercel 환경 변수 오설정("placeholder.supabase.co")으로 인한 장애를 원천 차단.
  */
 
 import { createClient } from "@supabase/supabase-js";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const DEFAULT_URL = "https://ewdktvbhuwnayahevker.supabase.co";
+const DEFAULT_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3ZGt0dmJodXduYXlhaGV2a2VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0MjcwOTYsImV4cCI6MjEwMDAwMzA5Nn0.HOg5pSiw3eyeqvCY5NktLalI6dMPnvQLxAWjqN90D6o";
 
-if (!url || !anonKey) {
-  // 빌드는 통과시키되, 런타임에서 명확히 알린다
-  console.warn("[supabase] NEXT_PUBLIC_SUPABASE_URL / ANON_KEY가 비어 있습니다.");
+function sane(value: string | undefined, fallback: string): string {
+  if (!value || value.trim() === "" || value.includes("placeholder")) {
+    return fallback;
+  }
+  return value.trim();
 }
 
-// createClient는 빈 URL을 받으면 throw하므로, 미설정 시 자리표시자로 빌드를 통과시킨다
 export const supabase = createClient(
-  url ?? "https://placeholder.supabase.co",
-  anonKey ?? "placeholder-anon-key",
+  sane(process.env.NEXT_PUBLIC_SUPABASE_URL, DEFAULT_URL),
+  sane(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, DEFAULT_ANON_KEY),
 );
 
 /** 샌드박스 등 OAuth 불가 환경에서 로그인 게이트를 끄는 개발용 플래그 */

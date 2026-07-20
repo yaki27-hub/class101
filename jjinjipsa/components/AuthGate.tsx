@@ -10,6 +10,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ALLOW_GUEST, supabase } from "@/lib/supabase";
 
+/**
+ * 임시(D-07): 카카오 로그인 검증이 끝날 때까지 게이트를 기본 OFF.
+ * NEXT_PUBLIC_REQUIRE_AUTH=1 을 넣으면 다시 로그인 필수로 전환된다.
+ */
+const REQUIRE_AUTH = process.env.NEXT_PUBLIC_REQUIRE_AUTH === "1";
+
 export default function AuthGate({
   children,
 }: {
@@ -20,7 +26,7 @@ export default function AuthGate({
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (ALLOW_GUEST) {
+    if (!REQUIRE_AUTH || ALLOW_GUEST) {
       setReady(true);
       return;
     }
