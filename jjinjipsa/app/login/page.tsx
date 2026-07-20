@@ -19,13 +19,11 @@ export default function LoginPage() {
 
   async function signInWithKakao() {
     setError("");
-    // 익명 세션이면 '연결'로 업그레이드(데이터 유지), 아니면 일반 로그인
-    const { data } = await supabase.auth.getUser();
-    const isAnon = data.user?.is_anonymous;
-    const opts = { redirectTo: window.location.origin };
-    const { error } = isAnon
-      ? await supabase.auth.linkIdentity({ provider: "kakao", options: opts })
-      : await supabase.auth.signInWithOAuth({ provider: "kakao", options: opts });
+    // 표준 카카오 OAuth 로그인 (안정적). 익명 데이터 이관은 추후 별도 처리.
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "kakao",
+      options: { redirectTo: window.location.origin },
+    });
     if (error) setError(`로그인에 실패했어요: ${error.message}`);
   }
 
