@@ -13,6 +13,8 @@ export interface LlmRequest {
   history: LlmTurn[];
   /** 이번 질문 */
   question: string;
+  /** 첨부 사진 dataURL (사진 진단) */
+  image?: string | null;
 }
 
 export interface LlmChunkedResponse {

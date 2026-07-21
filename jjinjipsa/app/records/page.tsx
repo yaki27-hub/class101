@@ -11,16 +11,24 @@ export default function Records() {
     { cat: Cat; log: SymptomLog }[] | null
   >(null);
 
+  async function load() {
+    const cats = await storage.listCats();
+    const all: { cat: Cat; log: SymptomLog }[] = [];
+    for (const cat of cats) {
+      for (const log of await storage.listSymptoms(cat.id)) all.push({ cat, log });
+    }
+    all.sort((a, b) => (a.log.occurredAt < b.log.occurredAt ? 1 : -1));
+    setRows(all);
+  }
+
   useEffect(() => {
-    void storage.listCats().then(async (cats) => {
-      const all: { cat: Cat; log: SymptomLog }[] = [];
-      for (const cat of cats) {
-        for (const log of await storage.listSymptoms(cat.id)) all.push({ cat, log });
-      }
-      all.sort((a, b) => (a.log.occurredAt < b.log.occurredAt ? 1 : -1));
-      setRows(all);
-    });
+    void load();
   }, []);
+
+  async function remove(catId: string, id: string) {
+    await storage.deleteSymptom(catId, id);
+    await load();
+  }
 
   if (rows === null) return null;
 
@@ -43,9 +51,18 @@ export default function Records() {
           >
             <div className="flex items-center justify-between">
               <p className="text-[13px] font-bold text-secondary">🐱 {cat.name}</p>
-              <span className="text-[11px] text-muted">
-                {log.occurredAt.slice(0, 10).replace(/-/g, ".")}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] text-muted">
+                  {log.occurredAt.slice(0, 10).replace(/-/g, ".")}
+                </span>
+                <button
+                  onClick={() => void remove(cat.id, log.id)}
+                  aria-label="기록 삭제"
+                  className="rounded-full bg-surface-soft px-2 py-0.5 text-[11px] text-muted"
+                >
+                  🗑️
+                </button>
+              </div>
             </div>
             <p className="mt-1.5 flex flex-wrap gap-1">
               {log.tags.map((t) => (

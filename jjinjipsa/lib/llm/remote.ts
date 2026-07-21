@@ -50,6 +50,7 @@ export class RemoteLlmAdapter implements LlmAdapter {
           symptoms,
           history: req.history,
           question: req.question,
+          image: req.image ?? null,
         }),
       });
       // 하루 한도 초과 → mock 폴백 대신 안내 메시지
