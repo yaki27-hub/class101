@@ -29,7 +29,7 @@
 ## M3 — 출시 준비
 
 - [x] T-14 Supabase 프로젝트·스키마·RLS — 완료 기준: 테이블 생성 SQL 적용, 본인 행만 읽고 쓰이는 것 확인 (0001_init.sql 적용 완료, 7개 테이블 rowsecurity=true 사용자 확인) ✅ 2026-07-19
-- [x] T-15 카카오 로그인 — 익명→카카오 linkIdentity 연결, Supabase URL Configuration(Site/Redirect) 정합 후 배포본에서 로그인 성공 확인 ✅ 2026-07-20
+- [x] T-15 카카오 로그인 — 배포본에서 카카오 OAuth 로그인 성공(익명:false/provider:kakao). 원인 다수 해결: env placeholder, /login 익명 리다이렉트, 콜백 경쟁상태, 카카오 Redirect URI 등록 ✅ 2026-07-21
 - [x] T-16 로컬→Supabase 동기화 — SupabaseStorageAdapter + 익명 로그인, 플래그(NEXT_PUBLIC_USE_SUPABASE=1)로 전환. 배포본에서 등록→Supabase cats 테이블 저장 확인 ✅ 2026-07-20
 - [x] T-17 비용 통제 — bump_chat_usage RPC + /api/chat 서버 카운트, 10회 초과 시 AI 미호출·안내. 레드플래그 제외. RPC 배포·생성 확인 ✅ 2026-07-20
 - [x] T-18 모델 라우팅 — 텍스트=gemini-3.1-flash-lite / 사진첨부=gemini-3.5-flash, image 유무로 분기(로그 확인). env 오버라이드 가능 ✅ 2026-07-20
