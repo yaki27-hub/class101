@@ -113,7 +113,7 @@ export default function Home() {
 
       {/* 고양이 선택 줄 (다묘) */}
       {cats.length > 0 && (
-        <div className="flex items-center gap-3 overflow-x-auto pb-1">
+        <div className="-mx-1 flex items-center gap-3 overflow-x-auto px-1 pt-1.5 pb-2">
           {cats.map((c) => {
             const on = c.id === cat?.id;
             return (
