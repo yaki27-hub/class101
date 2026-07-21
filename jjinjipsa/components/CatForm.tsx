@@ -62,6 +62,14 @@ export default function CatForm({ existing }: { existing?: Cat }) {
   }
 
   async function save() {
+    // 오픈 테스트: 최대 3마리 (신규 등록 시)
+    if (!editing) {
+      const count = (await storage.listCats()).length;
+      if (count >= 3)
+        return setError(
+          "오픈 테스트 기간에는 최대 3마리까지 등록할 수 있어요. 기존 아이를 삭제한 뒤 등록해 주세요.",
+        );
+    }
     if (!name.trim()) return setError("이름을 입력해 주세요.");
     if (!birthDate)
       return setError("생일을 입력해 주세요. 모르면 추정 날짜도 괜찮아요.");

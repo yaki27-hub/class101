@@ -30,19 +30,36 @@ function loadCare(catId: string): string[] {
   }
 }
 
+const SEL_KEY = "jjinjipsa:selectedCat";
+export const MAX_CATS = 3; // 오픈 테스트: 최대 3마리
+
 export default function Home() {
   const router = useRouter();
   const [cats, setCats] = useState<Cat[] | null>(null);
   const [nick, setNick] = useState("집사");
   const [linked, setLinked] = useState(false);
   const [care, setCare] = useState<string[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const cat = cats?.[0];
+  const cat =
+    cats?.find((c) => c.id === selectedId) ?? cats?.[0];
+
+  function selectCat(id: string) {
+    setSelectedId(id);
+    localStorage.setItem(SEL_KEY, id);
+    setCare(loadCare(id));
+  }
 
   useEffect(() => {
     void storage.listCats().then((list) => {
       setCats(list);
-      if (list[0]) setCare(loadCare(list[0].id));
+      const saved =
+        typeof window !== "undefined" ? localStorage.getItem(SEL_KEY) : null;
+      const initial = list.find((c) => c.id === saved) ?? list[0];
+      if (initial) {
+        setSelectedId(initial.id);
+        setCare(loadCare(initial.id));
+      }
     });
     const applyUser = (u: { is_anonymous?: boolean; user_metadata?: Record<string, unknown> } | null | undefined) => {
       setLinked(!!u && u.is_anonymous === false);
@@ -93,6 +110,44 @@ export default function Home() {
           </Link>
         )}
       </header>
+
+      {/* 고양이 선택 줄 (다묘) */}
+      {cats.length > 0 && (
+        <div className="flex items-center gap-3 overflow-x-auto pb-1">
+          {cats.map((c) => {
+            const on = c.id === cat?.id;
+            return (
+              <button
+                key={c.id}
+                onClick={() => selectCat(c.id)}
+                className="flex flex-col items-center gap-1"
+              >
+                <span
+                  className={`flex size-14 items-center justify-center overflow-hidden rounded-full ${
+                    on ? "ring-[3px] ring-primary" : "opacity-60"
+                  }`}
+                >
+                  {c.photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={c.photo} alt="" className="size-full object-cover" />
+                  ) : (
+                    <span className="flex size-full items-center justify-center bg-surface-card text-2xl">🐱</span>
+                  )}
+                </span>
+                <span className={`text-[11px] font-semibold ${on ? "text-secondary" : "text-muted-soft"}`}>
+                  {c.name}
+                </span>
+              </button>
+            );
+          })}
+          {cats.length < MAX_CATS && (
+            <Link href="/profile/new" className="flex flex-col items-center gap-1">
+              <span className="flex size-14 items-center justify-center rounded-full border border-dashed border-muted-soft text-xl text-muted-soft">+</span>
+              <span className="text-[11px] font-semibold text-muted-soft">추가</span>
+            </Link>
+          )}
+        </div>
+      )}
 
       {!cat ? (
         <Link
