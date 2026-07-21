@@ -376,7 +376,7 @@ export default function ChatPage() {
           <button
             onClick={() => fileRef.current?.click()}
             aria-label="사진 첨부"
-            className="flex h-11 w-11 flex-none items-center justify-center rounded-md border border-hairline text-lg"
+            className="flex size-11 shrink-0 items-center justify-center rounded-md border border-hairline text-lg"
           >
             📷
           </button>
@@ -387,12 +387,12 @@ export default function ChatPage() {
               if (e.key === "Enter" && !e.nativeEvent.isComposing) void send();
             }}
             placeholder={photo ? "사진에 대해 물어보세요 (선택)" : `${cat.name}에 대해 물어보세요`}
-            className="h-11 flex-1 rounded-md border border-hairline bg-canvas px-4 text-base text-ink placeholder:text-muted-soft focus:border-ink focus:outline-none"
+            className="h-11 min-w-0 flex-1 rounded-md border border-hairline bg-canvas px-4 text-base text-ink placeholder:text-muted-soft focus:border-ink focus:outline-none"
           />
           <button
             onClick={() => void send()}
             disabled={streaming !== null || (!draft.trim() && !photo)}
-            className="h-11 rounded-md bg-ink px-5 text-sm font-semibold text-white disabled:bg-ink/20"
+            className="h-11 shrink-0 rounded-md bg-ink px-4 text-sm font-semibold whitespace-nowrap text-white disabled:bg-ink/20"
           >
             전송
           </button>
