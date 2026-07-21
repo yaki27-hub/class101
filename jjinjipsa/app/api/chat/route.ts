@@ -9,9 +9,10 @@ import { createClient } from "@supabase/supabase-js";
 import { buildSystemPrompt, type PromptContext } from "@/lib/llm/systemPrompt";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase";
 
-// 모델 라우팅(T-18, D-04): 텍스트=경량 / 사진 첨부=상위 멀티모달
+// 모델 라우팅(T-18, D-04): 텍스트/사진 모두 flash-lite.
+// (gemini-3.5-flash는 사진 입력 시 타임아웃 → flash-lite가 vision도 빠르고 정확)
 const TEXT_MODEL = process.env.GEMINI_TEXT_MODEL ?? "gemini-3.1-flash-lite";
-const VISION_MODEL = process.env.GEMINI_VISION_MODEL ?? "gemini-3.5-flash";
+const VISION_MODEL = process.env.GEMINI_VISION_MODEL ?? "gemini-3.1-flash-lite";
 // 비용 통제(T-17) — 유저당 하루 챗봇 호출 한도
 const DAILY_LIMIT = Number(process.env.DAILY_CHAT_LIMIT ?? "10");
 
