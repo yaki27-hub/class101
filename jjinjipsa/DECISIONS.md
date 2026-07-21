@@ -51,6 +51,15 @@
 - 카카오 개발자 앱 미보유 → T-15 착수 전 생성 가이드 제공 예정 (kakao developers 앱 생성 + Supabase Auth 연동 설정)
 - 영향받는 태스크: T-14(진행 가능, 미정-5 해소 후), T-15(카카오 앱 생성 선행)
 
+## D-10 (2026-07-21) UI 전면 리디자인 → **"고양이 건강수첩 / 집사의 책상"**
+
+- 방향: AI 챗봇 느낌 제거 → 집사가 매일 여는 따뜻한 케어 대시보드. Apple Health 미니멀 + Notion 여백 + Warm Beige + Cute but Premium
+- 새 팔레트: bg #FCFAF7 / primary #F6B352(앰버) / secondary #7A5C43(브라운) / mint #CFEFDF / soft-pink #FFD8D8. 라운드 card 24 / button·input 20
+- AI 캐릭터명: "냥박사" (고양이 캐릭터 안내 느낌)
+- 구조 변경: 홈=채팅 대신 **대시보드**(인사·건강점수·오늘기록·빠른질문·사진진단 CTA·AI질문), **하단 5탭**(홈/AI상담/사진진단/건강기록/우리고양이)
+- 단계 실행: Phase1 토큰+홈 대시보드+하단탭 / Phase2 챗 카드 UI·고양이 로딩 애니·빈 상태 / Phase3 사진진단·우리고양이 페이지
+- 기존 Clay 시스템(D-03)은 대체됨
+
 ## D-09 (2026-07-20) T-16 동기화 인증 → **Supabase 익명 로그인**
 
 - 선택: Supabase Anonymous 로그인으로 기기별 auth.uid() 확보 → RLS 통과, 카카오 없이 동기화. 추후 카카오 로그인 시 익명 계정 연결(link)

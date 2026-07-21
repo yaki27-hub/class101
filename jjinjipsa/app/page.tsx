@@ -1,122 +1,189 @@
 "use client";
 
-/* 홈 — 등록된 고양이 목록 + 첫 등록 CTA (챗봇 중심 홈 F-03'은 M2에서 완성) */
+/* 홈 대시보드 (D-10) — "집사의 책상": 인사·건강점수·오늘 기록·빠른 질문·사진진단 */
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { storage, type Cat } from "@/lib/storage";
-import DailyCheck from "@/components/DailyCheck";
 import { supabase } from "@/lib/supabase";
+import { getCatAge } from "@/lib/catAge";
+import { todayStr } from "@/lib/dailyCheck";
+
+const CARE_ITEMS = [
+  { key: "meal", icon: "🍚", label: "식사" },
+  { key: "water", icon: "💧", label: "물" },
+  { key: "brush", icon: "🪥", label: "양치" },
+  { key: "med", icon: "💊", label: "약" },
+];
+const QUICK = ["토했어요", "밥 안 먹어요", "설사", "눈곱", "기침", "숨었어요"];
+
+function careKey(catId: string) {
+  return `jjinjipsa:care:${catId}:${todayStr()}`;
+}
+function loadCare(catId: string): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(localStorage.getItem(careKey(catId)) || "[]");
+  } catch {
+    return [];
+  }
+}
 
 export default function Home() {
+  const router = useRouter();
   const [cats, setCats] = useState<Cat[] | null>(null);
-  const [linked, setLinked] = useState(false); // 카카오 연결된 계정 여부
+  const [nick, setNick] = useState("집사");
+  const [linked, setLinked] = useState(false);
+  const [care, setCare] = useState<string[]>([]);
+
+  const cat = cats?.[0];
 
   useEffect(() => {
-    void storage.listCats().then(setCats);
-    const check = (user: { is_anonymous?: boolean } | null | undefined) =>
-      setLinked(!!user && user.is_anonymous === false);
-    void supabase.auth.getUser().then(({ data }) => check(data.user));
-    // OAuth 콜백 완료(SIGNED_IN 등) 시 로그인 상태·목록 즉시 반영
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      check(session?.user);
+    void storage.listCats().then((list) => {
+      setCats(list);
+      if (list[0]) setCare(loadCare(list[0].id));
+    });
+    const applyUser = (u: { is_anonymous?: boolean; user_metadata?: Record<string, unknown> } | null | undefined) => {
+      setLinked(!!u && u.is_anonymous === false);
+      const n = (u?.user_metadata?.name || u?.user_metadata?.full_name) as string | undefined;
+      if (n) setNick(n);
+    };
+    void supabase.auth.getUser().then(({ data }) => applyUser(data.user));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      applyUser(s?.user);
       void storage.listCats().then(setCats);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  function toggleCare(key: string) {
+    if (!cat) return;
+    const next = care.includes(key) ? care.filter((k) => k !== key) : [...care, key];
+    setCare(next);
+    localStorage.setItem(careKey(cat.id), JSON.stringify(next));
+  }
+
+  function ask(q: string) {
+    if (!cat) return router.push("/profile/new");
+    router.push(`/cats/${cat.id}/chat?q=${encodeURIComponent(q)}`);
+  }
+
+  // 건강 점수: 기본 60 + 오늘 기록(4×8) + 프로필 완성 보너스
+  const score = cat
+    ? Math.min(100, 60 + care.length * 8 + (cat.weightKg ? 8 : 0))
+    : 0;
+  const scoreFace = score >= 85 ? "😺" : score >= 70 ? "🙂" : "😿";
+
+  if (cats === null) return null;
+
   return (
-    <main className="flex flex-1 flex-col px-5 py-10">
-      <header className="mb-8">
-        <div className="flex items-center justify-between">
-          <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
-            Jjinjipsa
-          </p>
-          {linked ? (
-            <button
-              onClick={() => void supabase.auth.signOut()}
-              className="text-[12px] font-medium text-muted underline"
-            >
-              로그아웃
-            </button>
-          ) : (
-            <Link href="/login" className="text-[12px] font-medium text-muted underline">
-              카카오로 로그인
-            </Link>
-          )}
+    <main className="flex flex-1 flex-col gap-4 px-5 pt-8 pb-6">
+      {/* 인사 */}
+      <header className="flex items-start justify-between">
+        <div>
+          <p className="text-sm text-muted">안녕하세요 {nick}님 👋</p>
+          <h1 className="display mt-0.5 text-[22px] text-secondary">
+            {cat ? `오늘 ${cat.name}는 잘 지냈나요?` : "우리 아이를 등록해 주세요"}
+          </h1>
         </div>
-        <h1 className="display mt-2 text-[28px] text-ink">
-          갑자기 시작된 인연도,
-          <br />
-          오래도록 걱정 없이.
-        </h1>
-        <p className="mt-2 text-sm text-body">
-          내 고양이를 기억하는 건강 챗봇, 찐집사
-        </p>
+        {!linked && (
+          <Link href="/login" className="mt-1 shrink-0 text-[11px] font-semibold text-muted underline">
+            로그인
+          </Link>
+        )}
       </header>
 
-      {cats === null ? null : cats.length === 0 ? (
-        <div className="rounded-xl bg-brand-peach p-6">
-          <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-ink/60">
-            시작하기
-          </p>
-          <p className="mt-1 text-lg font-semibold text-ink">
-            아직 등록된 아이가 없어요
-          </p>
-          <p className="mt-1 text-sm text-ink/70">
-            1분이면 끝나요. 프로필을 등록하면 나이 환산부터 바로 보여드려요.
-          </p>
-          <Link
-            href="/profile/new"
-            className="mt-4 flex h-11 items-center justify-center rounded-md bg-canvas text-sm font-semibold text-ink"
-          >
-            우리 아이 등록하기 🐾
-          </Link>
-        </div>
+      {!cat ? (
+        <Link
+          href="/profile/new"
+          className="rounded-card bg-primary/15 p-6 text-center"
+        >
+          <p className="text-4xl">🐱</p>
+          <p className="mt-2 font-bold text-secondary">우리 아이 등록하기</p>
+          <p className="mt-1 text-sm text-body">1분이면 끝나요. 나이 환산부터 바로 보여드려요.</p>
+        </Link>
       ) : (
-        <div className="space-y-3">
-          {/* 오늘의 체크 — 첫째 아이 기준 (다묘 회전은 추후) */}
-          <DailyCheck cat={cats[0]} />
-          {cats.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/cats/${cat.id}`}
-              className="flex items-center gap-3.5 rounded-lg border border-hairline bg-canvas p-4"
-            >
-              {cat.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={cat.photo}
-                  alt=""
-                  className="size-[52px] flex-none rounded-[14px] object-cover"
-                />
-              ) : (
-                <span className="flex size-[52px] flex-none items-center justify-center rounded-[14px] bg-surface-card text-2xl">
-                  🐈
-                </span>
-              )}
-              <div>
-                <p className="text-base font-semibold text-ink">{cat.name}</p>
-                <p className="mt-0.5 text-xs text-muted">
-                  {cat.breedGroup}
-                  {cat.weightKg ? ` · ${cat.weightKg}kg` : ""}
-                  {cat.conditions.length > 0
-                    ? ` · ${cat.conditions.join(", ")}`
-                    : ""}
+        <>
+          {/* 건강 점수 */}
+          <section className="rounded-card bg-white p-6 shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+            <p className="text-[12px] font-semibold tracking-wide text-muted">오늘의 건강 점수</p>
+            <div className="mt-2 flex items-center justify-between">
+              <span className="text-5xl">{scoreFace}</span>
+              <div className="text-right">
+                <span className="display text-4xl text-primary-deep">{score}</span>
+                <span className="text-lg font-bold text-primary-deep">%</span>
+                <p className="text-[11px] text-muted">
+                  {getCatAge(cat.birthDate).stageLabel} · {getCatAge(cat.birthDate).ageLabel}
                 </p>
               </div>
-            </Link>
-          ))}
+            </div>
+          </section>
+
+          {/* 오늘 기록 */}
+          <section className="rounded-card bg-white p-5 shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+            <p className="text-[12px] font-semibold tracking-wide text-muted">오늘 기록</p>
+            <div className="mt-3 grid grid-cols-4 gap-2">
+              {CARE_ITEMS.map((it) => {
+                const on = care.includes(it.key);
+                return (
+                  <button
+                    key={it.key}
+                    onClick={() => toggleCare(it.key)}
+                    className={`flex flex-col items-center gap-1 rounded-[18px] py-3 transition ${
+                      on ? "bg-mint" : "bg-surface-soft"
+                    }`}
+                  >
+                    <span className="text-xl">{it.icon}</span>
+                    <span className="text-[12px] font-semibold text-secondary">{it.label}</span>
+                    <span className={`text-[11px] ${on ? "text-success" : "text-muted-soft"}`}>
+                      {on ? "✔" : "○"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* 빠른 질문 */}
+          <section>
+            <p className="mb-2 text-[12px] font-semibold tracking-wide text-muted">빠른 질문</p>
+            <div className="flex flex-wrap gap-2">
+              {QUICK.map((q) => (
+                <button
+                  key={q}
+                  onClick={() => ask(q)}
+                  className="rounded-button bg-white px-3.5 py-2 text-[13px] font-semibold text-secondary shadow-[0_1px_8px_rgba(122,92,67,0.05)] active:scale-95"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* 사진 진단 (가장 큰 CTA) */}
           <Link
-            href="/profile/new"
-            className="flex h-11 items-center justify-center rounded-md border border-hairline bg-canvas text-sm font-semibold text-body"
+            href="/diagnose"
+            className="rounded-card bg-primary p-6 text-secondary shadow-[0_4px_20px_rgba(246,179,82,0.35)]"
           >
-            + 다른 아이 등록
+            <p className="text-2xl">📷</p>
+            <p className="mt-2 text-lg font-bold">사진으로 진단하기</p>
+            <p className="mt-0.5 text-[13px] opacity-80">
+              눈·피부·귀, 사진 한 장으로 냥박사가 살펴봐요.
+            </p>
           </Link>
-        </div>
+
+          {/* AI 질문 */}
+          <Link
+            href={`/cats/${cat.id}/chat`}
+            className="flex items-center justify-center gap-2 rounded-button border border-hairline bg-white py-3.5 text-sm font-semibold text-secondary"
+          >
+            🐱 냥박사에게 질문하기
+          </Link>
+        </>
       )}
 
-      <p className="mt-auto pt-10 text-center text-xs text-muted-soft">
+      <p className="mt-1 text-center text-[11px] text-muted-soft">
         이 정보는 참고용이며, 정확한 진단은 수의사 상담이 필요합니다.
       </p>
     </main>
