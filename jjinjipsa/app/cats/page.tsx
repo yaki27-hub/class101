@@ -42,12 +42,18 @@ export default function CatsList() {
           </Link>
         );
       })}
-      <Link
-        href="/profile/new"
-        className="rounded-button border border-dashed border-hairline bg-white py-3.5 text-center text-sm font-semibold text-muted"
-      >
-        + 다른 아이 등록
-      </Link>
+      {cats.length < 3 ? (
+        <Link
+          href="/profile/new"
+          className="rounded-button border border-dashed border-hairline bg-white py-3.5 text-center text-sm font-semibold text-muted"
+        >
+          + 다른 아이 등록
+        </Link>
+      ) : (
+        <p className="rounded-button bg-surface-soft py-3.5 text-center text-[13px] text-muted">
+          오픈 테스트 기간에는 최대 3마리까지 등록할 수 있어요 🐾
+        </p>
+      )}
     </main>
   );
 }
