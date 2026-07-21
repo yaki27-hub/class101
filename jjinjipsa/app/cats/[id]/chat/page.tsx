@@ -36,7 +36,34 @@ export default function ChatPage() {
     sessionId: string;
   } | null>(null);
   const [logSaved, setLogSaved] = useState(false);
+  const [photo, setPhoto] = useState<string | null>(null); // 첨부 사진
   const bottomRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  // 사진 첨부: 600px JPEG 압축
+  function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const src = String(ev.target?.result ?? "");
+      const img = new Image();
+      img.onload = () => {
+        const max = 600;
+        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * scale);
+        c.height = Math.round(img.height * scale);
+        const ctx = c.getContext("2d");
+        if (!ctx) return setPhoto(src);
+        ctx.drawImage(img, 0, 0, c.width, c.height);
+        setPhoto(c.toDataURL("image/jpeg", 0.82));
+      };
+      img.onerror = () => setPhoto(src);
+      img.src = src;
+    };
+    reader.readAsDataURL(file);
+  }
 
   // 고양이 + 최근 세션 이어보기
   useEffect(() => {
@@ -57,16 +84,20 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streaming]);
 
-  // 홈/사진진단의 빠른 질문(?q=)을 입력창에 미리 채움
+  // 홈/사진진단의 빠른 질문(?q=)·사진 요청(?photo=1)
   useEffect(() => {
     const q = searchParams.get("q");
     if (q) setDraft(q);
+    if (searchParams.get("photo") === "1")
+      setTimeout(() => fileRef.current?.click(), 300);
   }, [searchParams]);
 
   async function send(text?: string) {
-    const q = (text ?? draft).trim();
+    const q = (text ?? draft).trim() || (photo ? "이 사진 좀 봐줄래요?" : "");
     if (!q || !cat || streaming !== null) return;
+    const img = photo;
     setDraft("");
+    setPhoto(null);
     setPendingLog(null);
     setLogSaved(false);
 
@@ -88,7 +119,7 @@ export default function ChatPage() {
       sessionId: sid,
       role: "user",
       content: q,
-      imageUrl: null,
+      imageUrl: img,
       model: null,
       createdAt: new Date().toISOString(),
     };
@@ -125,7 +156,7 @@ export default function ChatPage() {
       role: m.role,
       content: m.content,
     }));
-    const res = await llm.ask({ cat, history, question: q });
+    const res = await llm.ask({ cat, history, question: q, image: img });
     setStreaming("");
     let full = "";
     for await (const chunk of res.stream) {
@@ -254,6 +285,14 @@ export default function ChatPage() {
                     : "max-w-[88%] rounded-lg rounded-bl-xs border border-hairline bg-canvas px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body"
                 }
               >
+                {m.imageUrl && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={m.imageUrl}
+                    alt="첨부 사진"
+                    className="mb-2 max-h-52 rounded-md"
+                  />
+                )}
                 {m.content}
               </div>
             </div>
@@ -312,19 +351,47 @@ export default function ChatPage() {
 
       {/* 입력 바 */}
       <div className="border-t border-hairline bg-canvas px-4 py-3">
+        {/* 첨부 사진 미리보기 */}
+        {photo && (
+          <div className="mb-2 flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={photo} alt="첨부" className="size-14 rounded-md object-cover" />
+            <span className="text-[12px] text-muted">사진 첨부됨</span>
+            <button
+              onClick={() => setPhoto(null)}
+              className="ml-auto rounded-full bg-surface-soft px-2.5 py-1 text-[12px] text-muted"
+            >
+              ✕ 제거
+            </button>
+          </div>
+        )}
         <div className="flex gap-2">
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={onPhoto}
+          />
+          <button
+            onClick={() => fileRef.current?.click()}
+            aria-label="사진 첨부"
+            className="flex h-11 w-11 flex-none items-center justify-center rounded-md border border-hairline text-lg"
+          >
+            📷
+          </button>
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.nativeEvent.isComposing) void send();
             }}
-            placeholder={`${cat.name}에 대해 물어보세요`}
+            placeholder={photo ? "사진에 대해 물어보세요 (선택)" : `${cat.name}에 대해 물어보세요`}
             className="h-11 flex-1 rounded-md border border-hairline bg-canvas px-4 text-base text-ink placeholder:text-muted-soft focus:border-ink focus:outline-none"
           />
           <button
             onClick={() => void send()}
-            disabled={streaming !== null || !draft.trim()}
+            disabled={streaming !== null || (!draft.trim() && !photo)}
             className="h-11 rounded-md bg-ink px-5 text-sm font-semibold text-white disabled:bg-ink/20"
           >
             전송

@@ -24,10 +24,10 @@ export default function Diagnose() {
         </p>
         {cat ? (
           <Link
-            href={`/cats/${cat.id}/chat`}
+            href={`/cats/${cat.id}/chat?photo=1`}
             className="mt-5 flex h-12 items-center justify-center rounded-button bg-white text-sm font-bold text-secondary"
           >
-            냥박사에게 사진 보여주기
+            📷 사진 찍기 / 올리기
           </Link>
         ) : (
           <Link
