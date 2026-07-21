@@ -10,10 +10,11 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
 
-  // 이미 로그인돼 있으면 홈으로
+  // 이미 '진짜(비익명)' 로그인돼 있으면 홈으로.
+  // 익명 세션은 누구에게나 있으므로 그것만으론 튕기지 않는다 (그래야 카카오 버튼을 누를 수 있음).
   useEffect(() => {
-    void supabase.auth.getSession().then(({ data }) => {
-      if (data.session) router.replace("/");
+    void supabase.auth.getUser().then(({ data }) => {
+      if (data.user && data.user.is_anonymous === false) router.replace("/");
     });
   }, [router]);
 
