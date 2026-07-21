@@ -20,26 +20,33 @@ export default function CatsList() {
       {cats.map((cat) => {
         const age = getCatAge(cat.birthDate);
         return (
-          <Link
+          <div
             key={cat.id}
-            href={`/cats/${cat.id}`}
             className="flex items-center gap-4 rounded-card bg-white p-4 shadow-[0_2px_16px_rgba(122,92,67,0.06)]"
           >
-            {cat.photo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={cat.photo} alt="" className="size-16 flex-none rounded-[18px] object-cover" />
-            ) : (
-              <span className="flex size-16 flex-none items-center justify-center rounded-[18px] bg-surface-soft text-3xl">🐱</span>
-            )}
-            <div>
-              <p className="font-bold text-secondary">{cat.name}</p>
-              <p className="text-[12px] text-muted">
-                {age.stageEmoji} {age.stageLabel} · {age.ageLabel}
-                {cat.weightKg ? ` · ${cat.weightKg}kg` : ""}
-              </p>
-              <p className="text-[12px] text-muted-soft">{cat.breedGroup}</p>
-            </div>
-          </Link>
+            <Link href={`/cats/${cat.id}`} className="flex flex-1 items-center gap-4">
+              {cat.photo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={cat.photo} alt="" className="size-16 flex-none rounded-[18px] object-cover" />
+              ) : (
+                <span className="flex size-16 flex-none items-center justify-center rounded-[18px] bg-surface-soft text-3xl">🐱</span>
+              )}
+              <div>
+                <p className="font-bold text-secondary">{cat.name}</p>
+                <p className="text-[12px] text-muted">
+                  {age.stageEmoji} {age.stageLabel} · {age.ageLabel}
+                  {cat.weightKg ? ` · ${cat.weightKg}kg` : ""}
+                </p>
+                <p className="text-[12px] text-muted-soft">{cat.breedGroup}</p>
+              </div>
+            </Link>
+            <Link
+              href={`/cats/${cat.id}/edit`}
+              className="flex-none rounded-full bg-surface-soft px-3 py-2 text-[12px] font-semibold text-secondary"
+            >
+              ✏️ 수정
+            </Link>
+          </div>
         );
       })}
       {cats.length < 3 ? (
