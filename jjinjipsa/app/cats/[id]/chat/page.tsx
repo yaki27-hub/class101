@@ -3,7 +3,7 @@
 /* F-08 챗봇 대화 화면 (T-06: mock 왕복 + 세션 저장. Gemini 연결·컨텍스트 주입은 T-07) */
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
   newId,
@@ -23,6 +23,7 @@ import {
 
 export default function ChatPage() {
   const { id: catId } = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -55,6 +56,12 @@ export default function ChatPage() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streaming]);
+
+  // 홈/사진진단의 빠른 질문(?q=)을 입력창에 미리 채움
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) setDraft(q);
+  }, [searchParams]);
 
   async function send(text?: string) {
     const q = (text ?? draft).trim();
