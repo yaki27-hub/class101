@@ -20,6 +20,12 @@ import {
   buildRedFlagResponse,
   checkRedFlags,
 } from "@/lib/redFlags";
+import NyangLoader from "@/components/NyangLoader";
+
+/** AI 답변의 마크다운 ** 강조 기호 정리 */
+function clean(text: string) {
+  return text.replace(/\*\*/g, "").replace(/^#+\s*/gm, "");
+}
 
 export default function ChatPage() {
   const { id: catId } = useParams<{ id: string }>();
@@ -212,44 +218,43 @@ export default function ChatPage() {
   return (
     <main className="flex h-dvh flex-col">
       {/* 헤더 */}
-      <header className="flex items-center justify-between border-b border-hairline bg-canvas px-5 py-4">
-        <Link href={`/cats/${catId}`} className="text-sm font-medium text-muted">
+      <header className="flex items-center justify-between border-b border-hairline bg-canvas px-5 py-3.5">
+        <Link href={`/cats/${catId}`} className="text-lg text-muted">
           ←
         </Link>
-        <div className="text-center">
-          <p className="text-sm font-semibold text-ink">🐈 {cat.name}</p>
-          <p className="text-[11px] text-muted">
-            {cat.name}를 아는 건강 도우미
-          </p>
+        <div className="flex items-center gap-2">
+          <span className="flex size-8 items-center justify-center rounded-full bg-primary/20 text-lg">🐱</span>
+          <div className="text-left">
+            <p className="text-sm font-bold text-secondary">냥박사</p>
+            <p className="text-[11px] text-muted">{cat.name}를 아는 건강 도우미</p>
+          </div>
         </div>
         <span className="w-4" />
       </header>
 
       {/* 메시지 리스트 */}
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-5">
+      <div className="flex-1 space-y-3 overflow-y-auto bg-surface-soft/40 px-4 py-5">
         {messages.length === 0 && streaming === null && (
           <>
-            <div className="rounded-xl bg-brand-lavender p-5 text-ink">
-              <p className="text-sm font-semibold">
-                안녕하세요 집사님! 🐾
-              </p>
-              <p className="mt-1 text-sm leading-relaxed">
-                {cat.name}에 대해 궁금한 걸 편하게 물어보세요.
-                사료·행동·건강 신호, 뭐든 좋아요.
+            {/* 빈 상태 — 귀여운 냥박사 */}
+            <div className="rounded-card bg-white p-6 text-center shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+              <p className="text-5xl">🐱</p>
+              <p className="mt-3 font-bold text-secondary">무엇이든 물어보세요</p>
+              <p className="mt-1 text-[13px] leading-relaxed text-body">
+                {cat.name}의 나이·기록을 아는 냥박사가
+                <br />사료·행동·건강 신호까지 살펴드려요.
               </p>
             </div>
             {/* 추천 질문 칩 — 프로필 기반 (T-08) */}
             <div className="space-y-2 pt-1">
-              <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
-                이런 게 궁금하다면
-              </p>
+              <p className="px-1 text-[12px] font-semibold text-muted">이런 게 궁금하다면</p>
               {getSuggestedQuestions(cat).map((q) => (
                 <button
                   key={q}
                   onClick={() => void send(q)}
-                  className="block w-full rounded-full bg-surface-card px-4 py-2.5 text-left text-[13px] font-medium text-ink active:bg-surface-strong"
+                  className="block w-full rounded-card bg-white px-4 py-3 text-left text-[13px] font-semibold text-secondary shadow-[0_1px_8px_rgba(122,92,67,0.05)] active:scale-[0.99]"
                 >
-                  {q}
+                  💬 {q}
                 </button>
               ))}
             </div>
@@ -259,82 +264,83 @@ export default function ChatPage() {
           m.model === "rule-engine" ? (
             /* 레드플래그 고정 응답 — 룰 엔진이 AI 없이 낸 응급 안내 (F-09) */
             <div key={m.id} className="flex">
-              <div className="max-w-[92%] space-y-3 rounded-lg border-2 border-error/50 bg-error/5 px-4 py-3.5">
+              <div className="max-w-[92%] space-y-3 rounded-card border-2 border-error/40 bg-error/5 px-4 py-3.5">
                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-body">
-                  {m.content}
+                  {clean(m.content)}
                 </p>
                 <a
                   href={EMERGENCY_MAP_URL}
                   target="_blank"
                   rel="noopener"
-                  className="flex h-11 items-center justify-center rounded-md bg-error text-sm font-semibold text-white"
+                  className="flex h-11 items-center justify-center rounded-input bg-error text-sm font-semibold text-white"
                 >
                   🗺️ 가까운 24시 동물병원 찾기
                 </a>
               </div>
             </div>
-          ) : (
-            <div
-              key={m.id}
-              className={m.role === "user" ? "flex justify-end" : "flex"}
-            >
-              <div
-                className={
-                  m.role === "user"
-                    ? "max-w-[80%] rounded-lg rounded-br-xs bg-ink px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap text-white"
-                    : "max-w-[88%] rounded-lg rounded-bl-xs border border-hairline bg-canvas px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body"
-                }
-              >
+          ) : m.role === "user" ? (
+            <div key={m.id} className="flex justify-end">
+              <div className="max-w-[80%] rounded-card rounded-br-md bg-secondary px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap text-white">
                 {m.imageUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={m.imageUrl}
-                    alt="첨부 사진"
-                    className="mb-2 max-h-52 rounded-md"
-                  />
+                  <img src={m.imageUrl} alt="첨부 사진" className="mb-2 max-h-52 rounded-md" />
                 )}
                 {m.content}
+              </div>
+            </div>
+          ) : (
+            <div key={m.id} className="flex items-end gap-1.5">
+              <span className="mb-1 flex size-7 flex-none items-center justify-center rounded-full bg-primary/20 text-sm">🐱</span>
+              <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+                {clean(m.content)}
               </div>
             </div>
           ),
         )}
         {streaming !== null && (
-          <div className="flex">
-            <div className="max-w-[88%] rounded-lg rounded-bl-xs border border-hairline bg-canvas px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body">
-              {streaming || "…"}
-            </div>
+          <div className="flex items-end gap-1.5">
+            {streaming === "" ? (
+              <NyangLoader />
+            ) : (
+              <>
+                <span className="mb-1 flex size-7 flex-none items-center justify-center rounded-full bg-primary/20 text-sm">🐱</span>
+                <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+                  {clean(streaming)}
+                </div>
+              </>
+            )}
           </div>
         )}
 
         {/* 대화→증상 기록 원탭 제안 (T-10) */}
         {pendingLog && streaming === null && (
-          <div className="rounded-xl bg-brand-peach p-4">
-            <p className="text-sm font-semibold text-ink">
-              오늘 대화를 {cat.name}의 증상 기록으로 남길까요?
+          <div className="rounded-card border border-mint bg-mint/40 p-4 shadow-[0_2px_16px_rgba(122,92,67,0.05)]">
+            <p className="text-sm font-bold text-secondary">
+              📓 오늘 대화를 {cat.name}의 증상 기록으로 남길까요?
             </p>
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
+            <div className="mt-2 flex flex-wrap gap-1.5">
               {pendingLog.tags.map((t) => (
                 <span
                   key={t}
-                  className="rounded-full bg-canvas px-2.5 py-1 text-[12px] font-medium text-ink"
+                  className="rounded-full bg-white px-2.5 py-1 text-[12px] font-semibold text-secondary"
                 >
                   #{t}
                 </span>
               ))}
             </div>
-            <p className="mt-1.5 text-[12px] text-ink/60">
+            <p className="mt-2 text-[12px] text-body/80">
               기록이 쌓이면 "평소랑 다른지"를 알려드릴 수 있어요.
             </p>
             <div className="mt-3 flex gap-2">
               <button
                 onClick={() => void saveSymptomLog()}
-                className="h-10 flex-1 rounded-md bg-ink text-sm font-semibold text-white"
+                className="h-11 flex-1 rounded-button bg-secondary text-sm font-bold text-white active:scale-[0.99]"
               >
                 기록 남기기
               </button>
               <button
                 onClick={() => setPendingLog(null)}
-                className="h-10 rounded-md border border-ink/20 px-4 text-sm font-semibold text-ink/70"
+                className="h-11 rounded-button border border-secondary/20 px-4 text-sm font-semibold text-body"
               >
                 괜찮아요
               </button>
@@ -342,7 +348,7 @@ export default function ChatPage() {
           </div>
         )}
         {logSaved && (
-          <p className="rounded-lg bg-surface-soft px-4 py-2.5 text-center text-[13px] font-medium text-body">
+          <p className="rounded-input bg-mint/50 px-4 py-2.5 text-center text-[13px] font-semibold text-secondary">
             🐾 기록했어요! 다음 답변부터 이 기록을 함께 볼게요.
           </p>
         )}
@@ -350,13 +356,13 @@ export default function ChatPage() {
       </div>
 
       {/* 입력 바 */}
-      <div className="border-t border-hairline bg-canvas px-4 py-3">
+      <div className="border-t border-hairline bg-white px-4 py-3">
         {/* 첨부 사진 미리보기 */}
         {photo && (
           <div className="mb-2 flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={photo} alt="첨부" className="size-14 rounded-md object-cover" />
-            <span className="text-[12px] text-muted">사진 첨부됨</span>
+            <img src={photo} alt="첨부" className="size-14 rounded-input object-cover" />
+            <span className="text-[12px] font-medium text-secondary">사진 첨부됨</span>
             <button
               onClick={() => setPhoto(null)}
               className="ml-auto rounded-full bg-surface-soft px-2.5 py-1 text-[12px] text-muted"
@@ -376,7 +382,7 @@ export default function ChatPage() {
           <button
             onClick={() => fileRef.current?.click()}
             aria-label="사진 첨부"
-            className="flex size-11 shrink-0 items-center justify-center rounded-md border border-hairline text-lg"
+            className="flex size-11 shrink-0 items-center justify-center rounded-input border border-hairline bg-surface-soft/60 text-lg active:scale-95"
           >
             📷
           </button>
@@ -387,12 +393,12 @@ export default function ChatPage() {
               if (e.key === "Enter" && !e.nativeEvent.isComposing) void send();
             }}
             placeholder={photo ? "사진에 대해 물어보세요 (선택)" : `${cat.name}에 대해 물어보세요`}
-            className="h-11 min-w-0 flex-1 rounded-md border border-hairline bg-canvas px-4 text-base text-ink placeholder:text-muted-soft focus:border-ink focus:outline-none"
+            className="h-11 min-w-0 flex-1 rounded-input border border-hairline bg-surface-soft/40 px-4 text-base text-ink placeholder:text-muted-soft focus:border-primary focus:bg-white focus:outline-none"
           />
           <button
             onClick={() => void send()}
             disabled={streaming !== null || (!draft.trim() && !photo)}
-            className="h-11 shrink-0 rounded-md bg-ink px-4 text-sm font-semibold whitespace-nowrap text-white disabled:bg-ink/20"
+            className="h-11 shrink-0 rounded-input bg-primary px-4 text-sm font-bold whitespace-nowrap text-white active:scale-95 disabled:bg-surface-strong disabled:text-muted-soft"
           >
             전송
           </button>
