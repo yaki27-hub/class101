@@ -61,6 +61,15 @@ export default function CatsList() {
           오픈 테스트 기간에는 최대 3마리까지 등록할 수 있어요 🐾
         </p>
       )}
+
+      {/* 계정 설정 진입 */}
+      <Link
+        href="/account"
+        className="mt-2 flex items-center justify-between rounded-card bg-white px-5 py-4 text-sm font-semibold text-secondary shadow-[0_2px_16px_rgba(122,92,67,0.06)]"
+      >
+        <span>⚙️ 계정 설정</span>
+        <span className="text-muted-soft">›</span>
+      </Link>
     </main>
   );
 }
