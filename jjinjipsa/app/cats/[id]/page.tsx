@@ -43,8 +43,6 @@ export default function CatDetailPage() {
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
   const [logs, setLogs] = useState<SymptomLog[]>([]);
   const [care, setCare] = useState<string[]>([]);
-  const [illustrating, setIllustrating] = useState(false);
-  const [illustError, setIllustError] = useState("");
   const [confirmDel, setConfirmDel] = useState(false);
 
   useEffect(() => {
@@ -60,40 +58,6 @@ export default function CatDetailPage() {
     const next = care.includes(key) ? care.filter((k) => k !== key) : [...care, key];
     setCare(next);
     localStorage.setItem(careKey(id), JSON.stringify(next));
-  }
-
-  async function makeIllustration() {
-    if (!cat?.photo) return;
-    setIllustrating(true);
-    setIllustError("");
-    try {
-      const res = await fetch("/api/illustrate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          photo: cat.photo,
-          name: cat.name,
-          birthDate: cat.birthDate,
-          breedGroup: cat.breedGroup,
-        }),
-      });
-      if (res.status === 429) {
-        setIllustError(
-          "지금은 AI 일러스트 생성이 잠시 막혀 있어요 (무료 등급 한도). 잠시 후 다시 시도하거나 관리자에게 문의해 주세요.",
-        );
-        return;
-      }
-      if (!res.ok) {
-        setIllustError("일러스트 생성에 실패했어요. 잠시 후 다시 시도해 주세요.");
-        return;
-      }
-      const { image } = (await res.json()) as { image: string };
-      const updated = { ...cat, illust: image };
-      await storage.saveCat(updated);
-      setCat(updated);
-    } finally {
-      setIllustrating(false);
-    }
   }
 
   async function deleteCat() {
@@ -289,42 +253,6 @@ export default function CatDetailPage() {
                 </li>
               ))}
           </ul>
-        )}
-      </section>
-
-      {/* AI 일러스트 (T-25) */}
-      <section className="rounded-card bg-surface-card p-5">
-        <p className="text-sm font-bold text-secondary">🎨 {cat.name}의 아늑한 초상화</p>
-        <p className="mt-1 text-[13px] text-body">
-          나이({age.stageLabel})와 사진을 반영해 따뜻한 일러스트로 그려드려요.
-        </p>
-        {cat.illust && (
-          <div className="mt-3 overflow-hidden rounded-[20px] border-4 border-primary">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={cat.illust} alt={`${cat.name} 일러스트`} className="w-full" />
-          </div>
-        )}
-        {illustError && (
-          <p className="mt-3 rounded-input border border-hairline bg-white p-3 text-[13px] text-muted">
-            {illustError}
-          </p>
-        )}
-        {!cat.photo ? (
-          <p className="mt-3 rounded-input border border-dashed border-hairline bg-white p-4 text-center text-[13px] text-muted">
-            먼저 프로필 수정에서 사진을 올려주세요 📷
-          </p>
-        ) : (
-          <button
-            onClick={() => void makeIllustration()}
-            disabled={illustrating}
-            className="mt-3.5 h-12 w-full rounded-button bg-secondary text-sm font-bold text-white disabled:opacity-60"
-          >
-            {illustrating
-              ? "그리는 중… 🎨"
-              : cat.illust
-                ? "다시 그리기 🎨"
-                : "일러스트 만들기 🎨"}
-          </button>
         )}
       </section>
 
