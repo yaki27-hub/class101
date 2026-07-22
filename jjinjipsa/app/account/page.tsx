@@ -9,7 +9,7 @@ import { storage } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 
 const APP_VERSION = "v1.0 (오픈 테스트)";
-const CONTACT_EMAIL = "yaki27@gmail.com";
+const CONTACT_EMAIL = "melona-yolo@naver.com";
 
 type AuthState = {
   linked: boolean; // 카카오 등으로 연결된 정식 계정
