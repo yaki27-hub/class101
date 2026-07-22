@@ -4,12 +4,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { storage, type Cat } from "@/lib/storage";
+import { type Cat } from "@/lib/storage";
+import { resolveSelectedCat } from "@/lib/selectedCat";
 
 export default function Diagnose() {
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
   useEffect(() => {
-    void storage.listCats().then((c) => setCat(c[0] ?? null));
+    void resolveSelectedCat().then((c) => setCat(c));
   }, []);
 
   return (
