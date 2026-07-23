@@ -15,8 +15,13 @@ const TABS = [
 
 export default function BottomNav() {
   const pathname = usePathname();
-  // 로그인 화면·챗 대화 화면(전체몰입)에서는 숨김
-  if (pathname === "/login" || /\/cats\/[^/]+\/chat$/.test(pathname)) return null;
+  // 로그인·온보딩·챗 대화 화면(전체몰입)에서는 숨김
+  if (
+    pathname === "/login" ||
+    pathname === "/onboard" ||
+    /\/cats\/[^/]+\/chat$/.test(pathname)
+  )
+    return null;
 
   return (
     <nav className="sticky bottom-0 z-40 border-t border-hairline bg-canvas/95 backdrop-blur">
