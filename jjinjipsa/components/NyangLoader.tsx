@@ -1,20 +1,18 @@
 "use client";
 
-/* 냥박사 로딩 — 눈 깜빡 + 꼬리 살랑 (prefers-reduced-motion 존중은 globals.css) */
+/* 냥박사 로딩 — 3D 마스코트(생각) 살짝 흔들림 + 꾹꾹이 도트 */
+
+import Mascot from "@/components/Mascot";
 
 export default function NyangLoader() {
   return (
-    <div className="flex items-center gap-2.5 rounded-card border border-hairline bg-white px-4 py-3 shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
-      <span className="relative inline-block text-2xl" aria-hidden>
-        <span className="inline-block" style={{ animation: "blink 2.4s infinite" }}>
-          🐱
-        </span>
-        <span
-          className="absolute -right-1 bottom-0 text-sm"
-          style={{ animation: "tail-wag 0.9s ease-in-out infinite", transformOrigin: "left bottom" }}
-        >
-          〰️
-        </span>
+    <div className="flex items-center gap-2.5 rounded-card border border-hairline bg-white px-4 py-3">
+      <span
+        className="inline-block"
+        style={{ animation: "knead 1.2s ease-in-out infinite" }}
+        aria-hidden
+      >
+        <Mascot mood="thinking" size={34} />
       </span>
       <span className="flex gap-1">
         {[0, 1, 2].map((i) => (

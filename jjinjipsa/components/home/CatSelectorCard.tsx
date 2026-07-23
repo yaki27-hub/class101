@@ -38,10 +38,10 @@ export default function CatSelectorCard({
         aria-haspopup="dialog"
       >
         <span className="flex items-center gap-1">
-          <span className="truncate font-bold text-secondary">{cat.name}</span>
-          {multiple && <span className="text-[12px] text-muted">▼</span>}
+          <span className="display truncate text-[19px] text-secondary">{cat.name}</span>
+          {multiple && <span className="text-[12px] text-muted-soft">▾</span>}
         </span>
-        <span className="mt-0.5 block truncate text-[12px] text-muted">
+        <span className="mt-0.5 block truncate text-[12.5px] text-muted">
           {age.ageLabel} · {cat.breedGroup}
         </span>
       </button>
@@ -50,7 +50,7 @@ export default function CatSelectorCard({
         <button
           type="button"
           onClick={onOpen}
-          className="flex-none rounded-full bg-surface-soft px-3 py-1.5 text-[12px] font-semibold text-secondary"
+          className="flex-none rounded-[14px] bg-primary-soft px-3 py-1.5 text-[12px] font-bold text-primary-deep"
         >
           바꾸기
         </button>

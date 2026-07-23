@@ -1,13 +1,14 @@
 "use client";
 
 /*
- * 오늘 상태 기록 카드 (건강 점수 대체) — 상태 문구 + 식사·물·배변·활동 4버튼 + 빠른 기록 시트.
- * 이상 상태면 냥박사 상담 CTA로 오늘 문맥을 전달 (지시서 §6·§15).
+ * 오늘 상태 기록 카드 — 식사·물·배변·활동 상태 타일(미기록/정상/주의) + 빠른 기록 시트.
+ * 이상 상태면 냥박사 상담 CTA로 오늘 문맥 전달 (핸드오프 Status Tile / 지시서 §6·§15).
  */
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import DailyStatusSheet from "./DailyStatusSheet";
+import { IconBowl, IconWater, IconLitter, IconYarn } from "@/components/icons";
 import {
   STATUS_ITEMS,
   abnormalSentence,
@@ -19,17 +20,31 @@ import {
 } from "@/lib/dailyStatus";
 import type { Cat } from "@/lib/storage";
 
-function buttonStyle(level?: DailyStatusLevel): string {
-  if (level === "normal") return "border-mint bg-mint/40";
-  if (level === "warning" || level === "danger")
-    return "border-soft-pink bg-soft-pink/50";
-  return "border-hairline bg-white";
+const ICON: Record<DailyStatusType, typeof IconBowl> = {
+  meal: IconBowl,
+  water: IconWater,
+  toilet: IconLitter,
+  activity: IconYarn,
+};
+// 카테고리 기본색 (핸드오프: 밥=green·물=sky·배변=neutral·활동=coral)
+const ICON_COLOR: Record<DailyStatusType, string> = {
+  meal: "text-success",
+  water: "text-sky-ink",
+  toilet: "text-muted",
+  activity: "text-primary",
+};
+
+type TileState = "unrecorded" | "normal" | "warning";
+function tileState(level?: DailyStatusLevel): TileState {
+  if (level === "normal") return "normal";
+  if (level === "warning" || level === "danger") return "warning";
+  return "unrecorded";
 }
-function mark(level?: DailyStatusLevel): string {
-  if (level === "normal") return "✓";
-  if (level === "warning" || level === "danger") return "!";
-  return "○";
-}
+const TILE_BG: Record<TileState, string> = {
+  unrecorded: "border-hairline bg-white",
+  normal: "border-mint bg-mint-soft",
+  warning: "border-soft-pink bg-[#fff4ec]",
+};
 
 function stateCopy(cat: Cat, summary: DailySummary): { title: string; sub: string } {
   switch (summary.state) {
@@ -86,39 +101,38 @@ export default function DailyStatusCard({
   }
 
   return (
-    <section
-      className={`rounded-card border p-5 ${abnormal ? "border-soft-pink bg-soft-pink/20" : "border-hairline bg-white"}`}
-    >
-      <p className="text-[17px] font-bold text-secondary">{copy.title}</p>
+    <section className="rounded-card border border-hairline bg-white p-5">
+      <p className="display text-[19px] text-secondary">{copy.title}</p>
       <p className="mt-1 text-[13px] text-body">{copy.sub}</p>
 
-      <div className="mt-4 grid grid-cols-4 gap-2">
+      <div className="mt-4 grid grid-cols-4 gap-2.5">
         {STATUS_ITEMS.map((item) => {
           const level = record[item.key]?.level;
+          const st = tileState(level);
+          const Glyph = ICON[item.key];
           return (
             <button
               key={item.key}
               onClick={() => setOpenItem(item)}
               aria-label={`${item.label} 기록하기`}
-              className={`flex flex-col items-center gap-1 rounded-input border py-3 transition active:scale-95 ${buttonStyle(level)}`}
+              className={`relative flex flex-col items-center gap-1.5 rounded-tile border py-4 transition active:scale-95 ${TILE_BG[st]}`}
             >
-              <span className="text-2xl" aria-hidden>
-                {item.icon}
-              </span>
+              {st === "normal" && (
+                <span className="absolute right-1.5 top-1.5 flex size-[18px] items-center justify-center rounded-full bg-success text-[10px] font-bold text-white">
+                  ✓
+                </span>
+              )}
+              {st === "warning" && (
+                <span className="absolute right-1.5 top-1.5 flex size-[18px] items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+                  !
+                </span>
+              )}
+              <Glyph
+                size={30}
+                className={st === "warning" ? "text-primary" : ICON_COLOR[item.key]}
+              />
               <span className="text-[13px] font-semibold text-secondary">
                 {item.label}
-              </span>
-              <span
-                className={`text-[11px] ${
-                  level === "normal"
-                    ? "text-success"
-                    : level === "warning" || level === "danger"
-                      ? "text-error"
-                      : "text-muted-soft"
-                }`}
-                aria-hidden
-              >
-                {mark(level)}
               </span>
             </button>
           );
@@ -128,7 +142,7 @@ export default function DailyStatusCard({
       {abnormal && (
         <button
           onClick={askDoctor}
-          className="mt-4 flex h-12 w-full items-center justify-center rounded-button bg-primary text-sm font-bold text-white active:scale-[0.99]"
+          className="mt-4 flex h-12 w-full items-center justify-center rounded-full bg-primary text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
         >
           냥박사와 확인하기
         </button>
@@ -143,7 +157,7 @@ export default function DailyStatusCard({
       {toast && (
         <div
           role="status"
-          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-secondary px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
+          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
         >
           {toast}
         </div>

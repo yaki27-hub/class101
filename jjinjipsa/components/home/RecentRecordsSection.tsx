@@ -3,6 +3,7 @@
 /* 최근 기록 — 홈엔 최대 2개, 전체는 기록 탭으로 (지시서 §8) */
 
 import Link from "next/link";
+import Mascot from "@/components/Mascot";
 import type { SymptomLog } from "@/lib/storage";
 
 function fmtDate(iso: string): string {
@@ -15,7 +16,7 @@ export default function RecentRecordsSection({ rows }: { rows: SymptomLog[] }) {
   return (
     <section>
       <div className="flex items-center justify-between px-1">
-        <p className="text-[15px] font-bold text-secondary">최근 기록</p>
+        <p className="display text-[18px] text-secondary">최근 기록</p>
         {rows.length > 0 && (
           <Link href="/records" className="text-[13px] font-semibold text-muted">
             전체보기 ›
@@ -25,7 +26,7 @@ export default function RecentRecordsSection({ rows }: { rows: SymptomLog[] }) {
 
       {rows.length === 0 ? (
         <div className="mt-2 rounded-card border border-hairline bg-white p-6 text-center">
-          <p className="text-3xl">📖</p>
+          <Mascot mood="empty" size={64} className="mx-auto" />
           <p className="mt-2 text-[14px] font-bold text-secondary">
             아직 건강 기록이 없어요
           </p>

@@ -21,6 +21,7 @@ import {
   checkRedFlags,
 } from "@/lib/redFlags";
 import NyangLoader from "@/components/NyangLoader";
+import Mascot from "@/components/Mascot";
 
 /** AI 답변의 마크다운 ** 강조 기호 정리 */
 function clean(text: string) {
@@ -223,7 +224,9 @@ export default function ChatPage() {
           ←
         </Link>
         <div className="flex items-center gap-2">
-          <span className="flex size-8 items-center justify-center rounded-full bg-primary/20 text-lg">🐱</span>
+          <span className="flex size-9 items-center justify-center rounded-full bg-primary-soft">
+            <Mascot mood="calm" size={30} />
+          </span>
           <div className="text-left">
             <p className="text-sm font-bold text-secondary">냥박사</p>
             <p className="text-[11px] text-muted">{cat.name}를 아는 건강 도우미</p>
@@ -237,9 +240,9 @@ export default function ChatPage() {
         {messages.length === 0 && streaming === null && (
           <>
             {/* 빈 상태 — 귀여운 냥박사 */}
-            <div className="rounded-card bg-white p-6 text-center shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
-              <p className="text-5xl">🐱</p>
-              <p className="mt-3 font-bold text-secondary">무엇이든 물어보세요</p>
+            <div className="rounded-card border border-hairline bg-white p-6 text-center">
+              <Mascot mood="calm" size={84} className="mx-auto" />
+              <p className="display mt-3 text-[18px] text-secondary">무엇이든 물어보세요</p>
               <p className="mt-1 text-[13px] leading-relaxed text-body">
                 {cat.name}의 나이·기록을 아는 냥박사가
                 <br />사료·행동·건강 신호까지 살펴드려요.
@@ -252,7 +255,7 @@ export default function ChatPage() {
                 <button
                   key={q}
                   onClick={() => void send(q)}
-                  className="block w-full rounded-card bg-white px-4 py-3 text-left text-[13px] font-semibold text-secondary shadow-[0_1px_8px_rgba(122,92,67,0.05)] active:scale-[0.99]"
+                  className="block w-full rounded-card bg-white px-4 py-3 text-left text-[13px] font-semibold text-secondary border border-hairline active:scale-[0.99]"
                 >
                   💬 {q}
                 </button>
@@ -290,8 +293,10 @@ export default function ChatPage() {
             </div>
           ) : (
             <div key={m.id} className="flex items-end gap-1.5">
-              <span className="mb-1 flex size-7 flex-none items-center justify-center rounded-full bg-primary/20 text-sm">🐱</span>
-              <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+              <span className="mb-1 flex size-8 flex-none items-center justify-center rounded-full bg-primary-soft">
+              <Mascot mood="calm" size={26} />
+            </span>
+              <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body">
                 {clean(m.content)}
               </div>
             </div>
@@ -303,8 +308,10 @@ export default function ChatPage() {
               <NyangLoader />
             ) : (
               <>
-                <span className="mb-1 flex size-7 flex-none items-center justify-center rounded-full bg-primary/20 text-sm">🐱</span>
-                <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+                <span className="mb-1 flex size-8 flex-none items-center justify-center rounded-full bg-primary-soft">
+              <Mascot mood="calm" size={26} />
+            </span>
+                <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body">
                   {clean(streaming)}
                 </div>
               </>

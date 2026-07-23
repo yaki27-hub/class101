@@ -39,10 +39,16 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
           crossOrigin="anonymous"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+        />
       </head>
       <body className="min-h-full bg-surface-strong text-ink">
         {/* 모바일: 전체 화면 / 데스크톱: 420px 중앙 폰 프레임 (내부는 크림 캔버스) */}
-        <div className="mx-auto flex min-h-dvh w-full max-w-[420px] flex-col bg-canvas sm:border-x sm:border-hairline">
+        <div className="paper mx-auto flex min-h-dvh w-full max-w-[420px] flex-col sm:border-x sm:border-hairline">
           <AuthGate>
             <div className="flex flex-1 flex-col">{children}</div>
             <BottomNav />

@@ -1,49 +1,31 @@
 "use client";
 
-/* 우리 고양이 상세 대시보드 (D-10 Phase 3) — 히어로·건강점수·오늘 케어·생애시계·기록·CTA */
+/* 우리 고양이 상세 대시보드 — 히어로·오늘 상태·생애시계·기록·CTA (건강점수 제거, 오늘 상태 연동) */
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
-import { todayStr } from "@/lib/dailyCheck";
 import { setSelectedCatId } from "@/lib/selectedCat";
+import { useTodayStatus } from "@/hooks/useTodayStatus";
+import DailyStatusCard from "@/components/home/DailyStatusCard";
 
 const SEGMENT_COLORS: Record<string, string> = {
   kitten: "bg-mint",
   junior: "bg-primary",
   adult: "bg-soft-pink",
   mature: "bg-primary-deep",
-  senior: "bg-secondary",
+  senior: "bg-ink",
 };
-
-const CARE_ITEMS = [
-  { key: "meal", icon: "🍚", label: "식사" },
-  { key: "water", icon: "💧", label: "물" },
-  { key: "brush", icon: "🪥", label: "양치" },
-  { key: "med", icon: "💊", label: "약" },
-];
-
-function careKey(catId: string) {
-  return `jjinjipsa:care:${catId}:${todayStr()}`;
-}
-function loadCare(catId: string): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    return JSON.parse(localStorage.getItem(careKey(catId)) || "[]");
-  } catch {
-    return [];
-  }
-}
 
 export default function CatDetailPage() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
   const [logs, setLogs] = useState<SymptomLog[]>([]);
-  const [care, setCare] = useState<string[]>([]);
   const [confirmDel, setConfirmDel] = useState(false);
+  const { record, summary, setStatus } = useTodayStatus(id);
 
   useEffect(() => {
     void storage.getCat(id).then((c) => {
@@ -51,14 +33,7 @@ export default function CatDetailPage() {
       if (c) setSelectedCatId(c.id); // 이 아이를 홈·AI 탭 기본 선택으로
     });
     void storage.listSymptoms(id).then(setLogs);
-    setCare(loadCare(id));
   }, [id]);
-
-  function toggleCare(key: string) {
-    const next = care.includes(key) ? care.filter((k) => k !== key) : [...care, key];
-    setCare(next);
-    localStorage.setItem(careKey(id), JSON.stringify(next));
-  }
 
   async function deleteCat() {
     if (!cat) return;
@@ -78,9 +53,6 @@ export default function CatDetailPage() {
     );
 
   const age = getCatAge(cat.birthDate);
-  // 건강 점수: 기본 60 + 오늘 기록(4×8) + 프로필 완성 보너스 (홈과 동일 공식)
-  const score = Math.min(100, 60 + care.length * 8 + (cat.weightKg ? 8 : 0));
-  const scoreFace = score >= 85 ? "😺" : score >= 70 ? "🙂" : "🐱";
 
   return (
     <main className="flex-1 space-y-4 px-5 pt-8 pb-24">
@@ -97,7 +69,7 @@ export default function CatDetailPage() {
       </header>
 
       {/* 히어로 — 사진 + 이름 + 나이 */}
-      <section className="flex items-center gap-4 rounded-card bg-white p-5 shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+      <section className="flex items-center gap-4 rounded-card bg-white p-5 border border-hairline">
         {cat.photo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -127,52 +99,16 @@ export default function CatDetailPage() {
         </div>
       </section>
 
-      {/* 건강 점수 */}
-      <section className="flex items-center justify-between rounded-card bg-white p-5 shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
-        <div>
-          <p className="text-sm font-bold text-secondary">오늘의 건강 점수</p>
-          <p className="mt-0.5 text-[12px] text-muted">
-            오늘 케어를 기록할수록 올라가요
-          </p>
-        </div>
-        <div className="flex items-center gap-2.5">
-          <span className="text-4xl">{scoreFace}</span>
-          <span className="display text-[30px] text-primary-deep">
-            {score}
-            <span className="text-lg">%</span>
-          </span>
-        </div>
-      </section>
-
-      {/* 오늘의 케어 */}
-      <section className="rounded-card bg-white p-5 shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
-        <p className="text-sm font-bold text-secondary">오늘의 케어</p>
-        <div className="mt-3 grid grid-cols-4 gap-2">
-          {CARE_ITEMS.map((item) => {
-            const on = care.includes(item.key);
-            return (
-              <button
-                key={item.key}
-                onClick={() => toggleCare(item.key)}
-                className={`flex flex-col items-center gap-1.5 rounded-input py-3 transition active:scale-95 ${
-                  on ? "bg-mint/60" : "bg-surface-soft/70"
-                }`}
-              >
-                <span className="text-2xl">{item.icon}</span>
-                <span className="text-[13px] font-semibold text-secondary">
-                  {item.label}
-                </span>
-                <span className={`text-[11px] ${on ? "text-success" : "text-muted-soft"}`}>
-                  {on ? "✓ 완료" : "○"}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
+      {/* 오늘 상태 (홈과 동일 데이터 연동) */}
+      <DailyStatusCard
+        cat={cat}
+        record={record}
+        summary={summary}
+        onSet={setStatus}
+      />
 
       {/* 생애 시계 */}
-      <section className="rounded-card bg-white p-5 shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+      <section className="rounded-card border border-hairline bg-white p-5">
         <p className="text-sm font-bold text-secondary">{cat.name}의 생애 시계</p>
         <div className="relative mt-4">
           <div className="flex h-3 w-full overflow-hidden rounded-full">
@@ -211,7 +147,7 @@ export default function CatDetailPage() {
       </section>
 
       {/* 최근 증상 기록 */}
-      <section className="rounded-card bg-white p-5 shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+      <section className="rounded-card bg-white p-5 border border-hairline">
         <div className="flex items-center justify-between">
           <p className="text-sm font-bold text-secondary">
             최근 증상 기록{logs.length > 0 ? ` · ${logs.length}건` : ""}
@@ -273,7 +209,7 @@ export default function CatDetailPage() {
       </div>
 
       <p className="text-center text-[11px] text-muted-soft">
-        나이 환산·건강 점수는 참고값이에요. 정확한 진단은 수의사 상담이 필요합니다.
+        나이 환산은 참고값이에요. 정확한 진단은 수의사 상담이 필요합니다.
       </p>
 
       {/* 삭제 확인 */}
