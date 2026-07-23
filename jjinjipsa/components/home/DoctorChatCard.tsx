@@ -1,13 +1,14 @@
 "use client";
 
 /*
- * 냥박사 통합 카드 (AI상담 + 사진진단 통합) — 홈 최상위 CTA (지시서 §7).
- * 입력창 → 채팅(질문 전달) / 카메라 → 채팅(사진 첨부) / 추천 칩 → 입력창에 채운 채 이동.
- * 최근 증상 기록이 있으면 "지난 기록과 비교" 개인화 CTA를 우선 노출.
+ * 냥박사 통합 카드 (AI상담 + 사진진단) — 홈 최상위 CTA. Accent Card(코랄 그라데이션) + 3D 마스코트.
+ * 입력창 → 채팅 / 카메라 → 사진 첨부 채팅 / 추천 칩 → 프리필. 최근 증상 있으면 비교 CTA 우선.
  */
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Mascot from "@/components/Mascot";
+import { IconCamera } from "@/components/icons";
 import type { Cat, SymptomLog } from "@/lib/storage";
 
 const DEFAULT_CHIPS = ["밥을 안 먹어요", "토했어요", "물을 많이 마셔요", "이거 먹어도 돼요?"];
@@ -30,21 +31,32 @@ export default function DoctorChatCard({
   const lastTag = recent[0]?.tags?.[0];
 
   return (
-    <section className="rounded-card border border-soft-pink bg-primary/5 p-5">
-      <div className="flex items-center gap-2.5">
-        <span className="flex size-11 items-center justify-center rounded-full bg-primary/20 text-2xl">
-          🐱
+    <section
+      className="relative overflow-hidden rounded-card border border-[#ffd7ce] p-5"
+      style={{ background: "linear-gradient(135deg,#fff7f3,#fff0eb)" }}
+    >
+      {/* 하트 데코 */}
+      <span className="pointer-events-none absolute right-4 top-3 text-[18px] text-[#ffb7a8]" aria-hidden>
+        ♥
+      </span>
+      <span className="pointer-events-none absolute right-9 top-5 text-[12px] text-[#ffd1c6]" aria-hidden>
+        ♥
+      </span>
+
+      <div className="flex items-center gap-3">
+        <span className="flex size-14 flex-none items-center justify-center rounded-[16px] bg-white/70">
+          <Mascot mood="thinking" size={48} />
         </span>
-        <div>
-          <p className="text-[17px] font-bold text-secondary">냥박사에게 물어보세요</p>
-          <p className="text-[13px] text-body">
+        <div className="min-w-0">
+          <p className="display text-[19px] text-secondary">냥박사에게 물어보세요</p>
+          <p className="text-[13px] text-muted">
             {cat.name}의 건강·행동, 편하게 질문해 주세요.
           </p>
         </div>
       </div>
 
       {/* 입력창 + 카메라 */}
-      <div className="mt-4 flex items-center gap-2 rounded-input border border-hairline bg-white px-3">
+      <div className="mt-4 flex items-center gap-2 rounded-[18px] border border-hairline bg-white px-3 focus-within:border-primary">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -58,19 +70,19 @@ export default function DoctorChatCard({
           type="button"
           aria-label="사진으로 물어보기"
           onClick={() => router.push(`/cats/${cat.id}/chat?photo=1`)}
-          className="flex size-9 flex-none items-center justify-center rounded-full bg-surface-soft text-lg"
+          className="flex size-9 flex-none items-center justify-center rounded-full bg-primary-soft text-primary-deep"
         >
-          📷
+          <IconCamera size={19} />
         </button>
       </div>
 
-      {/* 개인화 CTA (최근 증상 기록 있을 때) 또는 기본 추천 칩 */}
+      {/* 최근 증상 기록 있으면 비교 CTA, 없으면 기본 추천 칩 */}
       {lastTag ? (
         <button
           onClick={() =>
             toChat(`지난번 '${lastTag}' 기록이랑 오늘 상태를 비교해 줄 수 있어요?`)
           }
-          className="mt-3 flex w-full items-center justify-between rounded-input border border-soft-pink bg-white px-4 py-3 text-left"
+          className="mt-3 flex w-full items-center justify-between rounded-[18px] border border-[#ffd7ce] bg-white px-4 py-3 text-left"
         >
           <span className="min-w-0">
             <span className="block text-[13px] font-bold text-secondary">
@@ -88,8 +100,9 @@ export default function DoctorChatCard({
             <button
               key={q}
               onClick={() => toChat(q)}
-              className="min-h-[38px] rounded-full border border-hairline bg-white px-3.5 text-[13px] font-semibold text-secondary"
+              className="flex min-h-[38px] items-center gap-1.5 rounded-full border border-hairline bg-white px-3.5 text-[13px] font-semibold text-secondary"
             >
+              <span className="size-1.5 rounded-full bg-primary" aria-hidden />
               {q}
             </button>
           ))}

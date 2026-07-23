@@ -69,7 +69,7 @@ export default function AccountPage() {
       </header>
 
       {/* 로그인 상태 */}
-      <section className="rounded-card bg-white p-5 shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+      <section className="rounded-card bg-white p-5 border border-hairline">
         <p className="text-sm font-bold text-secondary">로그인 상태</p>
         {auth.linked ? (
           <div className="mt-3 flex items-center gap-3">
@@ -107,14 +107,14 @@ export default function AccountPage() {
         <button
           onClick={() => void logout()}
           disabled={busy}
-          className="rounded-card bg-white py-4 text-sm font-semibold text-secondary shadow-[0_2px_16px_rgba(122,92,67,0.06)] disabled:opacity-60"
+          className="rounded-card bg-white py-4 text-sm font-semibold text-secondary border border-hairline disabled:opacity-60"
         >
           로그아웃
         </button>
       )}
 
       {/* 문의 · 면책 · 버전 */}
-      <section className="rounded-card bg-white shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+      <section className="rounded-card bg-white border border-hairline">
         <a
           href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("[찐집사] 문의")}`}
           className="flex items-center justify-between border-b border-hairline px-5 py-4 text-sm text-secondary"

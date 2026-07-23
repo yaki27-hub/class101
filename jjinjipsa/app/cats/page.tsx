@@ -22,7 +22,7 @@ export default function CatsList() {
         return (
           <div
             key={cat.id}
-            className="flex items-center gap-4 rounded-card bg-white p-4 shadow-[0_2px_16px_rgba(122,92,67,0.06)]"
+            className="flex items-center gap-4 rounded-card bg-white p-4 border border-hairline"
           >
             <Link href={`/cats/${cat.id}`} className="flex flex-1 items-center gap-4">
               {cat.photo ? (
@@ -65,7 +65,7 @@ export default function CatsList() {
       {/* 계정 설정 진입 */}
       <Link
         href="/account"
-        className="mt-2 flex items-center justify-between rounded-card bg-white px-5 py-4 text-sm font-semibold text-secondary shadow-[0_2px_16px_rgba(122,92,67,0.06)]"
+        className="mt-2 flex items-center justify-between rounded-card bg-white px-5 py-4 text-sm font-semibold text-secondary border border-hairline"
       >
         <span>⚙️ 계정 설정</span>
         <span className="text-muted-soft">›</span>

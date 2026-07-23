@@ -145,7 +145,7 @@ export default function OnboardPrototype() {
       {/* Step 2 — 즉시 나이 결과 + 첫 질문 (생일 넣으면 바로 등장) */}
       {age && draftCat && (
         <>
-          <section className="rounded-card bg-white p-6 text-center shadow-[0_2px_16px_rgba(122,92,67,0.06)]">
+          <section className="rounded-card bg-white p-6 text-center border border-hairline">
             <p className="text-[13px] font-semibold text-muted">
               {age.stageEmoji} {age.stageLabel}
               {estimated ? " (추정)" : ""} · {age.ageLabel}
@@ -180,7 +180,7 @@ export default function OnboardPrototype() {
                   key={q}
                   onClick={() => void startChat(q)}
                   disabled={busy}
-                  className="block w-full rounded-card bg-white px-4 py-3.5 text-left text-[14px] font-semibold text-secondary shadow-[0_1px_8px_rgba(122,92,67,0.05)] active:scale-[0.99] disabled:opacity-60"
+                  className="block w-full rounded-card bg-white px-4 py-3.5 text-left text-[14px] font-semibold text-secondary border border-hairline active:scale-[0.99] disabled:opacity-60"
                 >
                   💬 {q}
                 </button>

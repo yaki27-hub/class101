@@ -1,14 +1,15 @@
 "use client";
 
-/* 고양이 미등록 상태 안내 카드 (지시서 §5·§15A) */
+/* 고양이 미등록 상태 안내 카드 — 빈 상태 마스코트 (지시서 §5·§15A) */
 
 import Link from "next/link";
+import Mascot from "@/components/Mascot";
 
 export default function EmptyCatCard() {
   return (
     <section className="rounded-card border border-hairline bg-white p-6 text-center">
-      <p className="text-4xl">🐱</p>
-      <p className="mt-3 text-[18px] font-bold text-secondary">
+      <Mascot mood="empty" size={92} className="mx-auto" />
+      <p className="display mt-2 text-[19px] text-secondary">
         우리 고양이를 소개해 주세요
       </p>
       <p className="mt-2 text-[14px] leading-relaxed text-body">
@@ -18,7 +19,7 @@ export default function EmptyCatCard() {
       </p>
       <Link
         href="/profile/new"
-        className="mt-5 flex h-12 items-center justify-center rounded-button bg-primary text-[15px] font-bold text-white active:scale-[0.99]"
+        className="mt-5 flex h-12 items-center justify-center rounded-full bg-primary text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
       >
         고양이 등록하기
       </Link>

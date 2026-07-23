@@ -1,52 +1,64 @@
 @import "tailwindcss";
 
 /*
- * 찐집사 디자인 토큰 v2 — "고양이 건강수첩 / 집사의 책상" (D-10)
- * Warm Beige · Apple Health 미니멀 · Cute but Premium.
+ * 찐집사 디자인 시스템 (핸드오프 적용) — 플랫 UI × 3D 마스코트.
+ * 도화지 크림 배경 + 흰 카드, 코랄은 주요 CTA 전용, 민트=정상·스카이=정보·버터=보상.
+ * 제목 서체 Jua, 본문 Pretendard.
  */
 @theme {
-  /* Surface — 따뜻한 크림 */
-  --color-canvas: #fcfaf7;
-  --color-surface-soft: #f6f0e8;
-  --color-surface-card: #f1e9dd;
-  --color-surface-strong: #ebe2d3;
+  /* Surface — 도화지 화이트 */
+  --color-canvas: #fbfaf6;
+  --color-surface-soft: #f5efea;
+  --color-surface-card: #ffffff;
+  --color-surface-strong: #efe7dd;
 
-  /* Text — 웜 브라운 계열 */
-  --color-ink: #2a2018;
-  --color-body: #5a4a3c;
-  --color-muted: #9a8a7a;
-  --color-muted-soft: #bcae9f;
-  --color-hairline: #ece4d8;
+  /* Text — 순수 검정 금지 */
+  --color-ink: #403a39;
+  --color-body: #6b635e;
+  --color-muted: #7e7876;
+  --color-muted-soft: #b8b0ac;
+  --color-hairline: #f0e5de;
 
   /* Brand */
-  --color-primary: #f6b352;      /* 앰버 — 주 CTA·포인트 */
-  --color-primary-deep: #e79a2e;
-  --color-secondary: #7a5c43;    /* 브라운 — 제목·강조 */
-  --color-mint: #cfefdf;
-  --color-soft-pink: #ffd8d8;
+  --color-primary: #ff8d7b;      /* 코랄 — 주요 CTA 전용 */
+  --color-primary-deep: #e9705c;
+  --color-primary-soft: #fff0eb;
+  --color-secondary: #403a39;    /* 제목·강조 = 잉크 */
+  --color-butter: #ffd97b;       /* 보상·긍정 */
+  --color-butter-soft: #fff8df;
+  --color-mint: #bfe7d8;         /* 정상 */
+  --color-mint-soft: #eff8f1;
+  --color-sky: #cfeaff;          /* 정보 */
+  --color-sky-soft: #f0f8ff;
+  --color-sky-ink: #5b9bc9;
+  --color-soft-pink: #ffb7a8;    /* 코랄 보더(주의) */
 
-  /* 기존 컴포넌트 호환 별칭 (점진 마이그레이션) */
-  --color-brand-pink: #ffd8d8;
-  --color-brand-teal: #7a5c43;
-  --color-brand-lavender: #cfefdf;
-  --color-brand-peach: #ffd8d8;
-  --color-brand-ochre: #f6b352;
-  --color-brand-mint: #cfefdf;
+  /* 기존 컴포넌트 호환 별칭 */
+  --color-brand-pink: #ffb7a8;
+  --color-brand-teal: #403a39;
+  --color-brand-lavender: #cfeaff;
+  --color-brand-peach: #fff0eb;
+  --color-brand-ochre: #ff8d7b;
+  --color-brand-mint: #bfe7d8;
 
   /* 🚦 판정 시맨틱 */
-  --color-success: #58c08a;
-  --color-warning: #f6b352;
-  --color-error: #ef6b6b;
+  --color-success: #58a97b;
+  --color-warning: #f4a261;
+  --color-error: #f26b6b;
 
-  /* Radius */
+  /* Radius (핸드오프: 타일16·버튼18·카드20·pill999) */
   --radius-xs: 8px;
   --radius-sm: 12px;
   --radius-md: 16px;
-  --radius-input: 20px;
-  --radius-button: 20px;
-  --radius-card: 24px;
-  --radius-lg: 24px;
-  --radius-xl: 28px;
+  --radius-tile: 16px;
+  --radius-input: 18px;
+  --radius-button: 18px;
+  --radius-card: 20px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+
+  /* 서체 */
+  --font-title: "Jua", "Pretendard Variable", Pretendard, sans-serif;
 }
 
 body {
@@ -55,9 +67,17 @@ body {
     "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 }
 
+/* 도화지 결 — 채도0 노이즈 아주 옅게 (핸드오프 §종이 질감) */
+.paper {
+  background-color: #fbfaf6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* 제목 서체 = Jua (단일 weight) */
 .display {
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: var(--font-title);
+  font-weight: 400;
+  letter-spacing: -0.01em;
   line-height: 1.2;
 }
 
