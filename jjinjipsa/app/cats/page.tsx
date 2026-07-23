@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { storage, type Cat } from "@/lib/storage";
 import { getCatAge } from "@/lib/catAge";
+import { IconCat, IconPencil, IconGear } from "@/components/icons";
 
 export default function CatsList() {
   const [cats, setCats] = useState<Cat[] | null>(null);
@@ -29,7 +30,9 @@ export default function CatsList() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={cat.photo} alt="" className="size-16 flex-none rounded-[18px] object-cover" />
               ) : (
-                <span className="flex size-16 flex-none items-center justify-center rounded-[18px] bg-surface-soft text-3xl">🐱</span>
+                <span className="flex size-16 flex-none items-center justify-center rounded-[18px] bg-surface-soft text-muted-soft">
+                  <IconCat size={34} />
+                </span>
               )}
               <div>
                 <p className="font-bold text-secondary">{cat.name}</p>
@@ -42,9 +45,9 @@ export default function CatsList() {
             </Link>
             <Link
               href={`/cats/${cat.id}/edit`}
-              className="flex-none rounded-full bg-surface-soft px-3 py-2 text-[12px] font-semibold text-secondary"
+              className="flex flex-none items-center gap-1 rounded-full bg-surface-soft px-3 py-2 text-[12px] font-semibold text-secondary"
             >
-              ✏️ 수정
+              <IconPencil size={13} /> 수정
             </Link>
           </div>
         );
@@ -67,7 +70,9 @@ export default function CatsList() {
         href="/account"
         className="mt-2 flex items-center justify-between rounded-card bg-white px-5 py-4 text-sm font-semibold text-secondary border border-hairline"
       >
-        <span>⚙️ 계정 설정</span>
+        <span className="flex items-center gap-2">
+          <IconGear size={18} className="text-muted" /> 계정 설정
+        </span>
         <span className="text-muted-soft">›</span>
       </Link>
     </main>

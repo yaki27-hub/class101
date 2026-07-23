@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { storage } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
+import { IconCat } from "@/components/icons";
 
 const APP_VERSION = "v1.0 (오픈 테스트)";
 const CONTACT_EMAIL = "melona-yolo@naver.com";
@@ -73,8 +74,8 @@ export default function AccountPage() {
         <p className="text-sm font-bold text-secondary">로그인 상태</p>
         {auth.linked ? (
           <div className="mt-3 flex items-center gap-3">
-            <span className="flex size-11 items-center justify-center rounded-full bg-primary/15 text-xl">
-              🐱
+            <span className="flex size-11 items-center justify-center rounded-full bg-primary-soft text-primary-deep">
+              <IconCat size={24} />
             </span>
             <div className="min-w-0">
               <p className="font-bold text-secondary">{auth.nick}님</p>
