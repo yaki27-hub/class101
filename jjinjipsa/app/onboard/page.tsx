@@ -180,9 +180,10 @@ export default function OnboardPrototype() {
                   key={q}
                   onClick={() => void startChat(q)}
                   disabled={busy}
-                  className="block w-full rounded-card bg-white px-4 py-3.5 text-left text-[14px] font-semibold text-secondary border border-hairline active:scale-[0.99] disabled:opacity-60"
+                  className="flex w-full items-center gap-2 rounded-card bg-white px-4 py-3.5 text-left text-[14px] font-semibold text-secondary border border-hairline active:scale-[0.99] disabled:opacity-60"
                 >
-                  💬 {q}
+                  <span className="size-1.5 flex-none rounded-full bg-primary" aria-hidden />
+                  {q}
                 </button>
               ))}
             </div>

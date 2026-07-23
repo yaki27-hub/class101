@@ -106,6 +106,34 @@ export function IconRecord({ size = 24, className }: P) {
   );
 }
 
+/** 연필 (수정) */
+export function IconPencil({ size = 24, className }: P) {
+  return (
+    <svg {...S(size)} className={className} aria-hidden>
+      <path d="M16.7 3.3a1.6 1.6 0 0 1 2.26 0l1.74 1.74a1.6 1.6 0 0 1 0 2.26l-1.2 1.2-4-4 1.2-1.2Z" />
+      <path d="M14.3 5.7 4.9 15.1l-.9 4.05a.7.7 0 0 0 .84.84L8.9 19.1l9.4-9.4-4-4Z" />
+    </svg>
+  );
+}
+
+/** 휴지통 (삭제) */
+export function IconTrash({ size = 24, className }: P) {
+  return (
+    <svg {...S(size)} className={className} aria-hidden>
+      <path d="M9 2.6h6a1 1 0 0 1 1 1V5h3.2a1 1 0 1 1 0 2h-.66l-.83 11.9A2.4 2.4 0 0 1 15.3 21H8.7a2.4 2.4 0 0 1-2.4-2.24L5.46 7H4.8a1 1 0 0 1 0-2H8V3.6a1 1 0 0 1 1-1Zm1 2.4h4V4.6h-4V5Z" />
+    </svg>
+  );
+}
+
+/** 톱니 (설정) */
+export function IconGear({ size = 24, className }: P) {
+  return (
+    <svg {...S(size)} className={className} aria-hidden fillRule="evenodd" clipRule="evenodd">
+      <path d="M11.8 2h.4l.4 2.15c.9.2 1.72.55 2.44 1.03l1.98-.9 1.9 3.28-1.65 1.45c.08.32.12.65.12.99s-.04.67-.12.99l1.65 1.45-1.9 3.28-1.98-.9c-.72.48-1.54.83-2.44 1.03L12.2 22h-.4l-.4-2.15c-.9-.2-1.72-.55-2.44-1.03l-1.98.9-1.9-3.28 1.65-1.45A5.6 5.6 0 0 1 6.6 12c0-.34.04-.67.12-.99L5.07 9.56l1.9-3.28 1.98.9c.72-.48 1.54-.83 2.44-1.03L11.8 2Zm.2 6.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Z" />
+    </svg>
+  );
+}
+
 /** 고양이 얼굴 (우리 아이) */
 export function IconCat({ size = 24, className }: P) {
   return (

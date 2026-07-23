@@ -255,9 +255,10 @@ export default function ChatPage() {
                 <button
                   key={q}
                   onClick={() => void send(q)}
-                  className="block w-full rounded-card bg-white px-4 py-3 text-left text-[13px] font-semibold text-secondary border border-hairline active:scale-[0.99]"
+                  className="flex w-full items-center gap-2 rounded-card bg-white px-4 py-3 text-left text-[13px] font-semibold text-secondary border border-hairline active:scale-[0.99]"
                 >
-                  💬 {q}
+                  <span className="size-1.5 flex-none rounded-full bg-primary" aria-hidden />
+                  {q}
                 </button>
               ))}
             </div>

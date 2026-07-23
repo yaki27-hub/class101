@@ -10,6 +10,7 @@ import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
 import { setSelectedCatId } from "@/lib/selectedCat";
 import { useTodayStatus } from "@/hooks/useTodayStatus";
 import DailyStatusCard from "@/components/home/DailyStatusCard";
+import { IconCat, IconChat, IconPencil, IconTrash } from "@/components/icons";
 
 const SEGMENT_COLORS: Record<string, string> = {
   kitten: "bg-mint",
@@ -62,9 +63,9 @@ export default function CatDetailPage() {
         </Link>
         <Link
           href={`/cats/${cat.id}/edit`}
-          className="rounded-full bg-surface-soft px-3 py-1.5 text-[12px] font-semibold text-secondary"
+          className="flex items-center gap-1 rounded-full bg-surface-soft px-3 py-1.5 text-[12px] font-semibold text-secondary"
         >
-          ✏️ 프로필 수정
+          <IconPencil size={13} /> 프로필 수정
         </Link>
       </header>
 
@@ -78,8 +79,8 @@ export default function CatDetailPage() {
             className="size-[84px] flex-none rounded-[22px] object-cover"
           />
         ) : (
-          <span className="flex size-[84px] flex-none items-center justify-center rounded-[22px] bg-surface-soft text-4xl">
-            🐱
+          <span className="flex size-[84px] flex-none items-center justify-center rounded-[22px] bg-surface-soft text-muted-soft">
+            <IconCat size={44} />
           </span>
         )}
         <div className="min-w-0">
@@ -196,15 +197,15 @@ export default function CatDetailPage() {
       <div className="space-y-2">
         <Link
           href={`/cats/${cat.id}/chat`}
-          className="flex h-12 w-full items-center justify-center rounded-button bg-primary text-sm font-bold text-white active:scale-[0.99]"
+          className="flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-primary text-sm font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
         >
-          💬 냥박사에게 물어보기
+          <IconChat size={18} /> 냥박사에게 물어보기
         </Link>
         <button
           onClick={() => setConfirmDel(true)}
-          className="flex h-11 w-full items-center justify-center rounded-button border border-error/30 text-sm font-semibold text-error"
+          className="flex h-11 w-full items-center justify-center gap-1.5 rounded-button border border-error/30 text-sm font-semibold text-error"
         >
-          이 아이 삭제 🗑️
+          <IconTrash size={16} /> 이 아이 삭제
         </button>
       </div>
 

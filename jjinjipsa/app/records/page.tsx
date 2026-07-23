@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { resolveSelectedCat } from "@/lib/selectedCat";
 import { loadDaily, STATUS_ITEMS, type DailyRecord } from "@/lib/dailyStatus";
+import { IconCat, IconRecord, IconTrash } from "@/components/icons";
 
 export default function Records() {
   const [rows, setRows] = useState<{ cat: Cat; log: SymptomLog }[] | null>(null);
@@ -71,7 +72,7 @@ export default function Records() {
 
       {rows.length === 0 ? (
         <div className="rounded-card bg-white p-8 text-center border border-hairline">
-          <p className="text-4xl">📖</p>
+          <IconRecord size={40} className="mx-auto text-muted-soft" />
           <p className="mt-2 font-bold text-secondary">아직 기록이 없어요</p>
           <p className="mt-1 text-sm text-body">
             챗봇 대화나 증상 기록이 여기에 모여요.
@@ -81,7 +82,9 @@ export default function Records() {
         rows.map(({ cat, log }) => (
           <div key={log.id} className="rounded-card bg-white p-4 border border-hairline">
             <div className="flex items-center justify-between">
-              <p className="text-[13px] font-bold text-secondary">🐱 {cat.name}</p>
+              <p className="flex items-center gap-1 text-[13px] font-bold text-secondary">
+                <IconCat size={15} className="text-muted" /> {cat.name}
+              </p>
               <div className="flex items-center gap-2">
                 <span className="text-[11px] text-muted">
                   {log.occurredAt.slice(0, 10).replace(/-/g, ".")}
@@ -89,9 +92,9 @@ export default function Records() {
                 <button
                   onClick={() => void remove(cat.id, log.id)}
                   aria-label="기록 삭제"
-                  className="rounded-full bg-surface-soft px-2 py-0.5 text-[11px] text-muted"
+                  className="flex size-6 items-center justify-center rounded-full bg-surface-soft text-muted"
                 >
-                  🗑️
+                  <IconTrash size={13} />
                 </button>
               </div>
             </div>
