@@ -1,16 +1,15 @@
 "use client";
 
-/* 하단 5탭 (D-10) — 홈/AI상담/사진진단/건강기록/우리고양이 */
+/* 하단 4탭 (홈 UX 개편) — 홈/냥박사/기록/우리 아이. 사진진단은 냥박사 카드로 통합 */
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const TABS = [
   { href: "/", icon: "🏠", label: "홈" },
-  { href: "/chat", icon: "💬", label: "AI 상담" },
-  { href: "/diagnose", icon: "📷", label: "사진 진단" },
-  { href: "/records", icon: "📖", label: "건강 기록" },
-  { href: "/cats", icon: "🐱", label: "우리 고양이" },
+  { href: "/chat", icon: "💬", label: "냥박사" },
+  { href: "/records", icon: "📖", label: "기록" },
+  { href: "/cats", icon: "🐱", label: "우리 아이" },
 ];
 
 export default function BottomNav() {
