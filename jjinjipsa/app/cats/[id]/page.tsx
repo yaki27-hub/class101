@@ -4,13 +4,30 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
 import { setSelectedCatId } from "@/lib/selectedCat";
 import { useTodayStatus } from "@/hooks/useTodayStatus";
 import DailyStatusCard from "@/components/home/DailyStatusCard";
+import HealthCard from "@/components/HealthCard";
+import BottomSheet from "@/components/BottomSheet";
+import { loadHealthNote, saveHealthNote, buildHealthText } from "@/lib/healthNote";
 import { IconCat, IconChat, IconPencil, IconTrash } from "@/components/icons";
+
+function dataURLToFile(dataUrl: string, filename: string): File {
+  const [head, b64] = dataUrl.split(",");
+  const mime = /:(.*?);/.exec(head)?.[1] ?? "image/png";
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new File([arr], filename, { type: mime });
+}
+
+function todayLabel(): string {
+  const d = new Date();
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+}
 
 const SEGMENT_COLORS: Record<string, string> = {
   kitten: "bg-mint",
@@ -26,6 +43,12 @@ export default function CatDetailPage() {
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
   const [logs, setLogs] = useState<SymptomLog[]>([]);
   const [confirmDel, setConfirmDel] = useState(false);
+  const [note, setNote] = useState("");
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteDraft, setNoteDraft] = useState("");
+  const [toast, setToast] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const { record, summary, setStatus } = useTodayStatus(id);
 
   useEffect(() => {
@@ -34,7 +57,62 @@ export default function CatDetailPage() {
       if (c) setSelectedCatId(c.id); // 이 아이를 홈·AI 탭 기본 선택으로
     });
     void storage.listSymptoms(id).then(setLogs);
+    setNote(loadHealthNote(id));
   }, [id]);
+
+  function showToast(m: string) {
+    setToast(m);
+    window.setTimeout(() => setToast(null), 1800);
+  }
+
+  function saveNote() {
+    saveHealthNote(id, noteDraft.trim());
+    setNote(noteDraft.trim());
+    setNoteOpen(false);
+    showToast("메모를 저장했어요");
+  }
+
+  async function shareText() {
+    if (!cat) return;
+    const text = buildHealthText(cat, note, record, logs);
+    try {
+      if (navigator.share) await navigator.share({ title: `${cat.name} 건강 카드`, text });
+      else {
+        await navigator.clipboard.writeText(text);
+        showToast("요약을 복사했어요");
+      }
+    } catch {
+      /* 사용자 취소 */
+    }
+  }
+
+  async function shareImage() {
+    const node = cardRef.current;
+    if (!node || !cat) return;
+    setBusy(true);
+    try {
+      const { toPng } = await import("html-to-image");
+      const dataUrl = await toPng(node, {
+        pixelRatio: 2,
+        backgroundColor: "#ffffff",
+        cacheBust: true,
+      });
+      const file = dataURLToFile(dataUrl, `${cat.name}_건강카드.png`);
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: `${cat.name} 건강 카드` });
+      } else {
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = file.name;
+        a.click();
+        showToast("이미지를 저장했어요");
+      }
+    } catch {
+      showToast("이미지 생성에 실패했어요");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function deleteCat() {
     if (!cat) return;
@@ -107,6 +185,50 @@ export default function CatDetailPage() {
         summary={summary}
         onSet={setStatus}
       />
+
+      {/* 건강 카드 — 병원·펫시터 공유 */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <div>
+            <p className="display text-[18px] text-secondary">건강 카드</p>
+            <p className="text-[12px] text-muted">병원·펫시터에게 한 장으로 공유해요</p>
+          </div>
+          <button
+            onClick={() => {
+              setNoteDraft(note);
+              setNoteOpen(true);
+            }}
+            className="flex items-center gap-1 rounded-full bg-surface-soft px-3 py-1.5 text-[12px] font-semibold text-secondary"
+          >
+            <IconPencil size={13} /> 메모
+          </button>
+        </div>
+
+        <HealthCard
+          ref={cardRef}
+          cat={cat}
+          note={note}
+          record={record}
+          logs={logs}
+          dateStr={todayLabel()}
+        />
+
+        <div className="flex gap-2">
+          <button
+            onClick={() => void shareText()}
+            className="h-11 flex-1 rounded-button border border-hairline bg-white text-sm font-semibold text-secondary"
+          >
+            텍스트 공유
+          </button>
+          <button
+            onClick={() => void shareImage()}
+            disabled={busy}
+            className="h-11 flex-1 rounded-button bg-primary text-sm font-bold text-white disabled:opacity-60"
+          >
+            {busy ? "만드는 중…" : "이미지로 저장·공유"}
+          </button>
+        </div>
+      </section>
 
       {/* 생애 시계 */}
       <section className="rounded-card border border-hairline bg-white p-5">
@@ -236,6 +358,33 @@ export default function CatDetailPage() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* 꼭 기억할 것 메모 편집 */}
+      <BottomSheet open={noteOpen} onClose={() => setNoteOpen(false)} title="꼭 기억할 것">
+        <textarea
+          value={noteDraft}
+          onChange={(e) => setNoteDraft(e.target.value)}
+          rows={5}
+          maxLength={300}
+          placeholder="알레르기, 복용 중인 약, 주의사항 등을 적어주세요"
+          className="w-full rounded-input border border-hairline bg-surface-soft/40 p-3 text-[14px] leading-relaxed text-ink focus:border-primary focus:bg-white focus:outline-none"
+        />
+        <button
+          onClick={saveNote}
+          className="mt-3 h-12 w-full rounded-button bg-primary text-sm font-bold text-white"
+        >
+          저장
+        </button>
+      </BottomSheet>
+
+      {toast && (
+        <div
+          role="status"
+          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
+        >
+          {toast}
         </div>
       )}
     </main>
