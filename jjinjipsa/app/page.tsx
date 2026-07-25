@@ -17,6 +17,7 @@ import RecentRecordsSection from "@/components/home/RecentRecordsSection";
 import { useSelectedCat } from "@/hooks/useSelectedCat";
 import { useTodayStatus } from "@/hooks/useTodayStatus";
 import { useRecentRecords } from "@/hooks/useRecentRecords";
+import { accentAt } from "@/lib/catColor";
 
 export default function Home() {
   const { cats, cat, select, loading } = useSelectedCat();
@@ -37,6 +38,11 @@ export default function Home() {
           <CatSelectorCard
             cat={cat}
             multiple={cats.length > 1}
+            accent={
+              cats.length > 1
+                ? accentAt(cats.findIndex((c) => c.id === cat.id))
+                : undefined
+            }
             onOpen={() => setSheetOpen(true)}
           />
           <DailyStatusCard

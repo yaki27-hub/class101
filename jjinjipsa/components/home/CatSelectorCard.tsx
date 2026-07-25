@@ -3,33 +3,25 @@
 /* 고양이 선택 카드 — 현재 관리 중인 고양이 표시 + 바꾸기(바텀시트) (지시서 §5) */
 
 import { getCatAge } from "@/lib/catAge";
-import { IconCat } from "@/components/icons";
+import CatAvatar from "@/components/CatAvatar";
+import type { CatAccent } from "@/lib/catColor";
 import type { Cat } from "@/lib/storage";
 
 export default function CatSelectorCard({
   cat,
   multiple,
+  accent,
   onOpen,
 }: {
   cat: Cat;
   multiple: boolean;
+  accent?: CatAccent;
   onOpen: () => void;
 }) {
   const age = getCatAge(cat.birthDate);
   return (
     <section className="flex items-center gap-3 rounded-card border border-hairline bg-white p-4">
-      {cat.photo ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={cat.photo}
-          alt={`${cat.name} 프로필 사진`}
-          className="size-[52px] flex-none rounded-[16px] object-cover"
-        />
-      ) : (
-        <span className="flex size-[52px] flex-none items-center justify-center rounded-[16px] bg-surface-soft text-muted-soft">
-          <IconCat size={28} />
-        </span>
-      )}
+      <CatAvatar cat={cat} size={52} radius={16} accent={accent} />
 
       <button
         type="button"

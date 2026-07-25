@@ -1,24 +1,14 @@
 "use client";
 
-/* 홈 헤더 — 로고(Jua) + 알림 벨(unread 도트). 로그인·설정은 우리 아이/계정으로 (지시서 §4) */
+/*
+ * 홈 헤더 — 로고만. 알림 벨은 실제 알림 기능이 없어 제거(빈 껍데기 UI 금지).
+ * 추후 리마인더/이상 신호 알림이 생기면 그때 다시 추가한다.
+ */
 
-import { IconBell } from "@/components/icons";
-
-export default function HomeHeader({ unread = false }: { unread?: boolean }) {
+export default function HomeHeader() {
   return (
-    <header className="flex h-16 items-center justify-between">
+    <header className="flex h-16 items-center">
       <p className="display text-[26px] text-ink">찐집사</p>
-      <button
-        type="button"
-        aria-label="알림 (준비 중)"
-        title="알림은 준비 중이에요"
-        className="relative -mr-1.5 flex size-11 items-center justify-center text-muted"
-      >
-        <IconBell size={23} />
-        {unread && (
-          <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-primary" />
-        )}
-      </button>
     </header>
   );
 }

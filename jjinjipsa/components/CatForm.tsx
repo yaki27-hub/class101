@@ -112,11 +112,17 @@ export default function CatForm({ existing }: { existing?: Cat }) {
     "h-11 w-full rounded-md border border-hairline bg-canvas px-4 text-base text-ink placeholder:text-muted-soft focus:border-ink focus:outline-none";
 
   return (
-    <main className="flex-1 space-y-6 px-5 py-8">
+    <main className="flex-1 space-y-6 px-5 pt-4 pb-8">
       <header>
-        <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
-          Profile
-        </p>
+        {/* 나가기 — 수정 중이면 해당 아이 상세로, 신규 등록이면 홈으로 */}
+        <button
+          type="button"
+          onClick={() => router.back()}
+          aria-label="이전 화면으로"
+          className="-ml-2.5 flex size-11 items-center justify-center text-lg text-muted"
+        >
+          ←
+        </button>
         <h1 className="display mt-1 text-2xl text-ink">
           {editing ? "프로필 수정" : "우리 아이를 알려주세요"}
         </h1>
@@ -230,10 +236,18 @@ export default function CatForm({ existing }: { existing?: Cat }) {
         </p>
       )}
 
-      <button onClick={() => void save()}
-        className="h-12 w-full rounded-md bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f]">
-        {editing ? "수정 완료" : "등록하기"}
-      </button>
+      <div className="flex gap-2">
+        {editing && (
+          <button type="button" onClick={() => router.back()}
+            className="h-12 flex-none rounded-md border border-hairline px-5 text-sm font-semibold text-body">
+            취소
+          </button>
+        )}
+        <button onClick={() => void save()}
+          className="h-12 flex-1 rounded-md bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f]">
+          {editing ? "수정 완료" : "등록하기"}
+        </button>
+      </div>
       <p className="text-center text-xs text-muted-soft">
         이 정보는 참고용이며, 정확한 진단은 수의사 상담이 필요합니다.
       </p>
