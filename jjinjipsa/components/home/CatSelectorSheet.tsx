@@ -5,6 +5,7 @@
 import Link from "next/link";
 import BottomSheet from "@/components/BottomSheet";
 import { getCatAge } from "@/lib/catAge";
+import { IconCat } from "@/components/icons";
 import type { Cat } from "@/lib/storage";
 
 export default function CatSelectorSheet({
@@ -45,8 +46,8 @@ export default function CatSelectorSheet({
                   className="size-11 flex-none rounded-[14px] object-cover"
                 />
               ) : (
-                <span className="flex size-11 flex-none items-center justify-center rounded-[14px] bg-surface-soft text-xl">
-                  🐱
+                <span className="flex size-11 flex-none items-center justify-center rounded-[14px] bg-surface-soft text-muted-soft">
+                  <IconCat size={24} />
                 </span>
               )}
               <span className="min-w-0 flex-1">

@@ -18,7 +18,10 @@ export default function RecentRecordsSection({ rows }: { rows: SymptomLog[] }) {
       <div className="flex items-center justify-between px-1">
         <p className="display text-[18px] text-secondary">최근 기록</p>
         {rows.length > 0 && (
-          <Link href="/records" className="text-[13px] font-semibold text-muted">
+          <Link
+            href="/records"
+            className="-my-3 -mr-2 flex min-h-11 items-center px-2 text-[13px] font-semibold text-muted"
+          >
             전체보기 ›
           </Link>
         )}

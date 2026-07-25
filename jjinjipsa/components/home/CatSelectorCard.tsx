@@ -3,6 +3,7 @@
 /* 고양이 선택 카드 — 현재 관리 중인 고양이 표시 + 바꾸기(바텀시트) (지시서 §5) */
 
 import { getCatAge } from "@/lib/catAge";
+import { IconCat } from "@/components/icons";
 import type { Cat } from "@/lib/storage";
 
 export default function CatSelectorCard({
@@ -25,8 +26,8 @@ export default function CatSelectorCard({
           className="size-[52px] flex-none rounded-[16px] object-cover"
         />
       ) : (
-        <span className="flex size-[52px] flex-none items-center justify-center rounded-[16px] bg-surface-soft text-2xl">
-          🐱
+        <span className="flex size-[52px] flex-none items-center justify-center rounded-[16px] bg-surface-soft text-muted-soft">
+          <IconCat size={28} />
         </span>
       )}
 

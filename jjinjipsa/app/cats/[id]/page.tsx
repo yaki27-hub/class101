@@ -136,12 +136,12 @@ export default function CatDetailPage() {
   return (
     <main className="flex-1 space-y-4 px-5 pt-8 pb-24">
       <header className="flex items-center justify-between">
-        <Link href="/" className="text-sm font-medium text-muted">
+        <Link href="/" className="-my-2 -ml-2 flex min-h-11 items-center px-2 text-sm font-medium text-muted">
           ← 홈
         </Link>
         <Link
           href={`/cats/${cat.id}/edit`}
-          className="flex items-center gap-1 rounded-full bg-surface-soft px-3 py-1.5 text-[12px] font-semibold text-secondary"
+          className="flex min-h-11 items-center gap-1 rounded-full bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
         >
           <IconPencil size={13} /> 프로필 수정
         </Link>
@@ -198,7 +198,7 @@ export default function CatDetailPage() {
               setNoteDraft(note);
               setNoteOpen(true);
             }}
-            className="flex items-center gap-1 rounded-full bg-surface-soft px-3 py-1.5 text-[12px] font-semibold text-secondary"
+            className="flex min-h-11 items-center gap-1 rounded-full bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
           >
             <IconPencil size={13} /> 메모
           </button>
@@ -277,7 +277,7 @@ export default function CatDetailPage() {
           </p>
           <Link
             href={`/cats/${cat.id}/log`}
-            className="text-[12px] font-semibold text-primary-deep"
+            className="-my-2 -mr-2 flex min-h-11 items-center px-2 text-[12px] font-semibold text-primary-deep"
           >
             + 기록하기
           </Link>
@@ -369,7 +369,7 @@ export default function CatDetailPage() {
           rows={5}
           maxLength={300}
           placeholder="알레르기, 복용 중인 약, 주의사항 등을 적어주세요"
-          className="w-full rounded-input border border-hairline bg-surface-soft/40 p-3 text-[14px] leading-relaxed text-ink focus:border-primary focus:bg-white focus:outline-none"
+          className="w-full rounded-input border border-hairline bg-surface-soft/40 p-3 text-base leading-relaxed text-ink focus:border-primary focus:bg-white focus:outline-none"
         />
         <button
           onClick={saveNote}

@@ -45,7 +45,7 @@ export default function CatsList() {
             </Link>
             <Link
               href={`/cats/${cat.id}/edit`}
-              className="flex flex-none items-center gap-1 rounded-full bg-surface-soft px-3 py-2 text-[12px] font-semibold text-secondary"
+              className="flex min-h-11 flex-none items-center gap-1 rounded-full bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
             >
               <IconPencil size={13} /> 수정
             </Link>

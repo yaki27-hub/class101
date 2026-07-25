@@ -64,15 +64,18 @@ export default function DoctorChatCard({
             if (e.key === "Enter" && !e.nativeEvent.isComposing) toChat(text || undefined);
           }}
           placeholder="무엇이 궁금한가요?"
-          className="h-12 min-w-0 flex-1 bg-transparent text-[15px] text-ink placeholder:text-muted-soft focus:outline-none"
+          className="h-12 min-w-0 flex-1 bg-transparent text-base text-ink placeholder:text-muted-soft focus:outline-none"
         />
         <button
           type="button"
           aria-label="사진으로 물어보기"
           onClick={() => router.push(`/cats/${cat.id}/chat?photo=1`)}
-          className="flex size-9 flex-none items-center justify-center rounded-full bg-primary-soft text-primary-deep"
+          className="-mr-1.5 flex size-11 flex-none items-center justify-center rounded-full"
         >
-          <IconCamera size={19} />
+          {/* 시각 크기는 36px 유지, 탭 영역만 44px로 확장 */}
+          <span className="flex size-9 items-center justify-center rounded-full bg-primary-soft text-primary-deep">
+            <IconCamera size={19} />
+          </span>
         </button>
       </div>
 

@@ -91,10 +91,10 @@ export default function Records() {
                 </span>
                 <button
                   onClick={() => void remove(cat.id, log.id)}
-                  aria-label="기록 삭제"
-                  className="flex size-6 items-center justify-center rounded-full bg-surface-soft text-muted"
+                  aria-label={`${cat.name}의 ${log.occurredAt.slice(0, 10)} 기록 삭제`}
+                  className="-m-2.5 flex size-11 items-center justify-center rounded-full text-muted active:bg-surface-soft"
                 >
-                  <IconTrash size={13} />
+                  <IconTrash size={15} />
                 </button>
               </div>
             </div>

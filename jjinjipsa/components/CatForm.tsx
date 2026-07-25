@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { newId, storage, type Cat, type Gender } from "@/lib/storage";
 import { BREED_GROUPS, CONDITIONS } from "@/lib/catOptions";
+import { IconCamera } from "@/components/icons";
 
 export default function CatForm({ existing }: { existing?: Cat }) {
   const router = useRouter();
@@ -131,12 +132,12 @@ export default function CatForm({ existing }: { existing?: Cat }) {
             onClick={() => fileRef.current?.click()}
             className="flex w-full items-center gap-4 text-left"
           >
-            <span className="flex size-[76px] flex-none items-center justify-center overflow-hidden rounded-[20px] bg-surface-card text-3xl">
+            <span className="flex size-[76px] flex-none items-center justify-center overflow-hidden rounded-[20px] bg-surface-soft text-muted-soft">
               {photo ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={photo} alt="선택한 우리 아이 사진 미리보기" className="size-full object-cover" />
               ) : (
-                "📷"
+                <IconCamera size={30} />
               )}
             </span>
             <span className="text-[13px] text-muted">
@@ -179,7 +180,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
             {([["male", "남아"], ["female", "여아"], ["unknown", "몰라요"]] as const).map(
               ([value, text]) => (
                 <button key={value} type="button" onClick={() => setGender(value)}
-                  className={`h-10 flex-1 rounded-md border text-sm font-semibold ${
+                  className={`h-11 flex-1 rounded-md border text-sm font-semibold ${
                     gender === value ? "border-ink bg-ink text-white"
                       : "border-hairline bg-canvas text-body"}`}>
                   {text}
@@ -187,9 +188,9 @@ export default function CatForm({ existing }: { existing?: Cat }) {
               ),
             )}
           </div>
-          <label className="flex items-center gap-2 text-sm text-body">
+          <label className="flex min-h-11 items-center gap-2 text-sm text-body">
             <input type="checkbox" checked={neutered}
-              onChange={(e) => setNeutered(e.target.checked)} className="size-4 accent-ink" />
+              onChange={(e) => setNeutered(e.target.checked)} className="size-5 accent-ink" />
             중성화 했어요
           </label>
         </div>
@@ -214,7 +215,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
           <div className="flex flex-wrap gap-2">
             {CONDITIONS.map((c) => (
               <button key={c} type="button" onClick={() => toggleCondition(c)}
-                className={`rounded-full px-3.5 py-2 text-[13px] font-medium ${
+                className={`flex min-h-11 items-center rounded-full px-3.5 text-[13px] font-medium ${
                   conditions.includes(c) ? "bg-ink text-white" : "bg-surface-card text-ink"}`}>
                 {c}
               </button>

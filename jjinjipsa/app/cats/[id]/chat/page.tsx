@@ -22,6 +22,7 @@ import {
 } from "@/lib/redFlags";
 import NyangLoader from "@/components/NyangLoader";
 import Mascot from "@/components/Mascot";
+import { IconCamera, IconClose } from "@/components/icons";
 
 /** AI 답변의 마크다운 ** 강조 기호 정리 */
 function clean(text: string) {
@@ -220,7 +221,11 @@ export default function ChatPage() {
     <main className="flex h-dvh flex-col">
       {/* 헤더 */}
       <header className="flex items-center justify-between border-b border-hairline bg-canvas px-5 py-3.5">
-        <Link href={`/cats/${catId}`} className="text-lg text-muted">
+        <Link
+          href={`/cats/${catId}`}
+          aria-label={`${cat.name} 정보로 돌아가기`}
+          className="-my-2 -ml-2.5 flex size-11 items-center justify-center text-lg text-muted"
+        >
           ←
         </Link>
         <div className="flex items-center gap-2">
@@ -373,9 +378,10 @@ export default function ChatPage() {
             <span className="text-[12px] font-medium text-secondary">사진 첨부됨</span>
             <button
               onClick={() => setPhoto(null)}
-              className="ml-auto rounded-full bg-surface-soft px-2.5 py-1 text-[12px] text-muted"
+              aria-label="첨부한 사진 제거"
+              className="-my-2 ml-auto flex min-h-11 items-center gap-1 rounded-full px-2.5 text-[12px] text-muted"
             >
-              ✕ 제거
+              <IconClose size={12} /> 제거
             </button>
           </div>
         )}
@@ -390,9 +396,9 @@ export default function ChatPage() {
           <button
             onClick={() => fileRef.current?.click()}
             aria-label="사진 첨부"
-            className="flex size-11 shrink-0 items-center justify-center rounded-input border border-hairline bg-surface-soft/60 text-lg active:scale-95"
+            className="flex size-11 shrink-0 items-center justify-center rounded-input border border-hairline bg-surface-soft/60 text-muted active:scale-95"
           >
-            📷
+            <IconCamera size={20} />
           </button>
           <input
             value={draft}
