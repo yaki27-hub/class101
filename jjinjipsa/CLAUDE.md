@@ -6,6 +6,8 @@
 출처 있는 건강 정보 + 각 고양이의 기록(프로필·습관·증상)을 결합한다.
 
 ## 먼저 읽을 문서
+- DESIGN.md — **디자인 시스템의 단일 출처**(토큰+근거). `npm run design:lint`로 검사,
+  `npm run design:export`로 Tailwind `@theme` 생성 → `app/globals.css`와 대조
 - PLAN.md — 제품 개요, MVP 범위, 데이터 모델, 마일스톤, **미정 사항(인터뷰 대기열)**
 - TASKS.md — 마일스톤별 태스크. **한 번에 하나만** 진행
 - DECISIONS.md — 인터뷰로 확정된 결정 (D-00부터)
