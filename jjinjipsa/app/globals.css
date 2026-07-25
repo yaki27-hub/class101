@@ -17,6 +17,7 @@
   --color-body: #6b635e;
   --color-muted: #7e7876;
   --color-muted-soft: #b8b0ac;
+  --color-nav-inactive: #78716e; /* 하단탭 비활성 — WCAG AA 4.79:1 */
   --color-hairline: #f0e5de;
 
   /* Brand */
