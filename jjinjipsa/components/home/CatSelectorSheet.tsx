@@ -5,7 +5,8 @@
 import Link from "next/link";
 import BottomSheet from "@/components/BottomSheet";
 import { getCatAge } from "@/lib/catAge";
-import { IconCat } from "@/components/icons";
+import CatAvatar from "@/components/CatAvatar";
+import { accentAt } from "@/lib/catColor";
 import type { Cat } from "@/lib/storage";
 
 export default function CatSelectorSheet({
@@ -24,7 +25,7 @@ export default function CatSelectorSheet({
   return (
     <BottomSheet open={open} onClose={onClose} title="어떤 아이를 볼까요?">
       <div className="space-y-2">
-        {cats.map((c) => {
+        {cats.map((c, i) => {
           const on = c.id === selectedId;
           const age = getCatAge(c.birthDate);
           return (
@@ -38,18 +39,7 @@ export default function CatSelectorSheet({
                 on ? "border-primary bg-primary/10" : "border-hairline bg-white"
               }`}
             >
-              {c.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={c.photo}
-                  alt={`${c.name} 프로필 사진`}
-                  className="size-11 flex-none rounded-[14px] object-cover"
-                />
-              ) : (
-                <span className="flex size-11 flex-none items-center justify-center rounded-[14px] bg-surface-soft text-muted-soft">
-                  <IconCat size={24} />
-                </span>
-              )}
+              <CatAvatar cat={c} size={44} radius={14} accent={cats.length > 1 ? accentAt(i) : undefined} />
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-bold text-secondary">
                   {c.name}

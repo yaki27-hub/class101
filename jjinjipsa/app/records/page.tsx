@@ -7,14 +7,21 @@ import { useEffect, useState } from "react";
 import { storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { resolveSelectedCat } from "@/lib/selectedCat";
 import { loadDaily, STATUS_ITEMS, type DailyRecord } from "@/lib/dailyStatus";
-import { IconCat, IconRecord, IconTrash } from "@/components/icons";
+import { IconRecord, IconTrash } from "@/components/icons";
+import { ACCENTS, buildAccentMap, type CatAccent } from "@/lib/catColor";
+import CatAvatar from "@/components/CatAvatar";
 
 export default function Records() {
   const [rows, setRows] = useState<{ cat: Cat; log: SymptomLog }[] | null>(null);
   const [today, setToday] = useState<{ cat: Cat; record: DailyRecord } | null>(null);
+  /** 등록 순서 기반 고양이별 색 (같은 화면에서 색 중복 없음) */
+  const [accents, setAccents] = useState<Record<string, CatAccent>>({});
+  const [multi, setMulti] = useState(false);
 
   async function load() {
     const cats = await storage.listCats();
+    setAccents(buildAccentMap(cats));
+    setMulti(cats.length > 1);
     const all: { cat: Cat; log: SymptomLog }[] = [];
     for (const cat of cats) {
       for (const log of await storage.listSymptoms(cat.id)) all.push({ cat, log });
@@ -43,7 +50,8 @@ export default function Records() {
       {/* 오늘의 상태 요약 (선택 고양이, 홈과 동일 데이터) */}
       {today && (
         <section className="rounded-card border border-hairline bg-white p-4">
-          <p className="text-[13px] font-bold text-secondary">
+          <p className="flex items-center gap-2 text-[13px] font-bold text-secondary">
+            <CatAvatar cat={today.cat} size={24} radius={8} accent={multi ? accents[today.cat.id] : undefined} />
             오늘 {today.cat.name}의 상태
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2">
@@ -79,38 +87,53 @@ export default function Records() {
           </p>
         </div>
       ) : (
-        rows.map(({ cat, log }) => (
-          <div key={log.id} className="rounded-card bg-white p-4 border border-hairline">
-            <div className="flex items-center justify-between">
-              <p className="flex items-center gap-1 text-[13px] font-bold text-secondary">
-                <IconCat size={15} className="text-muted" /> {cat.name}
-              </p>
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] text-muted">
-                  {log.occurredAt.slice(0, 10).replace(/-/g, ".")}
-                </span>
-                <button
-                  onClick={() => void remove(cat.id, log.id)}
-                  aria-label={`${cat.name}의 ${log.occurredAt.slice(0, 10)} 기록 삭제`}
-                  className="-m-2.5 flex size-11 items-center justify-center rounded-full text-muted active:bg-surface-soft"
-                >
-                  <IconTrash size={15} />
-                </button>
+        rows.map(({ cat, log }) => {
+          const accent = accents[cat.id] ?? ACCENTS[0];
+          return (
+            <div
+              key={log.id}
+              className="flex overflow-hidden rounded-card border border-hairline bg-white"
+            >
+              {/* 어느 아이 기록인지 — 좌측 색 바 (다묘일 때만) */}
+              {multi && <span className={`w-1.5 flex-none ${accent.bar}`} aria-hidden />}
+              <div className="min-w-0 flex-1 p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex min-w-0 items-center gap-2">
+                    <CatAvatar cat={cat} size={26} radius={9} />
+                    <span
+                      className={`truncate rounded-full px-2 py-0.5 text-[12px] font-bold ${accent.soft} ${accent.text}`}
+                    >
+                      {cat.name}
+                    </span>
+                  </span>
+                  <div className="flex flex-none items-center gap-1">
+                    <span className="text-[11px] text-muted">
+                      {log.occurredAt.slice(0, 10).replace(/-/g, ".")}
+                    </span>
+                    <button
+                      onClick={() => void remove(cat.id, log.id)}
+                      aria-label={`${cat.name}의 ${log.occurredAt.slice(0, 10)} 기록 삭제`}
+                      className="-my-2.5 -mr-2.5 flex size-11 items-center justify-center rounded-full text-muted active:bg-surface-soft"
+                    >
+                      <IconTrash size={15} />
+                    </button>
+                  </div>
+                </div>
+                <p className="mt-2 flex flex-wrap gap-1">
+                  {log.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="rounded-full bg-soft-pink px-2 py-0.5 text-[11px] font-semibold text-secondary"
+                    >
+                      #{t}
+                    </span>
+                  ))}
+                </p>
+                <p className="mt-1 text-[13px] text-body">{log.summary}</p>
               </div>
             </div>
-            <p className="mt-1.5 flex flex-wrap gap-1">
-              {log.tags.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full bg-soft-pink px-2 py-0.5 text-[11px] font-semibold text-secondary"
-                >
-                  #{t}
-                </span>
-              ))}
-            </p>
-            <p className="mt-1 text-[13px] text-body">{log.summary}</p>
-          </div>
-        ))
+          );
+        })
       )}
     </main>
   );

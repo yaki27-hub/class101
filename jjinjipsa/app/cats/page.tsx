@@ -6,7 +6,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { storage, type Cat } from "@/lib/storage";
 import { getCatAge } from "@/lib/catAge";
-import { IconCat, IconPencil, IconGear } from "@/components/icons";
+import { IconPencil, IconGear } from "@/components/icons";
+import CatAvatar from "@/components/CatAvatar";
+import { accentAt } from "@/lib/catColor";
 
 export default function CatsList() {
   const [cats, setCats] = useState<Cat[] | null>(null);
@@ -18,7 +20,7 @@ export default function CatsList() {
   return (
     <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-6">
       <h1 className="display text-[22px] text-secondary">우리 고양이</h1>
-      {cats.map((cat) => {
+      {cats.map((cat, i) => {
         const age = getCatAge(cat.birthDate);
         return (
           <div
@@ -26,14 +28,7 @@ export default function CatsList() {
             className="flex items-center gap-4 rounded-card bg-white p-4 border border-hairline"
           >
             <Link href={`/cats/${cat.id}`} className="flex flex-1 items-center gap-4">
-              {cat.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={cat.photo} alt={`${cat.name} 프로필 사진`} className="size-16 flex-none rounded-[18px] object-cover" />
-              ) : (
-                <span className="flex size-16 flex-none items-center justify-center rounded-[18px] bg-surface-soft text-muted-soft">
-                  <IconCat size={34} />
-                </span>
-              )}
+              <CatAvatar cat={cat} size={64} radius={18} accent={cats.length > 1 ? accentAt(i) : undefined} />
               <div>
                 <p className="font-bold text-secondary">{cat.name}</p>
                 <p className="text-[12px] text-muted">
