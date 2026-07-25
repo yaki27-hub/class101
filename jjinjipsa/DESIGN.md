@@ -16,6 +16,7 @@ colors:
   body: "#6B635E"
   muted: "#7E7876"
   muted-soft: "#B8B0AC"
+  nav-inactive: "#78716E"
   # Brand
   primary: "#FF8D7B"
   primary-deep: "#E9705C"
@@ -128,7 +129,7 @@ components:
     rounded: "{rounded.tile}"
   bottom-nav:
     backgroundColor: "{colors.surface}"
-    textColor: "#9A918D"
+    textColor: "{colors.nav-inactive}"
     typography: "{typography.tab-label}"
     height: 76px
 ---
@@ -240,5 +241,8 @@ npx @google/design.md export DESIGN.md --format css-tailwind   # @theme 생성 �
 | 대상 | 비율 | 메모 |
 |---|---|---|
 | 코랄 CTA 위 흰 글씨 | 2.25:1 | 버튼은 크고 굵어 실사용상 판독 가능. 소형 텍스트엔 코랄 배경 금지 |
-| 하단탭 비활성 라벨 | 3.08:1 | 아이콘+라벨 동시 제공. 활성 탭은 코랄로 명확히 구분 |
 | 상태 타일 아이콘 색 | 2.1~2.6:1 | **아이콘 색**이며 라벨 텍스트는 `ink`(고대비). 체크/`!` 배지로 색 외 단서 제공 |
+
+**수정 완료:** 하단탭 비활성 라벨은 12px 실제 텍스트라 대비가 필요해, 핸드오프의
+`#9A918D`(3.08:1)를 `nav-inactive #78716E`(**4.79:1, AA 통과**)로 조정했다. 웜그레이
+색조는 유지된다.

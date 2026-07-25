@@ -34,7 +34,7 @@ export default function BottomNav() {
             <Link
               key={t.href}
               href={t.href}
-              className={`flex flex-1 flex-col items-center gap-1 py-1 ${active ? "text-primary" : "text-[#9a918d]"}`}
+              className={`flex flex-1 flex-col items-center gap-1 py-1 ${active ? "text-primary" : "text-nav-inactive"}`}
             >
               <Icon size={24} />
               <span className="text-[12px] font-medium">{t.label}</span>
