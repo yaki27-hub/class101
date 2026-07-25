@@ -12,6 +12,7 @@ import { useTodayStatus } from "@/hooks/useTodayStatus";
 import DailyStatusCard from "@/components/home/DailyStatusCard";
 import HealthCard from "@/components/HealthCard";
 import BottomSheet from "@/components/BottomSheet";
+import BackButton from "@/components/BackButton";
 import { loadHealthNote, saveHealthNote, buildHealthText } from "@/lib/healthNote";
 import { IconCat, IconChat, IconPencil, IconTrash } from "@/components/icons";
 
@@ -136,9 +137,7 @@ export default function CatDetailPage() {
   return (
     <main className="flex-1 space-y-4 px-5 pt-8 pb-24">
       <header className="flex items-center justify-between">
-        <Link href="/" className="-my-2 -ml-2 flex min-h-11 items-center px-2 text-sm font-medium text-muted">
-          ← 홈
-        </Link>
+        <BackButton fallback="/cats" />
         <Link
           href={`/cats/${cat.id}/edit`}
           className="flex min-h-11 items-center gap-1 rounded-full bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { newId, storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { EMERGENCY_TAG_LIST, SYMPTOM_TAG_LIST } from "@/lib/symptomTags";
 import { EMERGENCY_MAP_URL } from "@/lib/redFlags";
+import BackButton from "@/components/BackButton";
 
 export default function ManualLogPage() {
   const { id: catId } = useParams<{ id: string }>();
@@ -73,9 +74,7 @@ export default function ManualLogPage() {
   return (
     <main className="flex-1 space-y-6 px-5 py-8">
       <header className="flex items-center justify-between">
-        <Link href={`/cats/${catId}`} className="text-sm font-medium text-muted">
-          ← 돌아가기
-        </Link>
+        <BackButton fallback={`/cats/${catId}`} />
         <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
           Symptom Log
         </p>

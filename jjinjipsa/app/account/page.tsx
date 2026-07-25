@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { storage } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 import { IconCat } from "@/components/icons";
+import BackButton from "@/components/BackButton";
 
 const APP_VERSION = "v1.0 (오픈 테스트)";
 const CONTACT_EMAIL = "melona-yolo@naver.com";
@@ -63,9 +64,7 @@ export default function AccountPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 px-5 pt-8 pb-24">
       <header className="flex items-center gap-2">
-        <Link href="/cats" className="text-lg text-muted">
-          ←
-        </Link>
+        <BackButton fallback="/cats" />
         <h1 className="display text-[22px] text-secondary">계정 설정</h1>
       </header>
 
