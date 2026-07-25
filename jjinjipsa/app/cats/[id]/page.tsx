@@ -140,7 +140,7 @@ export default function CatDetailPage() {
         <BackButton fallback="/cats" />
         <Link
           href={`/cats/${cat.id}/edit`}
-          className="flex min-h-11 items-center gap-1 rounded-full bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
+          className="flex min-h-11 items-center gap-1 rounded-button bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
         >
           <IconPencil size={13} /> 프로필 수정
         </Link>
@@ -197,7 +197,7 @@ export default function CatDetailPage() {
               setNoteDraft(note);
               setNoteOpen(true);
             }}
-            className="flex min-h-11 items-center gap-1 rounded-full bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
+            className="flex min-h-11 items-center gap-1 rounded-button bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
           >
             <IconPencil size={13} /> 메모
           </button>
@@ -318,7 +318,7 @@ export default function CatDetailPage() {
       <div className="space-y-2">
         <Link
           href={`/cats/${cat.id}/chat`}
-          className="flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-primary text-sm font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
+          className="flex h-12 w-full items-center justify-center gap-1.5 rounded-button bg-primary text-sm font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
         >
           <IconChat size={18} /> 냥박사에게 물어보기
         </Link>

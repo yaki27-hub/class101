@@ -19,7 +19,7 @@ export default function EmptyCatCard() {
       </p>
       <Link
         href="/profile/new"
-        className="mt-5 flex h-12 items-center justify-center rounded-full bg-primary text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
+        className="mt-5 flex h-12 items-center justify-center rounded-button bg-primary text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
       >
         고양이 등록하기
       </Link>

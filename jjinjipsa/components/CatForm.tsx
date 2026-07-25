@@ -180,7 +180,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
             {([["male", "남아"], ["female", "여아"], ["unknown", "몰라요"]] as const).map(
               ([value, text]) => (
                 <button key={value} type="button" onClick={() => setGender(value)}
-                  className={`h-11 flex-1 rounded-md border text-sm font-semibold ${
+                  className={`h-11 flex-1 rounded-button border text-sm font-semibold ${
                     gender === value ? "border-ink bg-ink text-white"
                       : "border-hairline bg-canvas text-body"}`}>
                   {text}
@@ -233,12 +233,12 @@ export default function CatForm({ existing }: { existing?: Cat }) {
       <div className="flex gap-2">
         {editing && (
           <button type="button" onClick={() => router.push(`/cats/${existing.id}`)}
-            className="h-12 flex-none rounded-md border border-hairline px-5 text-sm font-semibold text-body">
+            className="h-12 flex-none rounded-button border border-hairline px-5 text-sm font-semibold text-body">
             취소
           </button>
         )}
         <button onClick={() => void save()}
-          className="h-12 flex-1 rounded-md bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f]">
+          className="h-12 flex-1 rounded-button bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f]">
           {editing ? "수정 완료" : "등록하기"}
         </button>
       </div>

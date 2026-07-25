@@ -107,7 +107,7 @@ export default function AccountPage() {
         <button
           onClick={() => void logout()}
           disabled={busy}
-          className="rounded-card bg-white py-4 text-sm font-semibold text-secondary border border-hairline disabled:opacity-60"
+          className="rounded-button bg-white py-4 text-sm font-semibold text-secondary border border-hairline disabled:opacity-60"
         >
           로그아웃
         </button>
