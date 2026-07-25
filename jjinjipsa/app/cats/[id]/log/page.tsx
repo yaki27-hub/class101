@@ -128,7 +128,7 @@ export default function ManualLogPage() {
           onChange={(e) => setMemo(e.target.value)}
           rows={3}
           placeholder="예: 아침 사료 먹고 30분 뒤에 토함. 노란 거품."
-          className="w-full rounded-md border border-hairline bg-canvas px-4 py-3 text-base text-ink placeholder:text-muted-soft focus:border-ink focus:outline-none"
+          className="w-full rounded-button border border-hairline bg-canvas px-4 py-3 text-base text-ink placeholder:text-muted-soft focus:border-ink focus:outline-none"
         />
       </label>
 
@@ -140,7 +140,7 @@ export default function ManualLogPage() {
 
       <button
         onClick={() => void save()}
-        className="h-12 w-full rounded-md bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f]"
+        className="h-12 w-full rounded-button bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f]"
       >
         기록 저장하기
       </button>
@@ -161,13 +161,13 @@ export default function ManualLogPage() {
               href={EMERGENCY_MAP_URL}
               target="_blank"
               rel="noopener"
-              className="flex h-12 items-center justify-center rounded-md bg-error text-sm font-semibold text-white"
+              className="flex h-12 items-center justify-center rounded-button bg-error text-sm font-semibold text-white"
             >
               🗺️ 가까운 24시 동물병원 찾기
             </a>
             <button
               onClick={() => setShowEmergency(false)}
-              className="h-11 w-full rounded-md border border-hairline text-sm font-semibold text-body"
+              className="h-11 w-full rounded-button border border-hairline text-sm font-semibold text-body"
             >
               확인했어요 — 기록 계속하기
             </button>

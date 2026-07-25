@@ -46,7 +46,7 @@ export default function LoginPage() {
       <div className="space-y-3">
         <button
           onClick={() => void signInWithKakao()}
-          className="flex h-13 w-full items-center justify-center gap-2 rounded-md bg-[#FEE500] py-3.5 text-sm font-semibold text-ink active:brightness-95"
+          className="flex h-13 w-full items-center justify-center gap-2 rounded-button bg-[#FEE500] py-3.5 text-sm font-semibold text-ink active:brightness-95"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
             <path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.76 1.86 5.18 4.66 6.55l-.95 3.51c-.08.31.27.56.54.38l4.18-2.77c.51.06 1.03.13 1.57.13 5.52 0 10-3.48 10-7.8S17.52 3 12 3z" />
@@ -56,7 +56,7 @@ export default function LoginPage() {
         {ALLOW_GUEST && (
           <button
             onClick={() => router.replace("/")}
-            className="h-11 w-full rounded-md border border-hairline text-sm font-semibold text-body"
+            className="h-11 w-full rounded-button border border-hairline text-sm font-semibold text-body"
           >
             (개발용) 로그인 없이 둘러보기
           </button>

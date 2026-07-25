@@ -118,7 +118,7 @@ export default function OnboardPrototype() {
                     setBirthDate(iso);
                     setEstimated(true);
                   }}
-                  className={`rounded-input border px-3 py-3 text-[13px] font-semibold transition ${
+                  className={`rounded-button border px-3 py-3 text-[13px] font-semibold transition ${
                     on
                       ? "border-primary bg-primary/10 text-primary-deep"
                       : "border-hairline bg-white text-secondary"

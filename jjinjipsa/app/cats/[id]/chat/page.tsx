@@ -276,7 +276,7 @@ export default function ChatPage() {
                   href={EMERGENCY_MAP_URL}
                   target="_blank"
                   rel="noopener"
-                  className="flex h-11 items-center justify-center rounded-input bg-error text-sm font-semibold text-white"
+                  className="flex h-11 items-center justify-center rounded-button bg-error text-sm font-semibold text-white"
                 >
                   🗺️ 가까운 24시 동물병원 찾기
                 </a>
@@ -374,7 +374,7 @@ export default function ChatPage() {
             <button
               onClick={() => setPhoto(null)}
               aria-label="첨부한 사진 제거"
-              className="-my-2 ml-auto flex min-h-11 items-center gap-1 rounded-full px-2.5 text-[12px] text-muted"
+              className="-my-2 ml-auto flex min-h-11 items-center gap-1 rounded-button px-2.5 text-[12px] text-muted"
             >
               <IconClose size={12} /> 제거
             </button>
@@ -391,7 +391,7 @@ export default function ChatPage() {
           <button
             onClick={() => fileRef.current?.click()}
             aria-label="사진 첨부"
-            className="flex size-11 shrink-0 items-center justify-center rounded-input border border-hairline bg-surface-soft/60 text-muted active:scale-95"
+            className="flex size-11 shrink-0 items-center justify-center rounded-button border border-hairline bg-surface-soft/60 text-muted active:scale-95"
           >
             <IconCamera size={20} />
           </button>
@@ -407,7 +407,7 @@ export default function ChatPage() {
           <button
             onClick={() => void send()}
             disabled={streaming !== null || (!draft.trim() && !photo)}
-            className="h-11 shrink-0 rounded-input bg-primary px-4 text-sm font-bold whitespace-nowrap text-white active:scale-95 disabled:bg-surface-strong disabled:text-muted-soft"
+            className="h-11 shrink-0 rounded-button bg-primary px-4 text-sm font-bold whitespace-nowrap text-white active:scale-95 disabled:bg-surface-strong disabled:text-muted-soft"
           >
             전송
           </button>
