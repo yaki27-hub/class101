@@ -1,35 +1,63 @@
 "use client";
 
-/* 건강 기록 탭 — 오늘 상태 요약(선택 고양이) + 증상 기록 모아보기 */
+/*
+ * 건강 기록 탭 — 선택 고양이의 오늘 상태 + 건강 카드(공유) + 증상 기록 목록.
+ * 기록 추가를 탭 안에서 바로 할 수 있게 한다(이전엔 우리 아이→상세까지 들어가야 했음).
+ */
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { storage, type Cat, type SymptomLog } from "@/lib/storage";
-import { resolveSelectedCat } from "@/lib/selectedCat";
+import { resolveSelectedCat, setSelectedCatId } from "@/lib/selectedCat";
 import { loadDaily, STATUS_ITEMS, type DailyRecord } from "@/lib/dailyStatus";
 import { IconRecord, IconTrash } from "@/components/icons";
-import { ACCENTS, buildAccentMap, type CatAccent } from "@/lib/catColor";
+import { ACCENTS, accentAt, buildAccentMap, type CatAccent } from "@/lib/catColor";
 import CatAvatar from "@/components/CatAvatar";
+import BottomSheet from "@/components/BottomSheet";
+import HealthCard from "@/components/HealthCard";
+import { loadHealthNote, buildHealthText } from "@/lib/healthNote";
+
+function todayLabel(): string {
+  const d = new Date();
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function dataURLToFile(dataUrl: string, filename: string): File {
+  const [head, b64] = dataUrl.split(",");
+  const mime = /:(.*?);/.exec(head)?.[1] ?? "image/png";
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new File([arr], filename, { type: mime });
+}
 
 export default function Records() {
+  const router = useRouter();
+  const [cats, setCats] = useState<Cat[]>([]);
   const [rows, setRows] = useState<{ cat: Cat; log: SymptomLog }[] | null>(null);
   const [today, setToday] = useState<{ cat: Cat; record: DailyRecord } | null>(null);
+  const [note, setNote] = useState("");
   /** 등록 순서 기반 고양이별 색 (같은 화면에서 색 중복 없음) */
   const [accents, setAccents] = useState<Record<string, CatAccent>>({});
-  const [multi, setMulti] = useState(false);
+  const [pickOpen, setPickOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const multi = cats.length > 1;
 
   async function load() {
-    const cats = await storage.listCats();
-    setAccents(buildAccentMap(cats));
-    setMulti(cats.length > 1);
+    const list = await storage.listCats();
+    setCats(list);
+    setAccents(buildAccentMap(list));
     const all: { cat: Cat; log: SymptomLog }[] = [];
-    for (const cat of cats) {
+    for (const cat of list) {
       for (const log of await storage.listSymptoms(cat.id)) all.push({ cat, log });
     }
     all.sort((a, b) => (a.log.occurredAt < b.log.occurredAt ? 1 : -1));
     setRows(all);
     const sel = await resolveSelectedCat();
     setToday(sel ? { cat: sel, record: loadDaily(sel.id) } : null);
+    if (sel) setNote(loadHealthNote(sel.id));
   }
 
   useEffect(() => {
@@ -41,17 +69,94 @@ export default function Records() {
     await load();
   }
 
+  function showToast(m: string) {
+    setToast(m);
+    window.setTimeout(() => setToast(null), 1800);
+  }
+
+  /** 기록 추가 — 1마리면 바로, 여러 마리면 어느 아이인지 먼저 고른다 */
+  function addRecord() {
+    if (cats.length === 0) return router.push("/profile/new");
+    if (cats.length === 1) return router.push(`/cats/${cats[0].id}/log`);
+    setPickOpen(true);
+  }
+
+  const todayLogs = today ? rows?.filter((r) => r.cat.id === today.cat.id) ?? [] : [];
+
+  async function shareText() {
+    if (!today) return;
+    const text = buildHealthText(
+      today.cat,
+      note,
+      today.record,
+      todayLogs.map((r) => r.log),
+    );
+    try {
+      if (navigator.share)
+        await navigator.share({ title: `${today.cat.name} 건강 카드`, text });
+      else {
+        await navigator.clipboard.writeText(text);
+        showToast("요약을 복사했어요");
+      }
+    } catch {
+      /* 사용자 취소 */
+    }
+  }
+
+  async function shareImage() {
+    const node = cardRef.current;
+    if (!node || !today) return;
+    setBusy(true);
+    try {
+      const { toPng } = await import("html-to-image");
+      const dataUrl = await toPng(node, {
+        pixelRatio: 2,
+        backgroundColor: "#ffffff",
+        cacheBust: true,
+      });
+      const file = dataURLToFile(dataUrl, `${today.cat.name}_건강카드.png`);
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: `${today.cat.name} 건강 카드` });
+      } else {
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = file.name;
+        a.click();
+        showToast("이미지를 저장했어요");
+      }
+    } catch {
+      showToast("이미지 생성에 실패했어요");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   if (rows === null) return null;
 
   return (
     <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-6">
-      <h1 className="display text-[22px] text-secondary">건강 기록</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="display text-[22px] text-secondary">건강 기록</h1>
+        {cats.length > 0 && (
+          <button
+            onClick={addRecord}
+            className="flex min-h-11 items-center gap-1 rounded-button bg-primary px-4 text-[13px] font-bold text-white active:scale-95"
+          >
+            + 기록 추가
+          </button>
+        )}
+      </div>
 
       {/* 오늘의 상태 요약 (선택 고양이, 홈과 동일 데이터) */}
       {today && (
         <section className="rounded-card border border-hairline bg-white p-4">
           <p className="flex items-center gap-2 text-[13px] font-bold text-secondary">
-            <CatAvatar cat={today.cat} size={24} radius={8} accent={multi ? accents[today.cat.id] : undefined} />
+            <CatAvatar
+              cat={today.cat}
+              size={24}
+              radius={8}
+              accent={multi ? accents[today.cat.id] : undefined}
+            />
             오늘 {today.cat.name}의 상태
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2">
@@ -78,6 +183,43 @@ export default function Records() {
         </section>
       )}
 
+      {/* 건강 카드 — 병원·펫시터 공유 */}
+      {today && (
+        <section className="space-y-2 pt-1">
+          <div className="flex items-center justify-between px-1">
+            <p className="display text-[16px] text-secondary">건강 카드</p>
+            <span className="text-[12px] text-muted">병원·펫시터에게 한 장으로</span>
+          </div>
+          <HealthCard
+            ref={cardRef}
+            cat={today.cat}
+            note={note}
+            record={today.record}
+            logs={todayLogs.map((r) => r.log)}
+            dateStr={todayLabel()}
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={() => void shareText()}
+              className="h-11 flex-1 rounded-button border border-hairline bg-white text-sm font-semibold text-secondary"
+            >
+              텍스트 공유
+            </button>
+            <button
+              onClick={() => void shareImage()}
+              disabled={busy}
+              className="h-11 flex-1 rounded-button bg-primary text-sm font-bold text-white disabled:opacity-60"
+            >
+              {busy ? "만드는 중…" : "이미지로 저장·공유"}
+            </button>
+          </div>
+        </section>
+      )}
+
+      <p className="mt-2 px-1 text-[13px] font-bold text-secondary">
+        {multi ? "모든 아이의 증상 기록" : "증상 기록"}
+      </p>
+
       {rows.length === 0 ? (
         <div className="rounded-card bg-white p-8 text-center border border-hairline">
           <IconRecord size={40} className="mx-auto text-muted-soft" />
@@ -85,6 +227,14 @@ export default function Records() {
           <p className="mt-1 text-sm text-body">
             챗봇 대화나 증상 기록이 여기에 모여요.
           </p>
+          {cats.length > 0 && (
+            <button
+              onClick={addRecord}
+              className="mt-4 h-12 w-full rounded-button bg-primary text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
+            >
+              + 첫 기록 남기기
+            </button>
+          )}
         </div>
       ) : (
         rows.map(({ cat, log }) => {
@@ -134,6 +284,45 @@ export default function Records() {
             </div>
           );
         })
+      )}
+
+      {/* 어느 아이 기록인지 선택 (다묘) */}
+      <BottomSheet
+        open={pickOpen}
+        onClose={() => setPickOpen(false)}
+        title="어느 아이의 기록인가요?"
+      >
+        <div className="space-y-2">
+          {cats.map((c, i) => (
+            <button
+              key={c.id}
+              onClick={() => {
+                setSelectedCatId(c.id); // 이후 화면도 이 아이 기준으로
+                setPickOpen(false);
+                router.push(`/cats/${c.id}/log`);
+              }}
+              className="flex w-full items-center gap-3 rounded-card border border-hairline bg-white p-3 text-left"
+            >
+              <CatAvatar cat={c} size={44} radius={14} accent={accentAt(i)} />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-bold text-secondary">{c.name}</span>
+                <span className="block truncate text-[12px] text-muted">
+                  {c.breedGroup}
+                </span>
+              </span>
+              <span className="flex-none text-muted-soft">›</span>
+            </button>
+          ))}
+        </div>
+      </BottomSheet>
+
+      {toast && (
+        <div
+          role="status"
+          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
+        >
+          {toast}
+        </div>
       )}
     </main>
   );
