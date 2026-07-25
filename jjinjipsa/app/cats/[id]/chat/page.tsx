@@ -23,6 +23,7 @@ import {
 import NyangLoader from "@/components/NyangLoader";
 import Mascot from "@/components/Mascot";
 import { IconCamera, IconClose } from "@/components/icons";
+import BackButton from "@/components/BackButton";
 
 /** AI 답변의 마크다운 ** 강조 기호 정리 */
 function clean(text: string) {
@@ -221,13 +222,7 @@ export default function ChatPage() {
     <main className="flex h-dvh flex-col">
       {/* 헤더 */}
       <header className="flex items-center justify-between border-b border-hairline bg-canvas px-5 py-3.5">
-        <Link
-          href={`/cats/${catId}`}
-          aria-label={`${cat.name} 정보로 돌아가기`}
-          className="-my-2 -ml-2.5 flex size-11 items-center justify-center text-lg text-muted"
-        >
-          ←
-        </Link>
+        <BackButton fallback={`/cats/${catId}`} />
         <div className="flex items-center gap-2">
           <span className="flex size-9 items-center justify-center rounded-full bg-primary-soft">
             <Mascot mood="calm" size={30} />

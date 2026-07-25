@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import { newId, storage, type Cat, type Gender } from "@/lib/storage";
 import { BREED_GROUPS, CONDITIONS } from "@/lib/catOptions";
 import { IconCamera } from "@/components/icons";
+import BackButton from "@/components/BackButton";
 
 export default function CatForm({ existing }: { existing?: Cat }) {
   const router = useRouter();
@@ -114,15 +115,8 @@ export default function CatForm({ existing }: { existing?: Cat }) {
   return (
     <main className="flex-1 space-y-6 px-5 pt-4 pb-8">
       <header>
-        {/* 나가기 — 수정 중이면 해당 아이 상세로, 신규 등록이면 홈으로 */}
-        <button
-          type="button"
-          onClick={() => router.back()}
-          aria-label="이전 화면으로"
-          className="-ml-2.5 flex size-11 items-center justify-center text-lg text-muted"
-        >
-          ←
-        </button>
+        {/* 나가기 — 수정 중이면 해당 아이 상세로, 신규 등록이면 우리 아이 목록으로 */}
+        <BackButton fallback={existing ? `/cats/${existing.id}` : "/cats"} />
         <h1 className="display mt-1 text-2xl text-ink">
           {editing ? "프로필 수정" : "우리 아이를 알려주세요"}
         </h1>
@@ -238,7 +232,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
 
       <div className="flex gap-2">
         {editing && (
-          <button type="button" onClick={() => router.back()}
+          <button type="button" onClick={() => router.push(`/cats/${existing.id}`)}
             className="h-12 flex-none rounded-md border border-hairline px-5 text-sm font-semibold text-body">
             취소
           </button>

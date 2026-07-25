@@ -106,6 +106,15 @@ export function IconRecord({ size = 24, className }: P) {
   );
 }
 
+/** 뒤로가기 화살표 */
+export function IconArrowLeft({ size = 24, className }: P) {
+  return (
+    <svg {...S(size)} className={className} aria-hidden>
+      <path d="M10.7 4.3a1.15 1.15 0 0 1 0 1.63L5.98 10.65H20a1.15 1.15 0 0 1 0 2.3H5.98l4.72 4.72a1.15 1.15 0 1 1-1.63 1.63l-6.7-6.7a1.15 1.15 0 0 1 0-1.63l6.7-6.7a1.15 1.15 0 0 1 1.63 0Z" />
+    </svg>
+  );
+}
+
 /** 닫기 / 제거 */
 export function IconClose({ size = 24, className }: P) {
   return (
