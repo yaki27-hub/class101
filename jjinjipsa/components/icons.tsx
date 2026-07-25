@@ -106,6 +106,15 @@ export function IconRecord({ size = 24, className }: P) {
   );
 }
 
+/** 닫기 / 제거 */
+export function IconClose({ size = 24, className }: P) {
+  return (
+    <svg {...S(size)} className={className} aria-hidden>
+      <path d="M6.4 4.9 12 10.5l5.6-5.6a1.05 1.05 0 0 1 1.5 1.5L13.5 12l5.6 5.6a1.05 1.05 0 0 1-1.5 1.5L12 13.5l-5.6 5.6a1.05 1.05 0 0 1-1.5-1.5L10.5 12 4.9 6.4a1.05 1.05 0 0 1 1.5-1.5Z" />
+    </svg>
+  );
+}
+
 /** 연필 (수정) */
 export function IconPencil({ size = 24, className }: P) {
   return (

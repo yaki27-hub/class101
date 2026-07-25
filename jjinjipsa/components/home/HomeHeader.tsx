@@ -12,7 +12,7 @@ export default function HomeHeader({ unread = false }: { unread?: boolean }) {
         type="button"
         aria-label="알림 (준비 중)"
         title="알림은 준비 중이에요"
-        className="relative flex size-10 items-center justify-center text-muted"
+        className="relative -mr-1.5 flex size-11 items-center justify-center text-muted"
       >
         <IconBell size={23} />
         {unread && (
