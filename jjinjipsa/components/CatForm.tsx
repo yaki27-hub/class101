@@ -134,7 +134,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
             <span className="flex size-[76px] flex-none items-center justify-center overflow-hidden rounded-[20px] bg-surface-card text-3xl">
               {photo ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={photo} alt="" className="size-full object-cover" />
+                <img src={photo} alt="선택한 우리 아이 사진 미리보기" className="size-full object-cover" />
               ) : (
                 "📷"
               )}

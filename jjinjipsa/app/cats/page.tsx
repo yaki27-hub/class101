@@ -28,7 +28,7 @@ export default function CatsList() {
             <Link href={`/cats/${cat.id}`} className="flex flex-1 items-center gap-4">
               {cat.photo ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={cat.photo} alt="" className="size-16 flex-none rounded-[18px] object-cover" />
+                <img src={cat.photo} alt={`${cat.name} 프로필 사진`} className="size-16 flex-none rounded-[18px] object-cover" />
               ) : (
                 <span className="flex size-16 flex-none items-center justify-center rounded-[18px] bg-surface-soft text-muted-soft">
                   <IconCat size={34} />
