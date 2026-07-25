@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { resolveSelectedCat, setSelectedCatId } from "@/lib/selectedCat";
-import { loadDaily, STATUS_ITEMS, type DailyRecord } from "@/lib/dailyStatus";
+import { loadDaily, type DailyRecord } from "@/lib/dailyStatus";
 import { IconRecord, IconTrash } from "@/components/icons";
 import { ACCENTS, accentAt, buildAccentMap, type CatAccent } from "@/lib/catColor";
 import CatAvatar from "@/components/CatAvatar";
@@ -147,43 +147,7 @@ export default function Records() {
         )}
       </div>
 
-      {/* 오늘의 상태 요약 (선택 고양이, 홈과 동일 데이터) */}
-      {today && (
-        <section className="rounded-card border border-hairline bg-white p-4">
-          <p className="flex items-center gap-2 text-[13px] font-bold text-secondary">
-            <CatAvatar
-              cat={today.cat}
-              size={24}
-              radius={8}
-              accent={multi ? accents[today.cat.id] : undefined}
-            />
-            오늘 {today.cat.name}의 상태
-          </p>
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            {STATUS_ITEMS.map((item) => {
-              const v = today.record[item.key];
-              const abnormal = v?.level === "warning" || v?.level === "danger";
-              return (
-                <div
-                  key={item.key}
-                  className={`flex items-center justify-between rounded-[13px] px-3 py-2 text-[12px] ${
-                    v
-                      ? abnormal
-                        ? "bg-[#fff4ec] text-[#b8862e]"
-                        : "bg-mint-soft text-success"
-                      : "bg-surface-soft text-muted-soft"
-                  }`}
-                >
-                  <span className="font-semibold text-secondary">{item.label}</span>
-                  <span className="truncate pl-2">{v ? v.label : "미기록"}</span>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* 건강 카드 — 병원·펫시터 공유 */}
+      {/* 건강 카드 — 오늘 상태·최근 증상이 이 안에 모두 담긴다 (별도 요약 섹션 없음) */}
       {today && (
         <section className="space-y-2 pt-1">
           <div className="flex items-center justify-between px-1">
