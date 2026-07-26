@@ -9,7 +9,11 @@ import type { StorageAdapter } from "./adapter";
 
 /*
  * 저장소 선택 (T-16): NEXT_PUBLIC_USE_SUPABASE=1 이면 Supabase 동기화, 아니면 localStorage.
- * 검증 전까지 기본은 localStorage — 플래그로 안전하게 전환/롤백.
+ *
+ * **배포 환경(Vercel)에는 이미 1이 설정돼 있다 — 운영은 Supabase 동기화 모드다.**
+ * 로컬 개발은 .env.local에 값이 없으면 localStorage로 떨어진다.
+ * 문제가 생기면 Vercel 환경변수를 0으로 바꿔 즉시 롤백할 수 있고,
+ * 이관은 로컬 원본을 지우지 않으므로 되돌려도 기록은 남는다 (D-16).
  */
 /** 서버 동기화(계정에 기록 보관)가 켜져 있는가 — UI 문구도 이 값을 따른다 */
 export const USE_SUPABASE = process.env.NEXT_PUBLIC_USE_SUPABASE === "1";
