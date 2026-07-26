@@ -30,6 +30,9 @@ export default function CatForm({ existing }: { existing?: Cat }) {
   );
   const [photo, setPhoto] = useState<string | null>(existing?.photo ?? null);
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+  // 중복 제출 방지: state는 리렌더 배치로 빠른 더블탭을 못 막으므로 ref로 동기 차단
+  const savingRef = useRef(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
@@ -64,48 +67,61 @@ export default function CatForm({ existing }: { existing?: Cat }) {
   }
 
   async function save() {
-    // 오픈 테스트: 최대 3마리 (신규 등록 시)
-    if (!editing) {
-      const count = (await storage.listCats()).length;
-      if (count >= 3)
-        return setError(
-          "오픈 테스트 기간에는 최대 3마리까지 등록할 수 있어요. 기존 아이를 삭제한 뒤 등록해 주세요.",
-        );
-    }
-    if (!name.trim()) return setError("이름을 입력해 주세요.");
-    if (!birthDate)
-      return setError("생일을 입력해 주세요. 모르면 추정 날짜도 괜찮아요.");
-    const w = weight ? Number(weight) : null;
-    if (weight && (Number.isNaN(w) || w! <= 0 || w! > 20))
-      return setError("체중은 0~20kg 사이 숫자로 입력해 주세요.");
-
-    const now = new Date().toISOString();
-    const cat: Cat = {
-      id: existing?.id ?? newId(),
-      name: name.trim(),
-      birthDate,
-      birthEstimated,
-      gender,
-      neutered,
-      breedGroup,
-      weightKg: w,
-      conditions,
-      indoor: existing?.indoor ?? true,
-      avatar: existing?.avatar ?? null,
-      photo,
-      // 사진이 바뀌면 기존 일러스트는 무효화
-      illust: photo === existing?.photo ? (existing?.illust ?? null) : null,
-      createdAt: existing?.createdAt ?? now,
-      updatedAt: now,
-    };
+    // 중복 제출 방지: 이미 저장 중이면 즉시 무시 (더블탭·저장 지연 중 재클릭)
+    if (savingRef.current) return;
+    savingRef.current = true;
+    setSaving(true);
     try {
-      await storage.saveCat(cat);
-    } catch {
-      return setError(
-        "저장 공간이 부족해요. 사진을 빼고 등록하거나, 다른 아이의 사진을 정리해 주세요.",
-      );
+      // 오픈 테스트: 최대 3마리 (신규 등록 시)
+      if (!editing) {
+        const count = (await storage.listCats()).length;
+        if (count >= 3)
+          return setError(
+            "오픈 테스트 기간에는 최대 3마리까지 등록할 수 있어요. 기존 아이를 삭제한 뒤 등록해 주세요.",
+          );
+      }
+      if (!name.trim()) return setError("이름을 입력해 주세요.");
+      if (!birthDate)
+        return setError("생일을 입력해 주세요. 모르면 추정 날짜도 괜찮아요.");
+      const w = weight ? Number(weight) : null;
+      if (weight && (Number.isNaN(w) || w! <= 0 || w! > 20))
+        return setError("체중은 0~20kg 사이 숫자로 입력해 주세요.");
+
+      const now = new Date().toISOString();
+      const cat: Cat = {
+        id: existing?.id ?? newId(),
+        name: name.trim(),
+        birthDate,
+        birthEstimated,
+        gender,
+        neutered,
+        breedGroup,
+        weightKg: w,
+        conditions,
+        indoor: existing?.indoor ?? true,
+        avatar: existing?.avatar ?? null,
+        photo,
+        // 사진이 바뀌면 기존 일러스트는 무효화
+        illust: photo === existing?.photo ? (existing?.illust ?? null) : null,
+        createdAt: existing?.createdAt ?? now,
+        updatedAt: now,
+      };
+      try {
+        await storage.saveCat(cat);
+      } catch {
+        return setError(
+          "저장 공간이 부족해요. 사진을 빼고 등록하거나, 다른 아이의 사진을 정리해 주세요.",
+        );
+      }
+      // 성공: 상세로 이동 (가드는 유지한 채 언마운트되므로 해제 불필요)
+      router.push(`/cats/${cat.id}`);
+      return;
+    } finally {
+      // 검증 실패·저장 오류로 폼에 머무는 경우 재시도할 수 있도록 가드 해제.
+      // 성공 시엔 이미 router.push로 벗어난 뒤라 무해하다.
+      savingRef.current = false;
+      setSaving(false);
     }
-    router.push(`/cats/${cat.id}`);
   }
 
   const label = "text-sm font-semibold text-ink";
@@ -237,9 +253,9 @@ export default function CatForm({ existing }: { existing?: Cat }) {
             취소
           </button>
         )}
-        <button onClick={() => void save()}
-          className="h-12 flex-1 rounded-button bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f]">
-          {editing ? "수정 완료" : "등록하기"}
+        <button onClick={() => void save()} disabled={saving} aria-busy={saving}
+          className="h-12 flex-1 rounded-button bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f] disabled:opacity-60">
+          {saving ? (editing ? "저장 중…" : "등록 중…") : editing ? "수정 완료" : "등록하기"}
         </button>
       </div>
       <p className="text-center text-xs text-muted-soft">

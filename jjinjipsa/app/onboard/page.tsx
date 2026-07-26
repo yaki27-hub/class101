@@ -7,7 +7,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { newId, storage, type Cat } from "@/lib/storage";
 import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
 import { getSuggestedQuestions } from "@/lib/suggestedQuestions";
@@ -42,6 +42,8 @@ export default function OnboardPrototype() {
   const [estimated, setEstimated] = useState(false);
   const [dontKnow, setDontKnow] = useState(false);
   const [busy, setBusy] = useState(false);
+  // 중복 생성 방지: state 배치보다 앞서는 동기 가드
+  const busyRef = useRef(false);
 
   const age = useMemo(
     () => (birthDate ? getCatAge(birthDate) : null),
@@ -59,7 +61,8 @@ export default function OnboardPrototype() {
     : null;
 
   async function startChat(question?: string) {
-    if (!birthDate || busy) return;
+    if (!birthDate || busyRef.current) return;
+    busyRef.current = true;
     setBusy(true);
     const now = new Date().toISOString();
     const id = newId();
