@@ -13,11 +13,14 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase";
 // (gemini-3.5-flash는 사진 입력 시 타임아웃 → flash-lite가 vision도 빠르고 정확)
 const TEXT_MODEL = process.env.GEMINI_TEXT_MODEL ?? "gemini-3.1-flash-lite";
 const VISION_MODEL = process.env.GEMINI_VISION_MODEL ?? "gemini-3.1-flash-lite";
-// 비용 통제(T-17) — 유저당 하루 챗봇 호출 한도
-const DAILY_LIMIT = Number(process.env.DAILY_CHAT_LIMIT ?? "10");
+// 비용 통제(T-17) — 유저당 하루 챗봇 호출 한도. 0이면 무제한.
+// ⚠️ 임시로 무제한(0) — 테스트 종료 후 "10"으로 되돌릴 것.
+//    (Vercel 환경변수 DAILY_CHAT_LIMIT 으로도 재배포 없이 덮어쓸 수 있음)
+const DAILY_LIMIT = Number(process.env.DAILY_CHAT_LIMIT ?? "0");
 
 /** 로그인 사용자면 사용량 +1 후 한도 초과 여부 반환. 비로그인/오류 시 통과(허용). */
 async function overLimit(authHeader: string | null): Promise<boolean> {
+  if (!Number.isFinite(DAILY_LIMIT) || DAILY_LIMIT <= 0) return false; // 무제한
   const token = authHeader?.replace(/^Bearer\s+/i, "");
   if (!token) return false;
   try {
