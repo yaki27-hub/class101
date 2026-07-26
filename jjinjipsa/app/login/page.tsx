@@ -5,6 +5,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ALLOW_GUEST, supabase } from "@/lib/supabase";
+import { signInWithKakao } from "@/lib/auth/kakao";
+import { USE_SUPABASE } from "@/lib/storage";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,14 +20,11 @@ export default function LoginPage() {
     });
   }, [router]);
 
-  async function signInWithKakao() {
+  async function onKakao() {
     setError("");
-    // 표준 카카오 OAuth 로그인 (안정적). 익명 데이터 이관은 추후 별도 처리.
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "kakao",
-      options: { redirectTo: window.location.origin },
-    });
-    if (error) setError(`로그인에 실패했어요: ${error.message}`);
+    // 익명 세션이면 linkIdentity로 승격해 기존 기록을 그대로 가져간다 (lib/auth/kakao)
+    const res = await signInWithKakao();
+    if (!res.ok) setError(`로그인에 실패했어요: ${res.message}`);
   }
 
   return (
@@ -45,7 +44,7 @@ export default function LoginPage() {
 
       <div className="space-y-3">
         <button
-          onClick={() => void signInWithKakao()}
+          onClick={() => void onKakao()}
           className="flex h-13 w-full items-center justify-center gap-2 rounded-button bg-[#FEE500] py-3.5 text-sm font-semibold text-ink active:brightness-95"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -67,7 +66,9 @@ export default function LoginPage() {
           </p>
         )}
         <p className="text-center text-xs leading-relaxed text-muted-soft">
-          로그인하면 기록이 계정에 안전하게 보관돼요.
+          {USE_SUPABASE
+            ? "로그인하면 기록이 계정에 보관돼 다른 기기에서도 이어볼 수 있어요."
+            : "지금은 기록이 이 기기에만 저장돼요. 브라우저 데이터를 지우면 사라집니다."}
           <br />이 서비스의 정보는 참고용이며, 진단·처방은 수의사의 영역입니다.
         </p>
       </div>

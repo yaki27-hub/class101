@@ -11,10 +11,12 @@ import type { StorageAdapter } from "./adapter";
  * 저장소 선택 (T-16): NEXT_PUBLIC_USE_SUPABASE=1 이면 Supabase 동기화, 아니면 localStorage.
  * 검증 전까지 기본은 localStorage — 플래그로 안전하게 전환/롤백.
  */
-export const storage: StorageAdapter =
-  process.env.NEXT_PUBLIC_USE_SUPABASE === "1"
-    ? new SupabaseStorageAdapter()
-    : new LocalStorageAdapter();
+/** 서버 동기화(계정에 기록 보관)가 켜져 있는가 — UI 문구도 이 값을 따른다 */
+export const USE_SUPABASE = process.env.NEXT_PUBLIC_USE_SUPABASE === "1";
+
+export const storage: StorageAdapter = USE_SUPABASE
+  ? new SupabaseStorageAdapter()
+  : new LocalStorageAdapter();
 
 export * from "./types";
 export type { StorageAdapter } from "./adapter";
