@@ -24,6 +24,7 @@ import NyangLoader from "@/components/NyangLoader";
 import Mascot from "@/components/Mascot";
 import { IconCamera, IconClose } from "@/components/icons";
 import BackButton from "@/components/BackButton";
+import AnswerBlocks from "@/components/chat/AnswerBlocks";
 
 /** AI 답변의 마크다운 ** 강조 기호 정리 */
 function clean(text: string) {
@@ -297,8 +298,8 @@ export default function ChatPage() {
               <span className="mb-1 flex size-8 flex-none items-center justify-center rounded-full bg-primary-soft">
               <Mascot mood="calm" size={26} />
             </span>
-              <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body">
-                {clean(m.content)}
+              <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed text-body">
+                <AnswerBlocks content={m.content} />
               </div>
             </div>
           ),
@@ -312,8 +313,8 @@ export default function ChatPage() {
                 <span className="mb-1 flex size-8 flex-none items-center justify-center rounded-full bg-primary-soft">
               <Mascot mood="calm" size={26} />
             </span>
-                <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-body">
-                  {clean(streaming)}
+                <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed text-body">
+                  <AnswerBlocks content={streaming} />
                 </div>
               </>
             )}

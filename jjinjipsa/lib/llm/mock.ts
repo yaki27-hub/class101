@@ -10,13 +10,13 @@ function buildMockAnswer(req: LlmRequest): string {
   const { cat, question } = req;
   const shortQ = question.length > 40 ? `${question.slice(0, 40)}…` : question;
   return [
+    `🚦 판정 — 🟢 홈케어 가능(연습). 실제 판정은 진짜 두뇌(Gemini)가 연결되면 제공돼요.`,
+    ``,
     `🔍 관찰 — 집사님이 "${shortQ}"라고 물어보셨어요. (지금은 연습용 답변이에요)`,
     ``,
     `📖 히스토리 — ${cat.name}의 기록이 아직 충분히 쌓이지 않았어요. 증상을 기록해두면 다음 답변이 더 정확해져요.`,
     ``,
     `🧭 맥락 — ${cat.name}(${cat.breedGroup})의 프로필을 기준으로 답하게 될 거예요.`,
-    ``,
-    `🚦 판정 — 🟢 홈케어 가능(연습). 실제 판정은 진짜 두뇌(Gemini)가 연결되면 제공돼요.`,
     ``,
     `ℹ️ 저는 참고 정보를 드리는 것이고, 진단과 처방은 수의사 선생님의 영역이에요.`,
   ].join("\n");
