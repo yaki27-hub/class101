@@ -17,7 +17,7 @@ observe_ok_conditions: []
 
 age_risk: adult
 sex_risk: male
-breed_risk: [메인쿤, 랙돌, 브리티시숏헤어]
+breed_risk: [메인쿤, 랙돌, 브리티시숏헤어, 페르시안, 스핑크스]
 risk_factors: [비대성 심근병증, 좌심방 확장, 심장질환 병력, 갑상선기능항진증]
 
 sources:
