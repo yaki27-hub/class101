@@ -1,6 +1,7 @@
 /* LLM 어댑터 타입 (F-08) — 교체 지점은 lib/llm/index.ts 한 곳 */
 
 import type { Cat } from "@/lib/storage";
+import type { KbRefBrief } from "@/lib/kb/retrieve";
 
 export interface LlmTurn {
   role: "user" | "assistant";
@@ -22,6 +23,8 @@ export interface LlmChunkedResponse {
   stream: AsyncIterable<string>;
   /** 응답 생성에 쓴 모델 식별자 (저장용) */
   model: string;
+  /** 이 답변의 프롬프트에 실제로 들어간 KB 문서 (표시용) */
+  kbRefs?: KbRefBrief[];
 }
 
 export interface LlmAdapter {

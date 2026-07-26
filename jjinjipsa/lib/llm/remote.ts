@@ -8,6 +8,7 @@ import { storage } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 import { MockLlmAdapter } from "./mock";
 import type { LlmAdapter, LlmChunkedResponse, LlmRequest } from "./types";
+import type { KbRefBrief } from "@/lib/kb/retrieve";
 
 const LIMIT_MESSAGE =
   "오늘은 여기까지예요 🐾 하루에 물어볼 수 있는 횟수를 다 썼어요.\n" +
@@ -24,6 +25,20 @@ async function* streamBody(body: ReadableStream<Uint8Array>): AsyncIterable<stri
     const { done, value } = await reader.read();
     if (done) break;
     yield decoder.decode(value, { stream: true });
+  }
+}
+
+/** 서버가 base64로 실어 보낸 KB 참고 자료를 복원. 실패하면 표시하지 않는다. */
+function decodeRefs(header: string | null): KbRefBrief[] | undefined {
+  if (!header) return undefined;
+  try {
+    const json = new TextDecoder().decode(
+      Uint8Array.from(atob(header), (c) => c.charCodeAt(0)),
+    );
+    const parsed = JSON.parse(json) as KbRefBrief[];
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : undefined;
+  } catch {
+    return undefined;
   }
 }
 
@@ -61,6 +76,7 @@ export class RemoteLlmAdapter implements LlmAdapter {
       return {
         stream: streamBody(res.body),
         model: res.headers.get("x-model") ?? "gemini",
+        kbRefs: decodeRefs(res.headers.get("x-kb-refs")),
       };
     } catch (e) {
       console.warn("[llm] remote 실패 → mock 폴백:", e);

@@ -10,6 +10,8 @@ export interface PromptContext {
   cat: Cat;
   traits: TraitAnswer[];
   symptoms: SymptomLog[];
+  /** KB 검색 결과를 프롬프트용으로 직렬화한 문자열 (없으면 "none") */
+  kbReferences?: string;
 }
 
 const TEMPLATE = `너는 한국 고양이 집사들을 위한 건강 케어 서비스 '찐집사'의 인앱 건강 도우미다.
@@ -35,6 +37,20 @@ const TEMPLATE = `너는 한국 고양이 집사들을 위한 건강 케어 서�
 <recent_health_events>
 {{health_events}}
 </recent_health_events>
+
+## 참고 자료 (찐집사 질환 지식베이스)
+
+아래는 이 질문과 관련해 찐집사 지식베이스에서 찾아온 자료다. Cornell Feline Health
+Center, MSD Veterinary Manual, International Cat Care 등의 수의학 자료를 정리한 것이다.
+
+<kb_references>
+{{kb_references}}
+</kb_references>
+
+이 자료가 있으면 **판정과 설명의 근거로 우선 사용한다.** 특히 "병원에 가야 하는 신호"와
+"경과 관찰 기준"은 여기에 적힌 기준을 따른다.
+자료가 "none"이면 일반 지식으로 답하되, **자료를 참고한 척하지 않는다.**
+자료에 없는 내용을 자료에 있는 것처럼 말하지 않는다. 문서 ID(kb-...)는 답변에 쓰지 않는다.
 
 ## 응답 형식 — 항상 이 5블록을 이 순서로 사용한다
 
@@ -217,5 +233,6 @@ export function buildSystemPrompt(ctx: PromptContext): string {
   return TEMPLATE.replace("{{cat_profile}}", catProfileJson(ctx.cat))
     .replace("{{cat_traits}}", traits)
     .replace("{{symptom_logs_90d}}", symptoms)
-    .replace("{{health_events}}", "none");
+    .replace("{{health_events}}", "none")
+    .replace("{{kb_references}}", ctx.kbReferences?.trim() || "none");
 }

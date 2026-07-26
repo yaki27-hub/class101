@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "design:lint": "design.md lint DESIGN.md --format text",
-    "design:export": "design.md export DESIGN.md --format css-tailwind"
+    "design:export": "design.md export DESIGN.md --format css-tailwind",
+    "kb:index": "node scripts/build-kb-index.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.7",
