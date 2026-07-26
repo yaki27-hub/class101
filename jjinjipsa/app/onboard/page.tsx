@@ -12,6 +12,7 @@ import { newId, storage, type Cat } from "@/lib/storage";
 import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
 import { getSuggestedQuestions } from "@/lib/suggestedQuestions";
 import { setSelectedCatId } from "@/lib/selectedCat";
+import { MAX_CATS } from "@/lib/limits";
 
 const SEGMENT_COLORS: Record<string, string> = {
   kitten: "bg-mint",
@@ -64,6 +65,15 @@ export default function OnboardPrototype() {
     if (!birthDate || busyRef.current) return;
     busyRef.current = true;
     setBusy(true);
+
+    // 오픈 테스트 한도 — 이 화면도 고양이를 만들기 때문에 여기서도 막아야 한다.
+    // 이미 한도만큼 등록한 사람은 온보딩 대상이 아니므로 홈으로 돌려보낸다.
+    const existing = await storage.listCats();
+    if (existing.length >= MAX_CATS) {
+      router.replace("/");
+      return;
+    }
+
     const now = new Date().toISOString();
     const id = newId();
     const cat: Cat = {

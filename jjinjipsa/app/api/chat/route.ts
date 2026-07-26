@@ -15,9 +15,9 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase";
 const TEXT_MODEL = process.env.GEMINI_TEXT_MODEL ?? "gemini-3.1-flash-lite";
 const VISION_MODEL = process.env.GEMINI_VISION_MODEL ?? "gemini-3.1-flash-lite";
 // 비용 통제(T-17) — 유저당 하루 챗봇 호출 한도. 0이면 무제한.
-// ⚠️ 임시로 무제한(0) — 테스트 종료 후 "10"으로 되돌릴 것.
-//    (Vercel 환경변수 DAILY_CHAT_LIMIT 으로도 재배포 없이 덮어쓸 수 있음)
-const DAILY_LIMIT = Number(process.env.DAILY_CHAT_LIMIT ?? "0");
+// 오픈 테스트 기본값은 10. 잠시 풀어야 하면 Vercel 환경변수 DAILY_CHAT_LIMIT을
+// 0으로 두면 되고(재배포 불필요), 기본값 자체는 건드리지 않는다.
+const DAILY_LIMIT = Number(process.env.DAILY_CHAT_LIMIT ?? "10");
 
 /** 로그인 사용자면 사용량 +1 후 한도 초과 여부 반환. 비로그인/오류 시 통과(허용). */
 async function overLimit(authHeader: string | null): Promise<boolean> {
