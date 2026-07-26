@@ -8,6 +8,8 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { signInWithKakao } from "@/lib/auth/kakao";
+import { USE_SUPABASE } from "@/lib/storage";
 import { IconClose } from "@/components/icons";
 
 const DISMISS_KEY = "jjinjipsa:loginBannerDismissed";
@@ -39,13 +41,11 @@ export default function LoginBanner() {
     };
   }, []);
 
-  async function signInWithKakao() {
+  async function onKakao() {
     setError("");
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "kakao",
-      options: { redirectTo: window.location.origin },
-    });
-    if (error) setError("로그인에 실패했어요. 잠시 후 다시 시도해 주세요.");
+    // 익명 세션이면 승격(linkIdentity)해 지금까지의 기록을 그대로 가져간다
+    const res = await signInWithKakao();
+    if (!res.ok) setError("로그인에 실패했어요. 잠시 후 다시 시도해 주세요.");
   }
 
   function close() {
@@ -69,12 +69,14 @@ export default function LoginBanner() {
       <p className="pr-7 text-[13px] leading-relaxed text-body">
         지금은 <b className="text-secondary">게스트</b>로 이용 중이에요.
         <br />
-        카카오로 로그인하면 기록이 계정에 안전하게 보관돼요.
+        {USE_SUPABASE
+          ? "카카오로 로그인하면 지금까지의 기록이 계정에 그대로 보관돼요."
+          : "기록은 이 기기에만 저장돼요. 로그인해 두면 나중에 계정으로 이어받을 수 있어요."}
       </p>
 
       <button
         type="button"
-        onClick={() => void signInWithKakao()}
+        onClick={() => void onKakao()}
         className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-button bg-[#FEE500] text-sm font-bold text-[#3A1D1D] active:brightness-95"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
