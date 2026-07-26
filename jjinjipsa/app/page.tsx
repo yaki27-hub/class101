@@ -32,8 +32,6 @@ export default function Home() {
     <main className="flex flex-1 flex-col gap-5 px-5 pb-6">
       <HomeHeader />
 
-      <LoginBanner />
-
       {!cat || !cats || cats.length === 0 ? (
         <EmptyCatCard />
       ) : (
@@ -66,6 +64,11 @@ export default function Home() {
           />
         </>
       )}
+
+      {/* 로그인 유도 배너 — 하단 내비 바로 위에 붙도록 남은 공간을 채워 아래로 밀어냄 */}
+      <div className="mt-auto pt-1">
+        <LoginBanner />
+      </div>
     </main>
   );
 }
