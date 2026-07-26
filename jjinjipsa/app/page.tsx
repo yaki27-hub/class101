@@ -8,6 +8,7 @@
 
 import { useState } from "react";
 import HomeHeader from "@/components/home/HomeHeader";
+import LoginBanner from "@/components/home/LoginBanner";
 import EmptyCatCard from "@/components/home/EmptyCatCard";
 import CatSelectorCard from "@/components/home/CatSelectorCard";
 import CatSelectorSheet from "@/components/home/CatSelectorSheet";
@@ -30,6 +31,8 @@ export default function Home() {
   return (
     <main className="flex flex-1 flex-col gap-5 px-5 pb-6">
       <HomeHeader />
+
+      <LoginBanner />
 
       {!cat || !cats || cats.length === 0 ? (
         <EmptyCatCard />
