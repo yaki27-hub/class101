@@ -43,25 +43,50 @@ export default function AuthGate({
 
   // 동기화가 켜져 있으면, 켜기 전에 브라우저에만 쌓였던 기록을 계정으로 한 번 올린다.
   // 이걸 안 하면 동기화를 켜는 순간 예전 기록이 사라진 것처럼 보인다.
+  //
+  // **이관이 끝나기 전에는 화면을 그리지 않는다.** 앱은 서버에서 읽으므로,
+  // 업로드 전에 렌더하면 "기록 0건"이 잠깐 보였다가 나타나 집사를 놀라게 한다.
+  const [migrating, setMigrating] = useState(USE_SUPABASE);
+
   useEffect(() => {
     if (!USE_SUPABASE) return;
-    const run = (uid: string) => {
-      void migrateLocalToServer(uid)
-        .then((r) => {
-          if (r.ran && (r.cats || r.failed)) {
-            console.info("[migrate] 로컬→서버 이관", r);
-          }
-        })
-        .catch((e) => console.warn("[migrate] 실패 — 다음 실행에 재시도", e));
+    let done = false;
+    const run = async (uid: string) => {
+      try {
+        const r = await migrateLocalToServer(uid);
+        if (r.ran && (r.cats || r.failed)) {
+          console.info("[migrate] 로컬→서버 이관", r);
+        }
+      } catch (e) {
+        // 실패해도 화면은 열어준다 — 완료 표시를 안 남기므로 다음 실행에 재시도한다
+        console.warn("[migrate] 실패 — 다음 실행에 재시도", e);
+      } finally {
+        if (!done) {
+          done = true;
+          setMigrating(false);
+        }
+      }
     };
+
     void supabase.auth.getUser().then(({ data }) => {
-      if (data.user) run(data.user.id);
+      if (data.user) void run(data.user.id);
+      else setMigrating(false); // 아직 세션이 없으면 아래 onAuthStateChange가 받는다
     });
     // 카카오 승격 직후에도 한 번 더 (uid가 그대로여도 세션 교체 시점을 놓치지 않게)
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (session?.user) run(session.user.id);
+      if (session?.user) void run(session.user.id);
     });
-    return () => sub.subscription.unsubscribe();
+    // 서버가 느리거나 응답이 없어도 화면이 영원히 막히지 않게 상한을 둔다
+    const timer = setTimeout(() => {
+      if (!done) {
+        done = true;
+        setMigrating(false);
+      }
+    }, 8000);
+    return () => {
+      clearTimeout(timer);
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -89,7 +114,7 @@ export default function AuthGate({
     };
   }, [pathname, router]);
 
-  // 로그인 페이지는 항상 렌더, 그 외엔 세션 확인 후 렌더 (깜빡임 방지)
-  if (pathname !== "/login" && !ready) return null;
+  // 로그인 페이지는 항상 렌더, 그 외엔 세션 확인 + 이관 완료 후 렌더 (깜빡임 방지)
+  if (pathname !== "/login" && (!ready || migrating)) return null;
   return <>{children}</>;
 }
