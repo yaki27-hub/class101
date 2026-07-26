@@ -7,6 +7,7 @@
  */
 
 import { useState } from "react";
+import { KB_TOTAL_DOCS } from "@/lib/kb/meta.generated";
 
 type Key = "verdict" | "observe" | "history" | "context" | "info";
 
@@ -66,9 +67,23 @@ function verdictTone(verdict: string) {
   return { border: "border-warning/50", bg: "bg-warning/10", text: "text-secondary" };
 }
 
-export default function AnswerBlocks({ content }: { content: string }) {
+export interface KbRef {
+  id: string;
+  ko: string;
+  sources: string[];
+}
+
+export default function AnswerBlocks({
+  content,
+  refs,
+}: {
+  content: string;
+  refs?: KbRef[];
+}) {
   const [open, setOpen] = useState(false);
+  const [refsOpen, setRefsOpen] = useState(false);
   const blocks = parseBlocks(content);
+  const institutions = [...new Set((refs ?? []).flatMap((r) => r.sources))];
 
   // 포맷을 못 읽으면 원문 그대로 (내용 유실 방지)
   if (!blocks || (!blocks.verdict && !blocks.observe)) {
@@ -156,6 +171,60 @@ export default function AnswerBlocks({ content }: { content: string }) {
                     {blocks.context}
                   </p>
                 </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 📚 이 답변이 실제로 참고한 자료 — 서버가 프롬프트에 넣은 문서만 표시한다 */}
+      {refs && refs.length > 0 && (
+        <div className="rounded-card border border-hairline bg-white/70">
+          <button
+            type="button"
+            onClick={() => setRefsOpen((v) => !v)}
+            aria-expanded={refsOpen}
+            className="flex min-h-11 w-full items-center justify-between gap-2 px-3.5 py-2.5 text-left"
+          >
+            <span className="text-[12px] font-semibold text-secondary">
+              📚 질환 자료 {KB_TOTAL_DOCS}건 중 {refs.length}건을 찾아봤어요
+            </span>
+            <span className="flex items-center gap-1 text-[12px] font-medium text-muted">
+              {refsOpen ? "접기" : "보기"}
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+                className={`transition-transform ${refsOpen ? "rotate-180" : ""}`}
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </span>
+          </button>
+
+          {refsOpen && (
+            <div className="space-y-1.5 border-t border-hairline px-3.5 py-3">
+              {refs.map((r) => (
+                <div key={r.id}>
+                  <p className="text-[13px] font-semibold text-secondary">· {r.ko}</p>
+                  {r.sources.length > 0 && (
+                    <p className="pl-2.5 text-[11px] leading-relaxed text-muted">
+                      {r.sources.join(" · ")}
+                    </p>
+                  )}
+                </div>
+              ))}
+              {institutions.length > 0 && (
+                <p className="pt-1 text-[11px] leading-relaxed text-muted-soft">
+                  찐집사는 {institutions.slice(0, 3).join(", ")} 등 수의학 자료를 정리해
+                  두고, 질문에 맞는 문서를 찾아 답변에 참고해요.
+                </p>
               )}
             </div>
           )}

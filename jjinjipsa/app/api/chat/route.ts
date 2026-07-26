@@ -7,6 +7,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { buildSystemPrompt, type PromptContext } from "@/lib/llm/systemPrompt";
+import { formatKbForPrompt, retrieveKb, toRefBriefs } from "@/lib/kb/retrieve";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase";
 
 // 모델 라우팅(T-18, D-04): 텍스트/사진 모두 flash-lite.
@@ -52,7 +53,11 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const body = (await req.json()) as ChatBody;
-  const system = buildSystemPrompt(body);
+
+  // KB 검색 — 최근 증상 태그를 힌트로 함께 넣어 매칭률을 올린다
+  const symptomHints = (body.symptoms ?? []).slice(-5).flatMap((s) => s.tags ?? []);
+  const hits = retrieveKb(body.question, symptomHints);
+  const system = buildSystemPrompt({ ...body, kbReferences: formatKbForPrompt(hits) });
 
   // 사진 첨부 여부로 모델 라우팅
   const imgMatch = body.image
@@ -75,7 +80,9 @@ export async function POST(req: Request): Promise<Response> {
     { role: "user", parts: userParts },
   ];
 
-  console.log(`[api/chat] model=${model} image=${!!imgMatch}`);
+  console.log(
+    `[api/chat] model=${model} image=${!!imgMatch} kb=${hits.map((h) => h.doc.id).join(",") || "none"}`,
+  );
 
   const upstream = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`,
@@ -157,6 +164,9 @@ export async function POST(req: Request): Promise<Response> {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "x-model": model,
+      // 실제로 프롬프트에 넣은 자료만 내려보낸다 (화면 표시는 사실과 일치해야 한다).
+      // 한글이 들어가므로 base64로 감싼다 — 헤더는 latin1만 안전하다.
+      "x-kb-refs": Buffer.from(JSON.stringify(toRefBriefs(hits)), "utf8").toString("base64"),
     },
   });
 }

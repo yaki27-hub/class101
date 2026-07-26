@@ -180,6 +180,7 @@ export default function ChatPage() {
       content: full,
       imageUrl: null,
       model: res.model,
+      kbRefs: res.kbRefs,
       createdAt: new Date().toISOString(),
     };
     await storage.addMessage(botMsg);
@@ -299,7 +300,7 @@ export default function ChatPage() {
               <Mascot mood="calm" size={26} />
             </span>
               <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed text-body">
-                <AnswerBlocks content={m.content} />
+                <AnswerBlocks content={m.content} refs={m.kbRefs} />
               </div>
             </div>
           ),

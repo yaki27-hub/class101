@@ -73,5 +73,7 @@ export interface ChatMessage {
   imageUrl: string | null;
   /** 응답 생성에 쓴 모델 (라우팅 검증용) */
   model: string | null;
+  /** 답변 근거로 쓴 KB 문서 (없거나 과거 메시지면 undefined) */
+  kbRefs?: { id: string; ko: string; sources: string[] }[];
   createdAt: string;
 }
