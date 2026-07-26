@@ -8,6 +8,7 @@ import { newId, storage, type Cat, type Gender } from "@/lib/storage";
 import { BREED_GROUPS, CONDITIONS } from "@/lib/catOptions";
 import { IconCamera } from "@/components/icons";
 import BackButton from "@/components/BackButton";
+import { MAX_CATS, MAX_CATS_MESSAGE } from "@/lib/limits";
 
 export default function CatForm({ existing }: { existing?: Cat }) {
   const router = useRouter();
@@ -72,13 +73,11 @@ export default function CatForm({ existing }: { existing?: Cat }) {
     savingRef.current = true;
     setSaving(true);
     try {
-      // 오픈 테스트: 최대 3마리 (신규 등록 시)
+      // 오픈 테스트 한도 (신규 등록 시)
       if (!editing) {
         const count = (await storage.listCats()).length;
-        if (count >= 3)
-          return setError(
-            "오픈 테스트 기간에는 최대 3마리까지 등록할 수 있어요. 기존 아이를 삭제한 뒤 등록해 주세요.",
-          );
+        if (count >= MAX_CATS)
+          return setError(`${MAX_CATS_MESSAGE} 기존 아이를 삭제한 뒤 등록해 주세요.`);
       }
       if (!name.trim()) return setError("이름을 입력해 주세요.");
       if (!birthDate)

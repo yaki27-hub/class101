@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { storage, type Cat } from "@/lib/storage";
 import { getCatAge } from "@/lib/catAge";
 import { IconPencil, IconGear } from "@/components/icons";
+import { MAX_CATS_MESSAGE } from "@/lib/limits";
 import CatAvatar from "@/components/CatAvatar";
 import { accentAt } from "@/lib/catColor";
 
@@ -56,7 +57,7 @@ export default function CatsList() {
         </Link>
       ) : (
         <p className="rounded-button bg-surface-soft py-3.5 text-center text-[13px] text-muted">
-          오픈 테스트 기간에는 최대 3마리까지 등록할 수 있어요 🐾
+          {MAX_CATS_MESSAGE} 🐾
         </p>
       )}
 
