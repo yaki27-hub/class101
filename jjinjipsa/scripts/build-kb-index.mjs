@@ -92,6 +92,9 @@ for (const cat of readdirSync(KB_DIR)) {
       sources: (Array.isArray(fm.sources) ? fm.sources : [])
         .filter((s) => s && s.name)
         .map((s) => s.name),
+      // 수의사 감수 여부 — true면 아직 초안이다 (기본값 true: 명시 안 했으면 미감수로 본다)
+      draft: String(fm.draft ?? "true") !== "false",
+      reviewedBy: fm.reviewed_by ?? "",
       brief: section(body, "한 줄 요약", 260),
       signs: section(body, "🚨 지금 병원에 가야 하는 신호", 700),
       observe: section(body, "경과 관찰해도 되는 경우", 420),
@@ -125,7 +128,15 @@ writeFileSync(
   "utf8",
 );
 
+const reviewed = docs.filter((d) => !d.draft);
 console.log(`KB 인덱스 생성: ${docs.length}개 문서, 기관 ${institutions.length}곳 → ${OUT}`);
+console.log(`  수의사 감수 완료: ${reviewed.length}/${docs.length}건`);
+if (reviewed.length < docs.length) {
+  // 안전 우선순위: red/orange부터 감수하는 것이 효율적이다 (기준표 §0-1)
+  const urgent = docs.filter((d) => d.draft && (d.urgency === "red" || d.urgency === "orange"));
+  console.log(`  ⚠️ 미감수 red/orange ${urgent.length}건 — 우선 감수 대상:`);
+  for (const d of urgent) console.log(`     [${d.urgency}] ${d.ko} (${d.path})`);
+}
 const missing = docs.filter((d) => !d.brief || !d.id);
 if (missing.length) {
   console.warn(`  ⚠️ 요약/ID 누락 ${missing.length}건:`, missing.map((d) => d.path).join(", "));
