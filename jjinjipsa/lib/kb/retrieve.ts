@@ -17,6 +17,9 @@ export interface KbDoc {
   urgency: string;
   triggers: string[];
   sources: string[];
+  /** 수의사 감수 전이면 true */
+  draft: boolean;
+  reviewedBy: string;
   brief: string;
   signs: string;
   observe: string;
@@ -25,7 +28,20 @@ export interface KbDoc {
 
 export const KB_DOC_COUNT: number = index.docCount;
 export const KB_INSTITUTIONS: string[] = index.institutions;
-const DOCS = index.docs as KbDoc[];
+const ALL_DOCS = index.docs as KbDoc[];
+
+/**
+ * 감수 완료 문서만 챗봇이 참조하도록 강제하는 스위치.
+ *
+ * 기본은 꺼짐 — 현재 감수 완료가 0건이라 켜면 KB 참조가 통째로 사라진다.
+ * **수의사 감수가 끝나는 대로 `KB_REQUIRE_REVIEWED=1`로 켤 것.**
+ * (Vercel 환경변수로 재배포 없이 전환 가능)
+ */
+const REQUIRE_REVIEWED = process.env.KB_REQUIRE_REVIEWED === "1";
+const DOCS = REQUIRE_REVIEWED ? ALL_DOCS.filter((d) => !d.draft) : ALL_DOCS;
+
+/** 감수 현황 — 운영 점검용 */
+export const KB_REVIEWED_COUNT = ALL_DOCS.filter((d) => !d.draft).length;
 
 /** 조사·공백을 걷어내고 비교용으로 정규화 */
 function norm(s: string): string {
@@ -172,8 +188,15 @@ export interface KbRefBrief {
   id: string;
   ko: string;
   sources: string[];
+  /** 수의사 감수 전이면 true — 화면에 그대로 밝힌다 */
+  draft: boolean;
 }
 
 export function toRefBriefs(hits: KbHit[]): KbRefBrief[] {
-  return hits.map(({ doc }) => ({ id: doc.id, ko: doc.ko, sources: doc.sources }));
+  return hits.map(({ doc }) => ({
+    id: doc.id,
+    ko: doc.ko,
+    sources: doc.sources,
+    draft: doc.draft,
+  }));
 }

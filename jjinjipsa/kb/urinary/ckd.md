@@ -24,6 +24,8 @@ sources:
     url: http://www.iris-kidney.com
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
+# 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
+draft: true
 ---
 
 ## 한 줄 요약

@@ -71,6 +71,8 @@ export interface KbRef {
   id: string;
   ko: string;
   sources: string[];
+  /** 수의사 감수 전 초안이면 true */
+  draft?: boolean;
 }
 
 export default function AnswerBlocks({
@@ -224,6 +226,11 @@ export default function AnswerBlocks({
                 <p className="pt-1 text-[11px] leading-relaxed text-muted-soft">
                   찐집사는 {institutions.slice(0, 3).join(", ")} 등 수의학 자료를 정리해
                   두고, 질문에 맞는 문서를 찾아 답변에 참고해요.
+                </p>
+              )}
+              {refs.some((r) => r.draft) && (
+                <p className="text-[11px] leading-relaxed text-muted-soft">
+                  이 자료는 아직 수의사 감수를 받기 전이에요. 참고용으로만 봐주세요.
                 </p>
               )}
             </div>

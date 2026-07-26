@@ -11,6 +11,8 @@
  * ⚠️ 기준표는 수의사 감수 전 초안이다. 감수 후 이 파일도 함께 갱신할 것.
  */
 
+import { DISCLAIMER_CHAT } from "@/lib/disclaimer";
+
 export interface RedFlagRule {
   id: string;
   /** 응답에 표시할 위험 신호 이름 */
@@ -311,7 +313,7 @@ export function buildRedFlagResponse(rule: RedFlagRule, catName: string): string
     ``,
     `이동 중에는 이동장에 넣어 조용히 옮기고, 억지로 먹이거나 토하게 하려는 시도는 하지 마세요.`,
     ``,
-    `ℹ️ 저는 참고 정보를 드리는 것이고, 진단과 처방은 수의사 선생님의 영역이에요.`,
+    `ℹ️ ${DISCLAIMER_CHAT}`,
   ].join("\n");
 }
 
