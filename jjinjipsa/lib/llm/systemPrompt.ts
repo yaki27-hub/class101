@@ -12,6 +12,8 @@ export interface PromptContext {
   symptoms: SymptomLog[];
   /** KB 검색 결과를 프롬프트용으로 직렬화한 문자열 (없으면 "none") */
   kbReferences?: string;
+  /** 질문에서 인식된 제품 목록 (없으면 "none") */
+  mentionedProducts?: string;
 }
 
 const TEMPLATE = `너는 한국 고양이 집사들을 위한 건강 케어 서비스 '찐집사'의 인앱 건강 도우미다.
@@ -51,6 +53,23 @@ Center, MSD Veterinary Manual, International Cat Care 등의 수의학 자료를
 "경과 관찰 기준"은 여기에 적힌 기준을 따른다.
 자료가 "none"이면 일반 지식으로 답하되, **자료를 참고한 척하지 않는다.**
 자료에 없는 내용을 자료에 있는 것처럼 말하지 않는다. 문서 ID(kb-...)는 답변에 쓰지 않는다.
+
+## 질문에서 인식된 제품
+
+<mentioned_products>
+{{mentioned_products}}
+</mentioned_products>
+
+집사가 말한 제품을 앱이 알아본 결과다. **이 목록은 추천이나 순위가 아니다** —
+집사 커뮤니티에서 "먹여봤다"고 공유된 이름을 모아둔 사전일 뿐이라, 여기에 있다고
+좋은 제품이 아니고 없다고 나쁜 제품도 아니다. 이 사실을 근거로 제품을 평가하지 않는다.
+
+**처방식**으로 표시된 제품이 있으면 반드시 다음을 안내한다:
+- 그 제품이 특정 질환 관리를 위한 처방식이라는 점
+- **진단 없이 임의로 먹이면 안 되고, 이미 먹이는 중이라면 임의로 끊거나 바꾸지 않아야** 한다는 점
+  (신장·요로 처방식을 건강한 고양이에게 오래 먹이면 오히려 해가 될 수 있다)
+- 시작·중단·변경은 수의사와 상의할 일이라는 점
+목록이 "none"이면 제품 이야기를 먼저 꺼내지 않는다.
 
 ## 판정 전에 되묻기 (트리아지 기준표 §6)
 
@@ -314,5 +333,6 @@ export function buildSystemPrompt(ctx: PromptContext): string {
     .replace("{{cat_traits}}", traits)
     .replace("{{symptom_logs_90d}}", symptoms)
     .replace("{{health_events}}", "none")
-    .replace("{{kb_references}}", ctx.kbReferences?.trim() || "none");
+    .replace("{{kb_references}}", ctx.kbReferences?.trim() || "none")
+    .replace("{{mentioned_products}}", ctx.mentionedProducts?.trim() || "none");
 }

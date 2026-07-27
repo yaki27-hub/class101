@@ -8,6 +8,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { buildSystemPrompt, type PromptContext } from "@/lib/llm/systemPrompt";
 import { formatKbForPrompt, retrieveKb, toRefBriefs } from "@/lib/kb/retrieve";
+import { detectProducts, formatProductsForPrompt } from "@/lib/products/detect";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase";
 
 // 모델 라우팅(T-18, D-04): 텍스트/사진 모두 flash-lite.
@@ -111,7 +112,13 @@ export async function POST(req: Request): Promise<Response> {
   // KB 검색 — 최근 증상 태그를 힌트로 함께 넣어 매칭률을 올린다
   const symptomHints = (body.symptoms ?? []).slice(-5).flatMap((s) => s.tags ?? []);
   const hits = retrieveKb(body.question, symptomHints);
-  const system = buildSystemPrompt({ ...body, kbReferences: formatKbForPrompt(hits) });
+  // 제품명 인식 — 추천이 아니라 처방식 안내를 위한 것 (data/products/README.md)
+  const products = detectProducts(body.question);
+  const system = buildSystemPrompt({
+    ...body,
+    kbReferences: formatKbForPrompt(hits),
+    mentionedProducts: formatProductsForPrompt(products),
+  });
 
   // 사진 첨부 여부로 모델 라우팅
   const imgMatch = body.image
@@ -135,7 +142,7 @@ export async function POST(req: Request): Promise<Response> {
   ];
 
   console.log(
-    `[api/chat] model=${model} image=${!!imgMatch} kb=${hits.map((h) => h.doc.id).join(",") || "none"}`,
+    `[api/chat] model=${model} image=${!!imgMatch} kb=${hits.map((h) => h.doc.id).join(",") || "none"} products=${products.map((p) => p.name).join(",") || "none"}`,
   );
 
   const upstream = await fetch(
