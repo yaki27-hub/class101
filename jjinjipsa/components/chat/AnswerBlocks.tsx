@@ -9,9 +9,11 @@
 import { useState } from "react";
 import { KB_TOTAL_DOCS } from "@/lib/kb/meta.generated";
 
-type Key = "verdict" | "observe" | "history" | "context" | "info";
+type Key = "ask" | "verdict" | "observe" | "history" | "context" | "info";
 
 const BLOCKS: { key: Key; emoji: string; label: string }[] = [
+  // 되묻기(트리아지 §6) — 정보가 부족할 때 판정 대신 나온다
+  { key: "ask", emoji: "❓", label: "조금만 더 알려주세요" },
   { key: "verdict", emoji: "🚦", label: "판정" },
   { key: "observe", emoji: "🔍", label: "관찰" },
   { key: "history", emoji: "📖", label: "히스토리" },
@@ -88,7 +90,7 @@ export default function AnswerBlocks({
   const institutions = [...new Set((refs ?? []).flatMap((r) => r.sources))];
 
   // 포맷을 못 읽으면 원문 그대로 (내용 유실 방지)
-  if (!blocks || (!blocks.verdict && !blocks.observe)) {
+  if (!blocks || (!blocks.verdict && !blocks.observe && !blocks.ask)) {
     return (
       <p className="whitespace-pre-wrap text-sm leading-relaxed text-body">
         {clean(content)}
@@ -98,9 +100,22 @@ export default function AnswerBlocks({
 
   const tone = blocks.verdict ? verdictTone(blocks.verdict) : null;
   const hasDetails = !!(blocks.history || blocks.context);
+  const askOnly = !!blocks.ask && !blocks.verdict;
 
   return (
     <div className="space-y-3">
+      {/* ❓ 되묻기 — 판정 대신 나오는 경우. 답을 재촉하는 톤이 되지 않게 부드럽게 */}
+      {blocks.ask && (
+        <div className="rounded-card border border-mint bg-mint/30 px-3.5 py-3">
+          <p className="text-[11px] font-bold tracking-wide text-secondary">
+            ❓ 조금만 더 알려주세요
+          </p>
+          <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-body">
+            {blocks.ask}
+          </p>
+        </div>
+      )}
+
       {/* 🚦 판정 — 가장 먼저, 가장 눈에 띄게 */}
       {blocks.verdict && tone && (
         <div className={`rounded-card border ${tone.border} ${tone.bg} px-3.5 py-3`}>
@@ -180,7 +195,7 @@ export default function AnswerBlocks({
       )}
 
       {/* 📚 이 답변이 실제로 참고한 자료 — 서버가 프롬프트에 넣은 문서만 표시한다 */}
-      {refs && refs.length > 0 && (
+      {refs && refs.length > 0 && !askOnly && (
         <div className="rounded-card border border-hairline bg-white/70">
           <button
             type="button"

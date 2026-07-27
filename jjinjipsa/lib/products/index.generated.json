@@ -1,0 +1,8668 @@
+{
+ "generatedFrom": "data/products/고다카페_제품리스트.md",
+ "note": "추천 목록이 아니다. 제품명 인식·처방식 안내 용도. data/products/README.md 참고",
+ "total": 1232,
+ "prescriptionCount": 57,
+ "products": [
+  {
+   "name": "이나바 고양이 마구로쥬레 컵간식(닭가슴살+가다랑어 혼합맛)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "본아페티 고양이 관절 다이어트 건식 사료 참치 오리고기",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 인스팅트 LID 토끼고기",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고양이모래 18kg 와이오밍산 정직한 벤토나이트모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프루너스 닥터힐메딕스 인테스티널D/I (처방사료)",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "몬지 내추럴슈퍼프리미엄 어덜트 모노 프로틴 연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 코어 시그니쳐 셀렉트 플레이크 참치&연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스텔라앤츄이스 캣 크레이빙스 살몬&튜나&매크럴",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 가스트로 인테스티널 화이버 리스폰스",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "바이탈에센설 캣 라우 토끼 엔트리 미니패티스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "와그작 고양이는 생선을 더 좋아해(가다랑어)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 고양이 제이타크 퐁츄르(참치&해산물)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 lid 칠면조",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 얼티밋 프로틴",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "템테이션 미티 믹스업 호주산 (터키 치킨)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "간택 고양이 간식 생선살 게맛살 슬라이스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 얼티밋 오리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 얼티밋 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 저스트 쥬시",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 토끼 lid",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모래도사 프리미엄 제로 더스트 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스텔라앤츄이스 파테 캔 살몬&튜나&매크럴",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "제로랩스 츄빗 고등어 통살 간식 고등어맛",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퀸오브샌드 응고형 고양이 두부 모래 녹차",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "한국고양이모래연구소(한고연)미스터리 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 토끼 민스",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 인도어 닭고기 현미",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 캣 인도어 흰살생선",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 가스트로 인테스티널 모더레이트",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "스텔라앤츄이스 캣 크레이빙스 튜나&펌킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로네이처 캣 홀리스틱 칠면조&크랜베리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴발란스 울트라 오리지널 닭&연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 인스팅트",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "리얼 퓨어FD 동결건조 닭가슴살 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미스터리 두부킬러 고양이 모래 그린티",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "요세라캣 내추럴 (다이어트/송어오리)",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웨루바 클래식 파테 참치연어 틱택워우",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "위스카스 고양이 파우치 주니어 고등어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 원캣 자연식 텐더 바이트 연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 인스팅트 LID 토끼 캣 키블",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트 인스퍼레이션 파우치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 사이언스 유리너리 헤어볼 컨트롤",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "긴노스푼 후레이크 닭&참치&가다랑어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 GO 솔루션 웨이트 매니지먼트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴 그레이트니스 와일드 인스팅트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 칠면조",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트리소스 그레인프리 컨트리 셀렉트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 가스트로 모더레이트 칼로리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 가스트로 인테스티널 화이버",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로우즈 타파 치킨가슴살&치즈 파우치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니쳐바이 오라뮨 캣스틱 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 엣지 노메스(무향)",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아보덤 내추럴 그레인프리 참치&게살",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 신장건강케어 닭고기",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캐나디안샌드 엑스트라케어 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트 인스퍼레이션 연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트 인스퍼레이션 치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트 튜나치킨 플레이크",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 프로플랜 리브클리어 실내묘용",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "한국고양이모래연구소(한고연) 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 어덜트 유리너리 헤어볼 컨트롤",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 어덜트 퍼펙트 다이제스천 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 유리너리 케어 스트레스 c/d",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "굿벨런스 짜먹는 간식 닭고기 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 치킨",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네이처스 버라이어티 생식본능 토끼",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트리언스 서브제로 프레이저 밸리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 흰살참치&닭가슴살",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 파우치 인도어 인스팅티브",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타크래프트 캣스틱 치킨&캣글라스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웨루바 타임즈 앳 프리지먼트 파테",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 닭가슴살&황제트릿 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 신장건강케어 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣파푸(캣츠파인투드) 라구 시리즈",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣파푸(캣츠파인투드) 필렛 닭고기",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트 그레이비 러버스",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 프로플랜 리브클리어 어덜트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "한국고양이모래연구소(한고연) 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "헤일로 캣 홀리스틱 흰살생선 파테",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 k/d 얼리서포터(처방사료)",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "굿데이 네츄럴 스낵 게살슬레이스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 인도어 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 세이버 아로마 엑시전트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 밀프리 치킨&화이트 피쉬",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 슈레디드 치킨가슴살&치즈",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로투스 오븐베이크 정어리와 청어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 스테럴라이즈드 어덜트 송어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "블랙우드 그레인프리 닭고기 완두",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처바이 타히보 오리&돼지폐",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아딜론덱 그레인프리 인도어 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 참치&닭고기&치즈 캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 코어 플레이크 참치&새우",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 코어 플레이크 참치&연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽 고등어&양고기 에어드라이",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "티키캣 스페셜 오리 계란 파우치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫컴 솔리드골드 인디고 문 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 덴탈라이프 간식 캣 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 리브클리어 어덜트 헤어볼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 프로플랜 리브클리어 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 어덜트 퍼펙트 치킨쌀 스튜",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 GO 내추럴 오리&칠면조",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 GO 카니보 치킨&칠면조",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "너를 위한 디저트 캔디(치킨)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네꼬모리 두부국시 극세사 입자",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 7세 이상",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 그레인프리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 연어&현미",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 현미닭고기",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터맘마 미니파이 케어 라이스",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 고양이 간식캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 캣 뉴트리스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도 순수생육 연어&오리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 셀렉트 인도어 스폐셜",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바이탈에센셜 캣 토끼 미니닙스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타크래프트 매직크린 실리카겔",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처바이 타히보 연어&토끼",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처바이 타히보 참치&명태",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 (써스테이너블리 유얼스)",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 로얄레드 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아스크 후루루 게맛살 슬라이스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아카나 퓨어비타 파미나 로투스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카니러브 캣 생육 잉어와 송어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "파미나 그레인프리 멧돼지&사과",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫후 댕냥통살 닭안심+크릴새우",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "편백정원 국내산 편백나무 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로네이처 캣 라이프 인피니티",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 GO 솔루션 다이제스천",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 그레인프리 어덜트 피쉬",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴발란스 파테형 치킨리버",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 센시티브",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트리언스 그레인프리 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터페트라 캣즐 헤어볼 연어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 건강프로젝트",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 가스트로 인테스티널",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 어덜트 다이제스티브",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "ㅁㅊ모래 파워스쿱 카사바블렌",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미스터리 오더킬러 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타크래프트 밀키멜로디 치즈",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "빈티지 오븐프레쉬 오븐베이크",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에버드림 익스클루시브 멀티캣",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웨루바 클래식 틱택워우 파테",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 슈레디 닭고기&칠면조",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "유한양행 레시피브이 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "이나바 스고이 유산균 크런치",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 AIM 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 참치&헤어볼",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 나 산양유 좋아해 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카토빗 바이탈드링크 유리너리",
+   "categories": [
+    "간식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "캣만두 치킨(라이프 에센셜)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "컴페니언 CP 클래식 헤어볼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "파미나 그레인프리 치킨&석류",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 오도어 프리 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트 화이트라벨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로네이처 핏 그린 다이어트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 다이어트 헤어볼 컨트롤",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 유리너리 헤어볼 컨트롤",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "공백모래 오리지널 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터바이 캣초유프로틴 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터펠리스 포캣트릿 헤어볼",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬 오리지널(씬티드)",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더캣 마블링 슬라이스 연어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더캣 마블링 슬라이스 치즈",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 건강레시피",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 참치 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 통영 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 뉴터드 세타이어티",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 라이트웨이트 케어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 밀프리 치킨&칠면조",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 슈레디드 오리&치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "리얼와이오밍 내츄럴(벤토)",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미스터리 두부모래 오리지널",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바이네이처 그레인프리 연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바이네이처 그레인프리 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "반짝 싱글오리진 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "베츠 솔루션 데일리 올인원",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뽀시래기 동결건조 북어트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 로키플러스",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 아쿠아민트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아카나 캣 와일드 프레이리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 코어 시그니쳐 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 파테 닭고기&소고기",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 유산균 사료 소포장",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 짜먹는 헤어볼 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸 그레인프리 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "이즈칸 버라이어티 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "카나토라 통살 런치 보니또",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캐츠랑 어덜트(대주펫푸드)",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣찹 닭고기 프리바이오틱스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "탐사고메 캣푸드 버라이어티",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫후 닥터후 짜먹는 영양제",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 자연식텐더 순살연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 캣 덴탈라이프 치킨",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트 엘레강트",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로젝트21 리얼스틱 연어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 c/d 멀티 스트레스",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 어덜트 퍼펫트 웨이트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 어덜트 헤어볼 컨트롤",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 헤어볼 컨트롤 라이트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "강집사 블랙 벤토 마스터",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고마워모래야 응고형 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고양이 촉촉트릿 진짜육포",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고양이연구소 유산균 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "꼬뜨 동결건조 트릿 간식",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 GO 카니보 보라색",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴발란스 닭고기&닭간",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴키티 구운 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터팰리스 카사벤토 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레드캣 슈퍼프리미엄 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 그레이비 인도어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 리스폰스 파이버",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 유리너리 s/o",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 하이퍼 알러제닉",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로우즈 치킨가슴살&치킨간",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "리본 글로벌 카사바 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 닭가슴살 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 미니트릿 북어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 가스트로 인테스티널",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "바우와우 고양이 덴탈간식",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "반려소반 가을 스틱 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "베스트브리드 홀리스틱 캣",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "별자리스틱 눈 건강 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "블랙우드 그레인프리 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타크래프트 치킨캣그라스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "샌드백 프리미엄 벤토모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "솔리드골드 인디고문 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔로션 언씬티드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 매직카펫",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 언씬티드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아보덤 내추럴 그레인프리",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이처 닭고기와 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 닭고기와 호박",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에버크린 ES UN 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에이스 모래 벤토 사하라",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웨루바 라 이슬라 보니타",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 가다랑어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸 그레인프리 닭고기",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸 그레인프리 시니어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸 그레인프리 어덜트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸 퍼포먼스 올라이프",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "제주 강씨네 말고기 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 릴리프+ 오키로스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카니러브 트루프레시 피쉬",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캐티맨 크리미츄 가다랑어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣템 시크릿 크런치 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "패스룸x동원 튜나/치킨캔",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "팬시피스트 흰살생선 키튼",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 고스비 카튼 우유",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 벤토 마이도미넌트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 리브클리어 어덜트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 리브클리어 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 매들리 파테 치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 원 캣 습식 키튼",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트 메들리",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 프로플랜 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "퓨어비타 그레인프리 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨어비타 치킨 캣 1kg",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨어비타 캣 치킨 앙트레",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로바이오틱 라이브 생선",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로바이오틱 라이브 오리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로바이오틱 라이브 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로플랜 캣 성묘용 연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고양이 촉촉트릿 닭고기",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고양이 촉촉트릿 열빙어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "구루머스 두부모래 녹차",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 GO LID 오리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 그레인프리 어덜트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터펠리스 헤어볼 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬 오리지널 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도 어덜트 오리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 보스 가는입자",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 스테럴라이즈드",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 에이징 12+",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 유리너리 케어",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 인도어 롱헤어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 파우치 인도어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 치킨가슴살&오리",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로투스 오븐베이크 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "룽펑 크리스탈 실리카겔",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 치킨 파우더",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마마샌드 언센티드 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마이도미넌트 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬스터 캣리터 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 레날 멸치 헤팍틱",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "미스터리 두부킬러 녹차",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "베츠 닥터퓌레 유리너리",
+   "categories": [
+    "간식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "브리더랩 월간스틱 대구",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "블랙우드 아딜론덱 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "블랙우드 인도어 닭고기",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "손집사네 먼지없는 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처바이 오라뮨스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니쳐바이 오라뮨스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아로마 엑시전트 베이스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아르르 극세사 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 라이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아카나 패시피카 그랜스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 대서양 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 코어 디바인듀오",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 코어 참치&새우",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 코어 참치&연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 파테 참치/연어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰츠 저지방 및 헤어볼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 닭고기",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 유산균",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정글키친 동결건조&생식",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정직한 모래 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 나 산양유 좋아해",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 미니트릿 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 오키로스틱(그린)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 오키로스틱(레드)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 한방보약 삼계탕전",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "집사공감 다이어트 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카나토라 통살 가다랑어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카니러브 닭고기와 토끼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "클레버메이트 소프트터치",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "탐사 가는입자 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "토탈 이퀄리브리오 레날",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "패스룸x동원 퓨어 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 파인 크랙 두부",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펠리코 WELL9 오리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫토리아 저스트원 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫후 심쿵츄르 보양삼계",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포키포키 두부모래 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 리브클리어 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 원캣 실내고양이",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트 키튼",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 프로플랜 어덜트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 프로플랜 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로네이처 메디테라니아",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프롬한라 닭가슴살 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프리미엄 골드 런치 캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 메타볼릭 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 사이언스 다이어트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 키튼 치킨&라이스",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "건강한펫 트릿 전제품",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "게더 프리에이커 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "견우직냥 고고단 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고양이 촉촉트릿 북어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고양이 촉촉트릿 소간",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고양이 촉촉트릿 오리",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "굿데이 포켓 크리스피",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 그레인프리 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나인케어 피부와 피모",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴키티 참치 뱃살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "누터스가든 연어&대구",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트리언스 그레인프리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터힐메딕스 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "닥터힐메딕스 체중조절",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬 타이니 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬 타이니 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬 타이니 유향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리스틱 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 디쉬",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "두잇 푸푸샌드 소프트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "디그앤롤 프라임솔루션",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레옹펫 야미야미 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 7+ 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 뉴트로 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 다이제스티브",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 덴탈오랄케어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 라이트웨이트",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 레날 셀렉트",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 레날 스페셜",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 마더&베이비",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 마더앤베이비",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 스테럴라이즈",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 안티 에이징",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 인도어 키튼",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 헤어볼 케어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캣 베이비파우더향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 슈레디드 연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 슈레디드 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "리본 글로벌 북어트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "리틀빅파우 치킨&오리",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 가자미트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 명태&치킨",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 북어 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 오징어트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 치킨파우더",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 홍연어트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마마캣 시그니처 서퍼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마이베프 별자리 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마이베프 생유베리마치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 모노프로틴 송어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미아모아 드링크 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타크래프트 캣얌치즈",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "사나벨 어덜트 포트리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "생식본능 트릿(토끼)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉐지애 고양이 주식캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉬즈곤 먼지아웃 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스노우캣 함박눈꽃모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처 바이 A/a",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처바이 오라뮨캣",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아르르 프리미엄 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 레드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아보덤 참치 앤 게살",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아스쿠 헬씨미요 져키",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아카나 캣 그래스랜드",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 참치&뱅어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 참치&새우",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에센셜 더 재규어 캣",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오더캅 플래티넘 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웨루바 키티건 와일드",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰츠 저지방 다이어트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오 미니츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 신장",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정글키친 미디엄프로틴",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 나 참돔 좋아해",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 닭트릿 북어트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 리틀 제주 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 미니트릿 산양유",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 미니트릿 소고기",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣파푸(캣츠파인투드)",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "탐사 베이직 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 프리미엄 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 녹차 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫마트 감탄모래 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포옹 마이미우즈 화식",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포우장 먼지안녕 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포우장 악취안녕 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 원 체중조절용",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 원캣 순살연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 원캣 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "퓨리나 원캣 체중조절",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프렌냥 츄르 신장케어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프렌냥 츄르 실버케어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로젝트21 하루채움",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 c/d 메타볼릭",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 다이제스천 연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 다이제스천 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 유리너리 c/d",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "365샌드 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "K9 필라인 내추럴",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "KMR 파우더 분유",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "강집사 카사바 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "건강한펫 트릿 북어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "공공일 스틱 고등어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "공공일 츄르 닭고기",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "굿프랜드 전설의참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈 덴탈 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 프레쉬 어덜트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴발란스 인도어",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내츄럴코어 미트스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네츄럴키티 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 내추럴초이스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로 연어와 현미",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트리언스 서브제로",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터힐메딕스 D/I",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터힐메딕스 W/C",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬 벨벳 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동결건조 통살 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "두부랑캣츠 오리지널",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "디그앤롤 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도 순수생육",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도 오션피쉬",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도 컴플리트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레옹펫 샌드더블레스",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 똑띠 프로",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 나인 케어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 덴탈 간식",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 리커버리캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 세타이어티",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 아날러제닉",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 오랄 케어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 인도어27",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 인스팅티브",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 참치&고등어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 치킨&치킨간",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 닭 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 생선트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 치킨트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마이도미넌트 보라색",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마이베프 냥생 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 대구 비와일드",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미아모아 파스테이트",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미야옹철 펠리스샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미우타임즈 더프라임",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미우타임즈 스탠다드",
+   "categories": [
+    "모래",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바다고양이식탁 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "베로베로 미니 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보레알 닭고기&닭간",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보레알 닭고기&오리",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보레알 치킨&치킨간",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보레알 치킨&칠면조",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "브릿 그레이비 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "블랙우드 그레인프리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타크래프트 캣스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "샌드바이블 벤토나이",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "샌드바이블 에버크린",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "솔리드골드 인디고문",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉬바 닭고기와 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉬바 캣디럭스 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스마트하트 나인케어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스텔라앤츄이스 살몬",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처바이 A/a",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처바이 타히보",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아카나 캣 패시피카",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아카나 패시피카 캣",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아카나 페시피카 캣",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모 미니통살 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 닭가슴살",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "어드밴스 캣 시니어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에핏트릿(아임트릿)",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "연어 30 DAYS",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오픈팜 칠면조&치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "월드베스트 멀티플캣",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웨루바 러브 커넥션",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르 닭",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정직한 모래 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "제주 강씨네 흙돼지",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 5km닭고기맛",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 닭가슴살 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 미니트릿 북어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 테이스티 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 테이스티 치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "집사공감 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캐나다 프레쉬 연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "컨트리캣 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "코스믹캣 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "코스트코 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퀸오브샌드 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "테비 닭가슴살 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "파미나 청어&오렌지",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 치킨&칠면조",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페피테일 참 베타락",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펠리스샌드 프로젝트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨어비타 치킨/연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로네이처 노르디코",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프롬한라 오리 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "하림 유리너리 양갱",
+   "categories": [
+    "간식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "홈플러스 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "후새 링크스 시니어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "후새 오퍼스 링크스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "후새 크로케터 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "휴애니스 샌드마스터",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 어덜트 라이트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 어덜트 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 퍼펙트 웨이트",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "건강한펫 치킨텐더",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "건강한펫 트릿 닭",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고집츄르 가다랑어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고집츄르 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "굿프렌드 참치게살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈 닭고기맛",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈 덴탈케어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "긴노스푼 후레이크",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 GO 내츄럴",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 어덜트 피쉬",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 프레쉬 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나인케어 체중조절",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "냥프레쉬 버킨샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "너를 위한 디저트",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네꼬모리 두부국시",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네꼬모리 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네네린도 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네츄럴키티 고등어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트로초이스 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터팰리스 마스터",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터팰리스 주황색",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬 오리지널",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도 드링크",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도 라이트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도 시니어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 가는입자",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 카사로마",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 가스트로",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 덴탈케어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 베이비캣",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 벵갈전용",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 페르시안",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 참치&연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 파테 치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "리리펫 북어 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "리틀제주 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 가자미",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 노른자",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 닭안심",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 열빙어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마이베프 마이슐랭",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "메이드 바이 집사",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모래혁명 가는입자",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모찌네 모래 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 송어/헤어볼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미스터리 오더킬러",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미야모아 드링크캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "반려미식 통살트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "베스트브리드 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보레알 치킨&연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타크래프트 져키",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타크래프트 캣얌",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "샌드레시피 오도어",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "샌드레시피 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "샌드레시피 클럼프",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉬바 주식 파우치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉬바 참치 간식캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스쿠핑스 가는입자",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아보덤 연어&치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 정어리",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 주식캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오리젠 피트앤트림",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오쏘트루 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오코플러스 응고형",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "요세라캣 마리네스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 코어 새우",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 파테 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "유니참 데오토일렛",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 마구로쥬레",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 야키사사미",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸 그레인프리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정글키친 동결건조",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정글키친 치킨앤본",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "제주 강씨네 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 네추럴 라인",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 미니트릿 닭",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 산양유 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 산양유 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 산양유 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 소피캣 멸치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 소피캣 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 전제품 라인",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 츄르 산양유",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 츄르 옐로우",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 츄르 화이트",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 트릿 산양유",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽 고등어&양",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽 에어드라이",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣만두 스프링클스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣만두 연어 치킨",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣츠미어 냥이샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣토리 벤토나이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "코스트코 커클랜드",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "키스카미 오리지널",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "테비토퍼 두부두부",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "토르토르 통살간식",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "파미나 레날 습식",
+   "categories": [
+    "습식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "팬시피스트 퓨리얼",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 참치&새우",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 참치&연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 참치&치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 치킨&연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 파인다이닝",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페피테일 참글루칸",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페피테일 참페스토",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페피테일 참포스트",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펠리스샌드 마스터",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫띵 블랙홀 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫프리카 치킨트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포르자10 코리아",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포우장 옥수수모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 덴탈라이프",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 리브클리어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 팬시피스트",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로젝트21 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로젝트21 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프린세스 프리미엄",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "플라그오프 바이트",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "하림 더리얼 로우",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "황제트릿 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "후새 스테럴라이즈",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 7+ 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 7+ 헤어볼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 k/d 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 바이옴 gi",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 신부전 레날",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "고집츄르 산양유",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈 닭고기",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈 이빨껌",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈 필라인",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "금관캔 닭가슴살",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "꼬뜨샌드 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 그레인프리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나인케어 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴키티 통살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터팰리스 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터팰리스 샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터펠리스 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동원 뉴트리플랜",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "땡쓰트릿 고등어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도 피쉬",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 베이직",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 소프트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 플러스",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 12+",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 라이트",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 센서리",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 센서블",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 셀렉트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 어덜트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 웨이트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 인도어",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 슈레디드",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "리얼 퓨어 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 광어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 돼지",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 명태",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 오리",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 치킨",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마마캣 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마마캣 마마샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "매직카펫 클래식",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "메가파이브 사슴",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "메디펫 퓨리샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 레날 습식",
+   "categories": [
+    "습식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "몬지 송어 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 송어/레날",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "미라클샌드 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미아모아 드링크",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미우타임즈 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미츠보시 구루메",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바른모래 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바른펫 치킨트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바잇미 서플리츄",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바잇미 통살간식",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "밸리스 치카추르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "버터앤치즈 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보레알 돼지고기",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "블랙우드 어덜트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "블랙우드 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "샌드바이블 두부",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "샌드바이블 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "서울우유 펫밀크",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉬즈곤 먼지아웃",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "슈퍼조이풀 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스피루리나 덴탈",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처7 파테",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니쳐7 파테",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아르르 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아메리칸 솔루션",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아보덤 참치새우",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아이시아 야이즈",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아카나 패시피카",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐 치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "애기미 복어트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "어스본 홀리스틱",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에스클래스 블랙",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오리젠 가디언8",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오리젠 오리지널",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오리젠 캣앤키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오픈팜 흰살생선",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "요세라캣 네이처",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "요세라캣 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "월간스틱 대구맛",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웨루바 맥잭앤샘",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 캣 코어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰츠 어덜트 캣",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 가다랑어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 미니츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 야끼믹스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 차오츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸 다이어트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸 올라이프",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "제주 강씨네 닭",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 닭&산양유",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 오키로스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 츄르 레드",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 츄르 참돔",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 츄르 퍼플",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 호키&광어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "집사공감 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "촉촉트릿 열빙어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카루 연어&처키",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카루 치킨&크랩",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "칸타나 동결건조",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣 와일드 살몬",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣 와일드 튜나",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣만두 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "템테이션 헤어볼",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "팬시피스트 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 실꼬리돔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 치킨연어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 프리미엄",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 크랙두부",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펠라인 그리니즈",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫파더 치킨트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫플레이트 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포우장 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포우장 먼지안녕",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포우장 악취안녕",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 덴탈과자",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "퓨리나 파티믹스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 프로플랜",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨어네이쳐 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨어비타 lid",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "피쉬포캣 정어리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "필라인 닭고기맛",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "하루채움 가자미",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "하림 스틱 간식",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "헬로가토스 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "호랑이 두부모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 다이제스천",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 로스트치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 메타볼릭+",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "K9 동결건조",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "K9 램바이트",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "건강한펫 북어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "건강한펫 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "건강한펫 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고집츄르 대구",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고집츄르 사슴",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고집츄르 삼계",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고집츄르 연어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고집츄르 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "굿밸런스 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈 연어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈 치킨",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "근본 치킨텐더",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "긴노스푼 쥬레",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "긴노스푼 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "꼬뜨샌드 블랙",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나노입자 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나인케어 피부",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "냥신 탈취모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네모북어 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴로 캣앤키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터펠리 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬 벨벳",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동결건조 치킨",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "동해형씨 연어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "두카이츠 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 믹스",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 보스",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드 파인",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 랙돌",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 레날",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "로얄캐닌 키튼",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 피트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 고등어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마마샌드 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마이베프 쌩유",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "먀우먀우 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모래왕 장벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모래혁명 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모래혁명 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미스터리 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미아모아 습식",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미아모아 파테",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바다고양이식탁",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바른모래 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉐지애 과일맛",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스텔라앤츄이스",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시니멀 캣스프",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쓰라이브 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아르르 미니캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아보덤 내추럴",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아보덤 웨루바",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아이시아 흑관",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아임베키 비프",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "어스본 씨캐치",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에버크린 UN",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에버크린 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오라뮨 스틱형",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오리젠 6피쉬",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오리젠 소고기",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오리젠 양고기",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오스테크 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오픈팜 칠면조",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "요세라캣 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바 트윈컵",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정글키친 오리",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정글키친 토끼",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 미니트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 삼계탕전",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 오리탕전",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽 고등어",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "집츄르 별자리",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "챠오챠오 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "촉촉트릿 복어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "촉촉트릿 치킨",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "츄통령 바삭츄",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카니러브 토끼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카르나4 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카르나4 피쉬",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카사바랑 캣츠",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카카토 습식캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카토빗 드링크",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "커들스 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "코스믹캣 무향",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "크리스피 키스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "템테이션 연어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 간식캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼팩트 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 산양유",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "편백정원 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "풉 라이트샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨어비타 연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨어비타 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프롬한라 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프롬한라 전복",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프롬한라 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프리미엄 로얄",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "하림 하루양갱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "하운드앤가토스",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "후새 다이어트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 메타볼릭",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 바이옴캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 유리너리",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "60일 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "가필드 그린",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "가필드 보라",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "가필드 초록",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "강집사 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "건조 열빙어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고양이비스캣",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "공공일 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "금관캔 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 시니어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 어덜트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 프레쉬",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴발란스",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "노른자 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터힐메딕스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캐닌 샴",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 사시",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈 참치",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로투스 돼지",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로투스 연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로투스 치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로투스 터키",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마마캣 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마이도미넌트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모찌네 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "백사장 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "베스트브리드",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보니또 통살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보레알 송어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보레알 치킨",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "블랙우드 린",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타크래프트",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뽀로로 간식",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "사조 통조림",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "샌드넘버제로",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "순살닭가슴살",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스투키 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스페시픽 캣",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시그니처바이",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 가필드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 분홍색",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 오렌지",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 카사바",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아보덤 치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아임디퍼런트",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에이스 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에이티바이오",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "엔토벳 곤충",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "와이즐리츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 코어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스 헬시",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰츠 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰츠 헤어볼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "위시본(닭)",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정직한 간식",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "정직한 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 고등어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 릴리프",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 산양유",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 양미리",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 옐로우",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 흑염소",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽 돼지",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽 사슴",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽 치킨",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽 호키",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "촉촉 열빙어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카나간 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캐나디안샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캐츠랑 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣만두 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쿠쿳 닭오리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "클레버메이트",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "패스트 액팅",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼스트메이트",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 새우",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 연어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣 퓨레",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 벤토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 참치",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나 원캣",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로젝트21",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "하리노 키티",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "허레이 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "헤일로 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "호랑이 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "후새 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 11+",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 c/d",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 i/d",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 k/d",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 t/d",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 w/d",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 z/d",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "힐스 라이트",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 바이옴",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 시니어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 웨루바",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 인도어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 헤어볼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스메타볼릭",
+   "categories": [
+    "간식"
+   ],
+   "rx": true
+  },
+  {
+   "name": "ANF 캔",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우 GO",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "내추럴키티",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "누터스가든",
+   "categories": [
+    "사료",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴로 오리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뉴트리스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터페트라",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터펠리스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "두부랑캐츠",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "런치보니또",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "레오나르도",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "리얼네이처",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마도로스펫",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 레날",
+   "categories": [
+    "사료"
+   ],
+   "rx": true
+  },
+  {
+   "name": "몬지 송어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지 토끼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미우타임즈",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "베로베로젤",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "별자리스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "별자리츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "브릿 케어",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타캣스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "생활공작소",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉐바 듀오",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉐바 멜티",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "스크럼블즈",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "시바 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 보라",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 초록",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 퍼플",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "써유 핑크",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쓰라이브캣",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아투 연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아투 오리",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아투 치킨",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "알모네이쳐",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "야옹이맘마",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에보 청어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에스클래스",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에프디트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오더버스터",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰썸 곤충",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰츠 연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰츠 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 추르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 퍼플",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공 호키",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽 양",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "진짜 육포",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카루 스튜",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카츠 모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쿠쿳 연어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퀸오브샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "키티스마일",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "테라펠리스",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "토우 송어",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "팬시피스트",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "팰리스샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨어네이처",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로네이처",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "플라그오프",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 7+",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스 키튼",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "건강한펫",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "고집츄르",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "골드로니",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "굿밸런스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "굿프랜드",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "그리니즈",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "긴노스푼",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "깔끔보스",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "꼬뜨샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "꽁냥이네",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "냥이꾹꾹",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "냥프레쉬",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네모북어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터링크",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "닥터바이",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "단단보스",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "더스트몬",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "덴탈트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "덴티치카",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "디그앤롤",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로마샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "ㅁㅊ모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "마이베프",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "매직카펫",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "먼지제로",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "메그펫츠",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모래도감",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모래박사",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "모래혁명",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "묘한매력",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "묘한스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미스터리",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미아모아",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미요야미",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "바른모래",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "블랙우드",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "비타스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "뽀시래기",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "순백스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쓰라이브",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아딜론덱",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아리샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아스카타",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아이시아",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "애니몬다",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에버드림",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "에버크린",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오스테크",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "월간스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "위스카스",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "유로리터",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "집사공감",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "챠오챠오",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "촉촉트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "치킨텐더",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카니러브",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣크다스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣팡샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "컨트리캣",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "코스믹캣",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "타이티캣",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "테비로퍼",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "템테이션",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼스샌드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "편백정원",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨어비타",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프락티캣",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "프로가토",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "플래티넘",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "피그스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "피쉬포켓",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "하루양갱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "헬씨미요",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "황금푸딩",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "황제트릿",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "휴애니스",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "가필드",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "공공일",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "냥스푼",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로얄캣",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로우즈",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "로투스",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "벅시캣",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "보레알",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉐지애",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉨잇캣",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아르르",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아보덤",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아카나",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아타스",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "엔토벳",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "열빙어",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오더락",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오더캅",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오리젠",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "오픈팜",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "옵티마",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웨루바",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰니스",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "유니참",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이나바",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이즈칸",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "지위픽",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "츄르비",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "츄타민",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카나간",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카토빗",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캐니대",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣만두",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣스틱",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣토리",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "트윈컵",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "티키캣",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "파미나",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퍼시캣",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "페스룸",
+   "categories": [
+    "모래",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫시모",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "포캣츄",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "퓨리나",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "하리노",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "헤일로",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "게더",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "굿츄",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "나우",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "냥쌤",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "네코",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "르챗",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "먀오",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "몬지",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "미소",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "베츠",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "쉬바",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "아투",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "웰츠",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "이뮨",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "조공",
+   "categories": [
+    "습식",
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "카루",
+   "categories": [
+    "습식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣즐",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "캣쵸",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "탐사",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "토우",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "파인",
+   "categories": [
+    "모래"
+   ],
+   "rx": false
+  },
+  {
+   "name": "펫윈",
+   "categories": [
+    "간식"
+   ],
+   "rx": false
+  },
+  {
+   "name": "피모",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "후새",
+   "categories": [
+    "사료"
+   ],
+   "rx": false
+  },
+  {
+   "name": "힐스",
+   "categories": [
+    "사료",
+    "습식"
+   ],
+   "rx": false
+  }
+ ]
+}

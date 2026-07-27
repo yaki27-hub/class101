@@ -10,7 +10,8 @@
     "design:lint": "design.md lint DESIGN.md --format text",
     "design:export": "design.md export DESIGN.md --format css-tailwind",
     "kb:index": "node scripts/build-kb-index.mjs",
-    "test:redflags": "node scripts/test-redflags.mjs"
+    "test:redflags": "node scripts/test-redflags.mjs",
+    "products:index": "node scripts/build-product-index.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.7",
