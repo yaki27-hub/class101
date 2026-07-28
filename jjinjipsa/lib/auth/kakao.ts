@@ -53,3 +53,84 @@ export async function signInWithKakao(redirectTo?: string): Promise<KakaoSignInR
   if (error) return { ok: false, message: error.message };
   return { ok: true, mode: "signed-in" };
 }
+
+/* ────────────────────────────────────────────────────────────────
+ * OAuth 콜백 에러 처리
+ *
+ * linkIdentity는 호출 즉시 카카오로 리다이렉트되기 때문에, 링크 실패는
+ * 위 함수의 반환값이 아니라 **돌아온 URL에 실려서** 온다.
+ *   /?error=server_error&error_code=identity_already_exists&...
+ * 그래서 폴백을 함수 안에서만 처리하면 영영 실행되지 않는다 — 앱이 뜰 때
+ * URL을 확인해 여기서 폴백을 태워야 한다.
+ * ──────────────────────────────────────────────────────────────── */
+
+const RETRY_FLAG = "jjinjipsa:kakaoSignInRetried";
+
+export interface OAuthCallbackError {
+  code: string;
+  description: string;
+}
+
+/** 현재 URL(쿼리·해시 양쪽)에서 OAuth 에러를 읽는다 */
+export function readOAuthError(): OAuthCallbackError | null {
+  if (typeof window === "undefined") return null;
+  const q = new URLSearchParams(window.location.search);
+  const h = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const code = q.get("error_code") ?? h.get("error_code");
+  if (!code) return null;
+  return {
+    code,
+    description: q.get("error_description") ?? h.get("error_description") ?? "",
+  };
+}
+
+/** 주소창에서 에러 파라미터를 지운다 (새로고침할 때마다 다시 뜨지 않게) */
+export function clearOAuthErrorFromUrl(): void {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  for (const k of ["error", "error_code", "error_description", "sb"]) {
+    url.searchParams.delete(k);
+  }
+  url.hash = "";
+  window.history.replaceState({}, "", url.toString());
+}
+
+/**
+ * 앱 진입 시 호출. 링크 실패로 돌아온 경우 **한 번만** 일반 로그인으로 재시도한다.
+ *
+ * `identity_already_exists` = 이 카카오 계정이 이미 다른(예전) 계정에 붙어 있다는 뜻.
+ * 이 경우 승격은 불가하므로 그 계정으로 그냥 로그인시켜 준다.
+ *
+ * @returns 재시도를 걸었으면 true (곧 리다이렉트된다)
+ */
+export async function recoverFromOAuthError(): Promise<boolean> {
+  const err = readOAuthError();
+  if (!err) return false;
+
+  clearOAuthErrorFromUrl();
+
+  const alreadyLinked = isAlreadyLinked(err.code) || isAlreadyLinked(err.description);
+  const retried = sessionStorage.getItem(RETRY_FLAG) === "1";
+
+  if (!alreadyLinked || retried) {
+    // 다른 에러이거나 이미 한 번 재시도했으면 루프를 만들지 않는다
+    console.warn("[auth] 카카오 로그인 실패", err.code, err.description);
+    return false;
+  }
+
+  sessionStorage.setItem(RETRY_FLAG, "1");
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "kakao",
+    options: { redirectTo: window.location.origin },
+  });
+  if (error) {
+    console.warn("[auth] 폴백 로그인도 실패", error.message);
+    return false;
+  }
+  return true;
+}
+
+/** 로그인에 성공했으면 재시도 플래그를 비운다 */
+export function clearSignInRetryFlag(): void {
+  if (typeof window !== "undefined") sessionStorage.removeItem(RETRY_FLAG);
+}

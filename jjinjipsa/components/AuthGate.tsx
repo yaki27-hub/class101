@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { ALLOW_GUEST, supabase } from "@/lib/supabase";
 import { USE_SUPABASE } from "@/lib/storage";
 import { migrateLocalToServer } from "@/lib/storage/migrateLocal";
+import { clearSignInRetryFlag, recoverFromOAuthError } from "@/lib/auth/kakao";
 
 /**
  * 임시(D-07): 카카오 로그인 검증이 끝날 때까지 게이트를 기본 OFF.
@@ -36,8 +37,18 @@ export default function AuthGate({
       (window.location.hash.includes("access_token") ||
         new URLSearchParams(window.location.search).has("code"));
     if (inOAuthCallback) return;
-    void supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) void supabase.auth.signInAnonymously().catch(() => {});
+
+    // 링크 실패로 돌아온 경우 먼저 복구한다.
+    // (linkIdentity는 바로 리다이렉트되므로 실패가 URL로 온다 — lib/auth/kakao 참고)
+    void recoverFromOAuthError().then((retrying) => {
+      if (retrying) return; // 곧 카카오로 다시 넘어간다
+      void supabase.auth.getSession().then(({ data }) => {
+        if (!data.session) void supabase.auth.signInAnonymously().catch(() => {});
+        // 정식 계정으로 들어왔으면 재시도 플래그를 비워 다음 로그인에 영향 없게 한다
+        if (data.session?.user && data.session.user.is_anonymous === false) {
+          clearSignInRetryFlag();
+        }
+      });
     });
   }, []);
 
