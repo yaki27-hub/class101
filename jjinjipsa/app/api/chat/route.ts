@@ -31,6 +31,36 @@ const DAILY_LIMIT = Number(process.env.DAILY_CHAT_LIMIT ?? "10");
 const IP_DAILY_LIMIT = Number(process.env.IP_DAILY_CHAT_LIMIT ?? "40");
 const IP_HASH_SALT = process.env.IP_HASH_SALT ?? "jjinjipsa-ip";
 
+/**
+ * 해시 전에 주소를 네트워크 단위로 정규화한다.
+ *
+ * IPv6는 프라이버시 확장 때문에 뒷부분(인터페이스 ID)이 수시로 바뀐다.
+ * 전체 주소를 그대로 해시하면 같은 사람이 매번 다른 키가 되어 상한이 무의미해진다.
+ * 그래서 **앞 4그룹(/64 프리픽스)만** 쓴다 — 같은 회선이면 유지되는 부분이다.
+ * IPv4는 그대로 쓴다(이미 안정적이고, 더 자르면 남의 트래픽까지 묶인다).
+ */
+function normalizeIp(raw: string): string {
+  const ip = raw.trim();
+
+  // IPv4-mapped IPv6 (::ffff:1.2.3.4) → 뒤의 IPv4를 쓴다
+  if (ip.includes(":") && ip.includes(".")) {
+    const v4 = ip.slice(ip.lastIndexOf(":") + 1);
+    return v4;
+  }
+  if (!ip.includes(":")) return ip; // IPv4
+
+  // IPv6 — 압축(::)을 펼친 뒤 앞 4그룹(/64)만 남긴다
+  const [head, tail] = ip.split("::");
+  const headParts = head ? head.split(":").filter(Boolean) : [];
+  const tailParts = tail ? tail.split(":").filter(Boolean) : [];
+  const missing = 8 - headParts.length - tailParts.length;
+  const full =
+    ip.includes("::") && missing > 0
+      ? [...headParts, ...Array(missing).fill("0"), ...tailParts]
+      : ip.split(":");
+  return `${full.slice(0, 4).join(":")}::/64`;
+}
+
 /** 원본 IP는 저장하지 않는다 — 솔트를 섞어 해시한 값만 넘긴다 */
 async function hashIp(req: Request): Promise<string | null> {
   const raw =
@@ -39,7 +69,7 @@ async function hashIp(req: Request): Promise<string | null> {
   if (!raw) return null;
   const buf = await crypto.subtle.digest(
     "SHA-256",
-    new TextEncoder().encode(`${IP_HASH_SALT}:${raw}`),
+    new TextEncoder().encode(`${IP_HASH_SALT}:${normalizeIp(raw)}`),
   );
   return Array.from(new Uint8Array(buf))
     .map((b) => b.toString(16).padStart(2, "0"))
