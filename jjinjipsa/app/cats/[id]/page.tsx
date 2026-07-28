@@ -1,34 +1,24 @@
 "use client";
 
-/* 우리 고양이 상세 대시보드 — 히어로·오늘 상태·생애시계·기록·CTA (건강점수 제거, 오늘 상태 연동) */
+/*
+ * 우리 고양이 상세 — **그 아이 고유 정보만** 소유한다 (docs/정보구조.md 2단계).
+ *
+ * 전에는 오늘 상태·건강 카드·최근 증상을 그대로 안고 있어서 홈·기록 탭을
+ * 통째로 복제했다. 지금은 히어로·생애 시계·메모만 두고, 나머지는
+ * **한 줄 요약 + 소유 화면 링크**로 넘긴다.
+ */
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
 import { setSelectedCatId } from "@/lib/selectedCat";
 import { useTodayStatus } from "@/hooks/useTodayStatus";
-import DailyStatusCard from "@/components/home/DailyStatusCard";
-import HealthCard from "@/components/HealthCard";
 import BottomSheet from "@/components/BottomSheet";
 import BackButton from "@/components/BackButton";
-import { loadHealthNote, saveHealthNote, buildHealthText } from "@/lib/healthNote";
+import { loadHealthNote, saveHealthNote } from "@/lib/healthNote";
 import { IconCat, IconChat, IconPencil, IconTrash } from "@/components/icons";
-
-function dataURLToFile(dataUrl: string, filename: string): File {
-  const [head, b64] = dataUrl.split(",");
-  const mime = /:(.*?);/.exec(head)?.[1] ?? "image/png";
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-  return new File([arr], filename, { type: mime });
-}
-
-function todayLabel(): string {
-  const d = new Date();
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-}
 
 const SEGMENT_COLORS: Record<string, string> = {
   kitten: "bg-mint",
@@ -48,9 +38,8 @@ export default function CatDetailPage() {
   const [noteOpen, setNoteOpen] = useState(false);
   const [noteDraft, setNoteDraft] = useState("");
   const [toast, setToast] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const { record, summary, setStatus } = useTodayStatus(id);
+  // 오늘 상태는 홈이 소유한다 — 여기서는 한 줄 요약만 쓴다
+  const { summary } = useTodayStatus(id);
 
   useEffect(() => {
     void storage.getCat(id).then((c) => {
@@ -73,48 +62,6 @@ export default function CatDetailPage() {
     showToast("메모를 저장했어요");
   }
 
-  async function shareText() {
-    if (!cat) return;
-    const text = buildHealthText(cat, note, record, logs);
-    try {
-      if (navigator.share) await navigator.share({ title: `${cat.name} 건강 카드`, text });
-      else {
-        await navigator.clipboard.writeText(text);
-        showToast("요약을 복사했어요");
-      }
-    } catch {
-      /* 사용자 취소 */
-    }
-  }
-
-  async function shareImage() {
-    const node = cardRef.current;
-    if (!node || !cat) return;
-    setBusy(true);
-    try {
-      const { toPng } = await import("html-to-image");
-      const dataUrl = await toPng(node, {
-        pixelRatio: 2,
-        backgroundColor: "#ffffff",
-        cacheBust: true,
-      });
-      const file = dataURLToFile(dataUrl, `${cat.name}_건강카드.png`);
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: `${cat.name} 건강 카드` });
-      } else {
-        const a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = file.name;
-        a.click();
-        showToast("이미지를 저장했어요");
-      }
-    } catch {
-      showToast("이미지 생성에 실패했어요");
-    } finally {
-      setBusy(false);
-    }
-  }
-
   async function deleteCat() {
     if (!cat) return;
     await storage.deleteCat(cat.id);
@@ -133,6 +80,14 @@ export default function CatDetailPage() {
     );
 
   const age = getCatAge(cat.birthDate);
+  const latestLog = logs.length > 0 ? logs[logs.length - 1] : null;
+  // 오늘 상태를 한 줄로 — 살펴볼 항목이 있으면 그것부터 알린다
+  const todaySummaryText =
+    summary.abnormalItems.length > 0
+      ? `${summary.abnormalItems.map((i) => i.label).join(" · ")} 살펴보기`
+      : summary.recordedCount > 0
+        ? `오늘 ${summary.recordedCount}/${summary.totalCount}개 기록했어요`
+        : "아직 오늘 기록이 없어요";
 
   return (
     <main className="flex-1 space-y-4 px-5 pt-8 pb-24">
@@ -177,58 +132,6 @@ export default function CatDetailPage() {
         </div>
       </section>
 
-      {/* 오늘 상태 (홈과 동일 데이터 연동) */}
-      <DailyStatusCard
-        cat={cat}
-        record={record}
-        summary={summary}
-        onSet={setStatus}
-      />
-
-      {/* 건강 카드 — 병원·펫시터 공유 */}
-      <section className="space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <div>
-            <p className="display text-[18px] text-secondary">건강 카드</p>
-            <p className="text-[12px] text-muted">병원·펫시터에게 한 장으로 공유해요</p>
-          </div>
-          <button
-            onClick={() => {
-              setNoteDraft(note);
-              setNoteOpen(true);
-            }}
-            className="flex min-h-11 items-center gap-1 rounded-button bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
-          >
-            <IconPencil size={13} /> 메모
-          </button>
-        </div>
-
-        <HealthCard
-          ref={cardRef}
-          cat={cat}
-          note={note}
-          record={record}
-          logs={logs}
-          dateStr={todayLabel()}
-        />
-
-        <div className="flex gap-2">
-          <button
-            onClick={() => void shareText()}
-            className="h-11 flex-1 rounded-button border border-hairline bg-white text-sm font-semibold text-secondary"
-          >
-            텍스트 공유
-          </button>
-          <button
-            onClick={() => void shareImage()}
-            disabled={busy}
-            className="h-11 flex-1 rounded-button bg-primary text-sm font-bold text-white disabled:opacity-60"
-          >
-            {busy ? "만드는 중…" : "이미지로 저장·공유"}
-          </button>
-        </div>
-      </section>
-
       {/* 생애 시계 */}
       <section className="rounded-card border border-hairline bg-white p-5">
         <p className="text-sm font-bold text-secondary">{cat.name}의 생애 시계</p>
@@ -268,50 +171,72 @@ export default function CatDetailPage() {
         </p>
       </section>
 
-      {/* 최근 증상 기록 */}
-      <section className="rounded-card bg-white p-5 border border-hairline">
+      {/* 오늘·기록 요약 — 소유는 홈/기록 탭. 여기서는 상태만 보여주고 넘긴다 */}
+      <section className="overflow-hidden rounded-card border border-hairline bg-white">
+        <Link
+          href="/"
+          className="flex min-h-[60px] items-center gap-3 border-b border-hairline px-5 py-3.5"
+        >
+          <span className="min-w-0 flex-1">
+            <span className="block text-[13px] font-bold text-secondary">오늘 상태</span>
+            <span className="mt-0.5 block truncate text-[12.5px] text-muted">
+              {todaySummaryText}
+            </span>
+          </span>
+          <span className="flex-none text-[12px] font-semibold text-primary-deep">
+            홈에서 기록 ›
+          </span>
+        </Link>
+
+        <Link
+          href="/records"
+          className="flex min-h-[60px] items-center gap-3 border-b border-hairline px-5 py-3.5"
+        >
+          <span className="min-w-0 flex-1">
+            <span className="block text-[13px] font-bold text-secondary">
+              증상 기록{logs.length > 0 ? ` · ${logs.length}건` : ""}
+            </span>
+            <span className="mt-0.5 block truncate text-[12.5px] text-muted">
+              {latestLog
+                ? `${latestLog.occurredAt.slice(5, 10).replace("-", "/")} ${latestLog.summary}`
+                : "아직 기록이 없어요"}
+            </span>
+          </span>
+          <span className="flex-none text-[12px] font-semibold text-primary-deep">
+            전체 보기 ›
+          </span>
+        </Link>
+
+        <Link href="/records" className="flex min-h-[60px] items-center gap-3 px-5 py-3.5">
+          <span className="min-w-0 flex-1">
+            <span className="block text-[13px] font-bold text-secondary">건강 카드</span>
+            <span className="mt-0.5 block truncate text-[12.5px] text-muted">
+              병원·펫시터에게 한 장으로 공유해요
+            </span>
+          </span>
+          <span className="flex-none text-[12px] font-semibold text-primary-deep">
+            공유하기 ›
+          </span>
+        </Link>
+      </section>
+
+      {/* 꼭 기억할 것 — 이 아이 고유 정보라 상세가 소유한다 */}
+      <section className="rounded-card border border-hairline bg-white p-5">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-bold text-secondary">
-            최근 증상 기록{logs.length > 0 ? ` · ${logs.length}건` : ""}
-          </p>
-          <Link
-            href={`/cats/${cat.id}/log`}
-            className="-my-2 -mr-2 flex min-h-11 items-center px-2 text-[12px] font-semibold text-primary-deep"
+          <p className="text-sm font-bold text-secondary">꼭 기억할 것</p>
+          <button
+            onClick={() => {
+              setNoteDraft(note);
+              setNoteOpen(true);
+            }}
+            className="-my-2 -mr-2 flex min-h-11 items-center gap-1 px-2 text-[12px] font-semibold text-primary-deep"
           >
-            + 기록하기
-          </Link>
+            <IconPencil size={13} /> {note ? "수정" : "추가"}
+          </button>
         </div>
-        {logs.length === 0 ? (
-          <p className="mt-3 rounded-input bg-surface-soft/70 py-6 text-center text-[13px] text-muted">
-            아직 기록이 없어요. 챗봇 대화나 증상 기록이 여기에 모여요.
-          </p>
-        ) : (
-          <ul className="mt-3 space-y-2.5">
-            {[...logs]
-              .reverse()
-              .slice(0, 4)
-              .map((l) => (
-                <li key={l.id} className="flex items-start gap-2.5">
-                  <span className="mt-0.5 text-[11px] font-medium whitespace-nowrap text-muted">
-                    {l.occurredAt.slice(5, 10).replace("-", "/")}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="flex flex-wrap gap-1">
-                      {l.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-full bg-soft-pink px-2 py-0.5 text-[11px] font-semibold text-secondary"
-                        >
-                          #{t}
-                        </span>
-                      ))}
-                    </p>
-                    <p className="mt-0.5 truncate text-[12px] text-body">{l.summary}</p>
-                  </div>
-                </li>
-              ))}
-          </ul>
-        )}
+        <p className="mt-2 text-[13px] leading-relaxed whitespace-pre-wrap text-body">
+          {note || "알레르기, 복용 중인 약, 병원에 꼭 알려야 할 것을 적어두세요."}
+        </p>
       </section>
 
       {/* CTA */}
