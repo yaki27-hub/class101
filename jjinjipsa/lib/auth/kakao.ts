@@ -10,6 +10,7 @@
  */
 
 import { supabase } from "@/lib/supabase";
+import { storage } from "@/lib/storage";
 
 export type KakaoSignInResult =
   | { ok: true; mode: "linked" | "signed-in" }
@@ -37,7 +38,29 @@ export async function signInWithKakao(redirectTo?: string): Promise<KakaoSignInR
   const { data } = await supabase.auth.getUser();
   const isAnonymous = data.user?.is_anonymous === true;
 
+  /*
+   * 승격(linkIdentity)은 **지킬 기록이 있을 때만** 시도한다.
+   * 이 카카오 계정이 이미 다른 계정에 붙어 있으면 승격은 실패하는데,
+   * 지킬 게 없다면 그 실패를 감수할 이유가 없다 — 일반 로그인이 항상 통한다.
+   */
+  let hasDataToPreserve = false;
   if (isAnonymous) {
+    try {
+      hasDataToPreserve = (await storage.listCats()).length > 0;
+    } catch {
+      // 조회 실패 시엔 안전하게 '있다'로 보고 승격을 시도한다
+      hasDataToPreserve = true;
+    }
+  }
+
+  const skipLink =
+    !isAnonymous ||
+    !hasDataToPreserve ||
+    // 이 브라우저에서 이미 "링크 불가"로 확인됐으면 또 시도하지 않는다.
+    // 안 그러면 버튼을 누를 때마다 linkIdentity → 같은 에러 → 무한 반복이 된다.
+    linkKnownUnavailable();
+
+  if (!skipLink) {
     // 익명 → 카카오 승격. uid가 유지돼 기존 기록이 그대로 따라온다.
     const { error } = await supabase.auth.linkIdentity({ provider: "kakao", options });
     if (!error) return { ok: true, mode: "linked" };
@@ -47,6 +70,7 @@ export async function signInWithKakao(redirectTo?: string): Promise<KakaoSignInR
     if (!isAlreadyLinked(error.message)) {
       return { ok: false, message: error.message };
     }
+    markLinkUnavailable(); // 다음부터는 시도조차 하지 않는다
   }
 
   const { error } = await supabase.auth.signInWithOAuth({ provider: "kakao", options });
@@ -65,6 +89,21 @@ export async function signInWithKakao(redirectTo?: string): Promise<KakaoSignInR
  * ──────────────────────────────────────────────────────────────── */
 
 const RETRY_FLAG = "jjinjipsa:kakaoSignInRetried";
+/**
+ * 이 브라우저에서 linkIdentity가 불가능하다고 확인된 상태.
+ * (카카오 신원이 이미 다른 계정에 붙어 있음 — 아무리 눌러도 승격은 안 된다)
+ * sessionStorage가 아니라 localStorage에 둬서 탭을 닫았다 열어도 유지한다.
+ */
+const LINK_UNAVAILABLE = "jjinjipsa:kakaoLinkUnavailable";
+
+export function linkKnownUnavailable(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(LINK_UNAVAILABLE) === "1";
+}
+
+function markLinkUnavailable(): void {
+  if (typeof window !== "undefined") localStorage.setItem(LINK_UNAVAILABLE, "1");
+}
 
 export interface OAuthCallbackError {
   code: string;
@@ -110,10 +149,15 @@ export async function recoverFromOAuthError(): Promise<boolean> {
   clearOAuthErrorFromUrl();
 
   const alreadyLinked = isAlreadyLinked(err.code) || isAlreadyLinked(err.description);
-  const retried = sessionStorage.getItem(RETRY_FLAG) === "1";
 
+  // 링크가 불가하다는 걸 알았으니 기록해 둔다.
+  // 이후에는 버튼을 눌러도 linkIdentity를 건너뛰고 바로 일반 로그인으로 간다.
+  if (alreadyLinked) markLinkUnavailable();
+
+  const retried = sessionStorage.getItem(RETRY_FLAG) === "1";
   if (!alreadyLinked || retried) {
-    // 다른 에러이거나 이미 한 번 재시도했으면 루프를 만들지 않는다
+    // 다른 에러이거나 이미 한 번 자동 재시도했으면 여기서 멈춘다.
+    // (수동으로 버튼을 누르면 위 플래그 덕분에 일반 로그인으로 정상 진행된다)
     console.warn("[auth] 카카오 로그인 실패", err.code, err.description);
     return false;
   }
@@ -130,7 +174,7 @@ export async function recoverFromOAuthError(): Promise<boolean> {
   return true;
 }
 
-/** 로그인에 성공했으면 재시도 플래그를 비운다 */
+/** 로그인에 성공했으면 재시도 플래그를 비운다 (링크 불가 표시는 사실이므로 유지) */
 export function clearSignInRetryFlag(): void {
   if (typeof window !== "undefined") sessionStorage.removeItem(RETRY_FLAG);
 }
