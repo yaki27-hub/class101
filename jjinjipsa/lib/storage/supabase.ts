@@ -13,6 +13,7 @@ import type {
   Gender,
   SymptomLog,
   TraitAnswer,
+  WeightLog,
 } from "./types";
 
 async function uid(): Promise<string> {
@@ -86,6 +87,28 @@ export class SupabaseStorageAdapter implements StorageAdapter {
       id: a.id, cat_id: a.catId, question_key: a.questionKey,
       answer: a.answer, answered_on: a.answeredOn,
     });
+    if (error) throw error;
+  }
+
+  async listWeights(catId: string): Promise<WeightLog[]> {
+    const { data, error } = await supabase
+      .from("weight_logs").select("*").eq("cat_id", catId).order("measured_at");
+    if (error) throw error;
+    return (data ?? []).map((r) => ({
+      id: r.id, catId: r.cat_id, weightKg: Number(r.weight_kg),
+      measuredAt: r.measured_at, createdAt: r.created_at,
+    }));
+  }
+
+  async addWeight(w: WeightLog): Promise<void> {
+    const { error } = await supabase.from("weight_logs").insert({
+      id: w.id, cat_id: w.catId, weight_kg: w.weightKg, measured_at: w.measuredAt,
+    });
+    if (error) throw error;
+  }
+
+  async deleteWeight(_catId: string, id: string): Promise<void> {
+    const { error } = await supabase.from("weight_logs").delete().eq("id", id);
     if (error) throw error;
   }
 

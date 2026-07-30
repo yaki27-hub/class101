@@ -3,6 +3,7 @@
  *   jjinjipsa:cats                  Cat[]
  *   jjinjipsa:traits:{catId}        TraitAnswer[]
  *   jjinjipsa:symptoms:{catId}      SymptomLog[]
+ *   jjinjipsa:weights:{catId}       WeightLog[]
  *   jjinjipsa:chats:{catId}         ChatSession[]
  *   jjinjipsa:chatmsgs:{sessionId}  ChatMessage[]
  * SSR에서는 storage가 없으므로 빈 값으로 동작한다 (클라이언트에서만 실제 저장).
@@ -15,6 +16,7 @@ import type {
   ChatSession,
   SymptomLog,
   TraitAnswer,
+  WeightLog,
 } from "./types";
 
 const NS = "jjinjipsa";
@@ -71,6 +73,23 @@ export class LocalStorageAdapter implements StorageAdapter {
     const rows = await this.listTraits(answer.catId);
     rows.push(answer);
     write(`${NS}:traits:${answer.catId}`, rows);
+  }
+
+  async listWeights(catId: string): Promise<WeightLog[]> {
+    return read<WeightLog>(`${NS}:weights:${catId}`);
+  }
+
+  async addWeight(log: WeightLog): Promise<void> {
+    const rows = await this.listWeights(log.catId);
+    rows.push(log);
+    write(`${NS}:weights:${log.catId}`, rows);
+  }
+
+  async deleteWeight(catId: string, id: string): Promise<void> {
+    write(
+      `${NS}:weights:${catId}`,
+      (await this.listWeights(catId)).filter((w) => w.id !== id),
+    );
   }
 
   async listSymptoms(catId: string): Promise<SymptomLog[]> {

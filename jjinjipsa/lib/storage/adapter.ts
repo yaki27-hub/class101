@@ -10,6 +10,7 @@ import type {
   ChatMessage,
   ChatSession,
   SymptomLog,
+  WeightLog,
   TraitAnswer,
 } from "./types";
 
@@ -24,6 +25,11 @@ export interface StorageAdapter {
   // 오늘의 체크 (F-15)
   listTraits(catId: string): Promise<TraitAnswer[]>;
   addTrait(answer: TraitAnswer): Promise<void>;
+
+  // 체중 기록 (추이·감소 감지)
+  listWeights(catId: string): Promise<WeightLog[]>;
+  addWeight(log: WeightLog): Promise<void>;
+  deleteWeight(catId: string, id: string): Promise<void>;
 
   // 증상 기록 (F-05)
   listSymptoms(catId: string): Promise<SymptomLog[]>;

@@ -46,6 +46,16 @@ export interface TraitAnswer {
 }
 
 /** 증상 기록(F-05) — 챗봇 히스토리 대조의 원천 */
+export interface WeightLog {
+  id: string;
+  catId: string;
+  /** 잰 체중 (kg) */
+  weightKg: number;
+  /** 잰 날짜 (ISO date, YYYY-MM-DD) */
+  measuredAt: string;
+  createdAt: string;
+}
+
 export interface SymptomLog {
   id: string;
   catId: string;

@@ -17,6 +17,7 @@ import { setSelectedCatId } from "@/lib/selectedCat";
 import { useTodayStatus } from "@/hooks/useTodayStatus";
 import BottomSheet from "@/components/BottomSheet";
 import BackButton from "@/components/BackButton";
+import WeightSection from "@/components/WeightSection";
 import { loadHealthNote, saveHealthNote } from "@/lib/healthNote";
 import { IconCat, IconChat, IconPencil, IconTrash } from "@/components/icons";
 
@@ -170,6 +171,12 @@ export default function CatDetailPage() {
           {age.stageMessage}
         </p>
       </section>
+
+      {/*
+        체중 추이 — 생애 시계와 같은 '그 아이의 시간축' 정보라 상세가 소유한다.
+        홈·기록 탭에는 두지 않는다 (docs/정보구조.md §3-1).
+      */}
+      <WeightSection cat={cat} onCatChange={setCat} />
 
       {/*
         오늘·기록 요약 — 소유는 홈/기록 탭. 여기서는 상태만 보여주고 넘긴다.
