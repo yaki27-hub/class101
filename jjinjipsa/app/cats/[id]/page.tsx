@@ -171,7 +171,11 @@ export default function CatDetailPage() {
         </p>
       </section>
 
-      {/* 오늘·기록 요약 — 소유는 홈/기록 탭. 여기서는 상태만 보여주고 넘긴다 */}
+      {/*
+        오늘·기록 요약 — 소유는 홈/기록 탭. 여기서는 상태만 보여주고 넘긴다.
+        건강 카드는 따로 줄을 두지 않는다 — 기록 탭의 첫 섹션이라 도착하면 바로 보이고,
+        같은 곳으로 가는 링크를 두 줄 두면 그 자체가 새로운 중복이 된다.
+      */}
       <section className="overflow-hidden rounded-card border border-hairline bg-white">
         <Link
           href="/"
@@ -188,13 +192,10 @@ export default function CatDetailPage() {
           </span>
         </Link>
 
-        <Link
-          href="/records"
-          className="flex min-h-[60px] items-center gap-3 border-b border-hairline px-5 py-3.5"
-        >
+        <Link href="/records" className="flex min-h-[60px] items-center gap-3 px-5 py-3.5">
           <span className="min-w-0 flex-1">
             <span className="block text-[13px] font-bold text-secondary">
-              증상 기록{logs.length > 0 ? ` · ${logs.length}건` : ""}
+              기록{logs.length > 0 ? ` · ${logs.length}건` : ""}
             </span>
             <span className="mt-0.5 block truncate text-[12.5px] text-muted">
               {latestLog
@@ -207,17 +208,6 @@ export default function CatDetailPage() {
           </span>
         </Link>
 
-        <Link href="/records" className="flex min-h-[60px] items-center gap-3 px-5 py-3.5">
-          <span className="min-w-0 flex-1">
-            <span className="block text-[13px] font-bold text-secondary">건강 카드</span>
-            <span className="mt-0.5 block truncate text-[12.5px] text-muted">
-              병원·펫시터에게 한 장으로 공유해요
-            </span>
-          </span>
-          <span className="flex-none text-[12px] font-semibold text-primary-deep">
-            공유하기 ›
-          </span>
-        </Link>
       </section>
 
       {/* 꼭 기억할 것 — 이 아이 고유 정보라 상세가 소유한다 */}
