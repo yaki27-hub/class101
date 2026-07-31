@@ -16,19 +16,11 @@ import CatAvatar from "@/components/CatAvatar";
 import BottomSheet from "@/components/BottomSheet";
 import HealthCard from "@/components/HealthCard";
 import { loadHealthNote, buildHealthText } from "@/lib/healthNote";
+import { shareNodeAsImage } from "@/lib/shareImage";
 
 function todayLabel(): string {
   const d = new Date();
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-}
-
-function dataURLToFile(dataUrl: string, filename: string): File {
-  const [head, b64] = dataUrl.split(",");
-  const mime = /:(.*?);/.exec(head)?.[1] ?? "image/png";
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-  return new File([arr], filename, { type: mime });
 }
 
 export default function Records() {
@@ -107,28 +99,14 @@ export default function Records() {
     const node = cardRef.current;
     if (!node || !today) return;
     setBusy(true);
-    try {
-      const { toPng } = await import("html-to-image");
-      const dataUrl = await toPng(node, {
-        pixelRatio: 2,
-        backgroundColor: "#ffffff",
-        cacheBust: true,
-      });
-      const file = dataURLToFile(dataUrl, `${today.cat.name}_건강카드.png`);
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: `${today.cat.name} 건강 카드` });
-      } else {
-        const a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = file.name;
-        a.click();
-        showToast("이미지를 저장했어요");
-      }
-    } catch {
-      showToast("이미지 생성에 실패했어요");
-    } finally {
-      setBusy(false);
-    }
+    const r = await shareNodeAsImage(
+      node,
+      `${today.cat.name}_건강카드.png`,
+      `${today.cat.name} 건강 카드`,
+    );
+    if (r === "downloaded") showToast("이미지를 저장했어요");
+    if (r === "failed") showToast("이미지 생성에 실패했어요");
+    setBusy(false);
   }
 
   if (rows === null) return null;
