@@ -11,7 +11,8 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { storage, type Cat, type SymptomLog } from "@/lib/storage";
+import { storage, type Cat, type SymptomLog, type TraitAnswer } from "@/lib/storage";
+import { buildReport, TOTAL_QUESTIONS } from "@/lib/personality";
 import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
 import { setSelectedCatId } from "@/lib/selectedCat";
 import { useTodayStatus } from "@/hooks/useTodayStatus";
@@ -34,6 +35,7 @@ export default function CatDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
   const [logs, setLogs] = useState<SymptomLog[]>([]);
+  const [traits, setTraits] = useState<TraitAnswer[]>([]);
   const [confirmDel, setConfirmDel] = useState(false);
   const [note, setNote] = useState("");
   const [noteOpen, setNoteOpen] = useState(false);
@@ -48,6 +50,7 @@ export default function CatDetailPage() {
       if (c) setSelectedCatId(c.id); // 이 아이를 홈·AI 탭 기본 선택으로
     });
     void storage.listSymptoms(id).then(setLogs);
+    void storage.listTraits(id).then(setTraits);
     setNote(loadHealthNote(id));
   }, [id]);
 
@@ -82,6 +85,7 @@ export default function CatDetailPage() {
 
   const age = getCatAge(cat.birthDate);
   const latestLog = logs.length > 0 ? logs[logs.length - 1] : null;
+  const reportFilled = buildReport(traits).filter((r) => r.answered).length;
   // 오늘 상태를 한 줄로 — 살펴볼 항목이 있으면 그것부터 알린다
   const todaySummaryText =
     summary.abnormalItems.length > 0
@@ -216,6 +220,26 @@ export default function CatDetailPage() {
         </Link>
 
       </section>
+
+      {/* 생활기록부 — 성격은 이 아이 고유 정보라 상세가 소유한다 (건강 정보 없음) */}
+      <Link
+        href={`/cats/${cat.id}/report`}
+        className="flex min-h-[60px] items-center gap-3 rounded-card border border-hairline bg-white px-5 py-3.5"
+      >
+        <span className="min-w-0 flex-1">
+          <span className="block text-[13px] font-bold text-secondary">
+            {cat.name}의 생활기록부
+          </span>
+          <span className="mt-0.5 block truncate text-[12.5px] text-muted">
+            {reportFilled > 0
+              ? `${reportFilled}/${TOTAL_QUESTIONS} 기재 · 자랑용으로 뽑아보세요`
+              : "성격 항목을 채우면 자랑용 카드가 나와요"}
+          </span>
+        </span>
+        <span className="flex-none text-[12px] font-semibold text-primary-deep">
+          보러 가기 ›
+        </span>
+      </Link>
 
       {/* 꼭 기억할 것 — 이 아이 고유 정보라 상세가 소유한다 */}
       <section className="rounded-card border border-hairline bg-white p-5">

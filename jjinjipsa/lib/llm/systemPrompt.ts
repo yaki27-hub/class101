@@ -4,6 +4,7 @@
  */
 
 import { getCatAge } from "@/lib/catAge";
+import { isPersonalityKey } from "@/lib/personality";
 import type { Cat, SymptomLog, TraitAnswer } from "@/lib/storage";
 
 export interface PromptContext {
@@ -307,11 +308,17 @@ function catProfileJson(cat: Cat): string {
 }
 
 export function buildSystemPrompt(ctx: PromptContext): string {
+  /*
+   * 생활기록부(성격) 답은 <habit_baseline>에서 뺀다 (D-20).
+   * 같은 TraitAnswer 저장소를 쓰기 때문에 거르지 않으면
+   * "사진 협조도: 그 순간 사라져요"가 건강 판정의 근거로 들어간다.
+   */
+  const habitTraits = ctx.traits.filter((t) => !isPersonalityKey(t.questionKey));
   const traits =
-    ctx.traits.length === 0
+    habitTraits.length === 0
       ? "none"
       : JSON.stringify(
-          ctx.traits.map((t) => ({
+          habitTraits.map((t) => ({
             항목: t.questionKey,
             답변: t.answer,
             날짜: t.answeredOn,

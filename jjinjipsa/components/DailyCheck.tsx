@@ -61,7 +61,9 @@ export default function DailyCheck({ cat }: { cat: Cat }) {
   return (
     <div className="rounded-xl bg-brand-ochre p-5">
       <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-ink/60">
-        오늘의 체크 · 하루 1문항
+        {question.kind === "personality"
+          ? "생활기록부 · 하루 1문항"
+          : "오늘의 체크 · 하루 1문항"}
       </p>
       <p className="mt-1.5 text-base font-semibold text-ink">
         {question.question(cat)}
@@ -77,8 +79,11 @@ export default function DailyCheck({ cat }: { cat: Cat }) {
           </button>
         ))}
       </div>
+      {/* 성격 답은 <habit_baseline>에서 빠지므로, 챗봇이 배운다고 하면 사실과 다르다 */}
       <p className="mt-2.5 text-[12px] text-ink/60">
-        답이 쌓일수록 챗봇이 "{cat.name}의 평소"를 알게 돼요.
+        {question.kind === "personality"
+          ? `${cat.name}의 생활기록부가 한 칸 채워져요.`
+          : `답이 쌓일수록 냥박사가 "${cat.name}의 평소"를 알게 돼요.`}
       </p>
     </div>
   );
