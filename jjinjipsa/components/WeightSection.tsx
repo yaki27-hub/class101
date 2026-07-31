@@ -128,7 +128,10 @@ export default function WeightSection({
         <button
           type="button"
           onClick={() => {
-            setDraft(trend.latest ? String(trend.latest.weightKg) : "");
+            // 기록이 없으면 프로필에 적힌 체중을 기본값으로 (첫 입력 마찰 줄이기).
+            // 프로필 값을 기록으로 **자동 저장하지는 않는다** — 언제 잰 값인지
+            // 모르는데 날짜를 지어내면 없는 측정을 만들어내는 셈이다
+            setDraft(String(trend.latest?.weightKg ?? cat.weightKg ?? ""));
             setDate(todayISO());
             setError("");
             setOpen(true);
