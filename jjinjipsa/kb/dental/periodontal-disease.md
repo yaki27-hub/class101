@@ -23,18 +23,16 @@ risk_factors: [3세 이상, 양치 안 함, 건사료만 급여, 치아 배열 �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-dental-disease
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/digestive-disorders-of-cats/dental-disorders-of-cats
   - name: AAFP / ISFM Guidelines
-    url: https://catvets.com
+    url: https://catvets.com/news/oral-health-dental-care-guidelines/
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 치아에 쌓인 플라크와 치석이 잇몸에 염증을 일으키고, 방치하면 치아를 지탱하는

@@ -23,18 +23,16 @@ risk_factors: [구충 미실시, 외출·야외 접촉, 구조·분양 직후, �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/gastrointestinal-parasites-cats
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/digestive-disorders-of-cats/gastrointestinal-parasites-of-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/worming-your-cat
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 장에 기생충이 자리 잡아 영양을 빼앗고 설사를 일으키는 상태예요. 성묘는 증상이

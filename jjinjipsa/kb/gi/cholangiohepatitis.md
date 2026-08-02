@@ -23,9 +23,9 @@ risk_factors: [췌장염 동반, 염증성 장질환 동반, 담석·담니, 중
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cholangiohepatitis
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/digestive-system/hepatic-diseases-of-small-animals/feline-cholangitis-cholangiohepatitis-syndrome
   - name: AAFP / ISFM Guidelines
     url: https://catvets.com
 last_reviewed: 2026-07
@@ -34,7 +34,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — AAFP / ISFM Guidelines (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 간에서 쓸개즙이 흐르는 담관과 그 주변 간 조직에 염증이 생기는 질환이에요.

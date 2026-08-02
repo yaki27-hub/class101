@@ -24,9 +24,9 @@ risk_factors: [백신 미접종, 다묘 환경, 보호소·구조 직후, 스트
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/respiratory-infections
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/cat-flu-upper-respiratory-infection
   - name: AAFP / ISFM Guidelines
     url: https://catvets.com
 last_reviewed: 2026-07
@@ -35,7 +35,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — AAFP / ISFM Guidelines (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 흔히 "고양이 감기"라고 부르는 코·눈·목의 감염이에요. 대부분 허피스바이러스나

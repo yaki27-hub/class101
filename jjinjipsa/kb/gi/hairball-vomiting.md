@@ -24,18 +24,18 @@ risk_factors: [장모종, 과도한 그루밍, 환절기 털갈이, 급하게 �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/danger-hairballs
   - name: International Cat Care
     url: https://icatcare.org
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/digestive-disorders-of-cats/vomiting-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — International Cat Care (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 그루밍하며 삼킨 털이 위에서 뭉쳐 토해내는 것이 헤어볼이에요. 가끔이라면

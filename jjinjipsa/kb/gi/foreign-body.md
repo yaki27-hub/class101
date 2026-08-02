@@ -25,16 +25,16 @@ sources:
   - name: Cornell Feline Health Center
     url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/digestive-system/surgical-problems-of-the-gastrointestinal-tract-in-small-animals/gastrointestinal-obstruction-in-small-animals
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/cats-and-foreign-bodies
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — Cornell Feline Health Center (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 삼킨 물건이 위나 장에 걸려 음식물이 지나가지 못하는 상태예요. 특히 실·끈처럼

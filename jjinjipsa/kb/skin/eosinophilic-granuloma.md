@@ -22,18 +22,16 @@ risk_factors: [벼룩 알레르기, 음식 알레르기, 환경 알레르기, �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/eosinophilic-granuloma-complex
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/skin-disorders-of-cats/eosinophilic-granuloma-complex-in-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/eosinophilic-granuloma-complex-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 알레르기 반응으로 피부와 입술에 특징적인 염증 병변이 생기는 고양이 특유의

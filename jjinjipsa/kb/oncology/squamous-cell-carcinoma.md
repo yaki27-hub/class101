@@ -21,9 +21,9 @@ risk_factors: [햇빛 노출, 흰 털·연한 색 귀·코, 야외 일광욕, �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/squamous-cell-cancer-dangerous
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/digestive-system/diseases-of-the-mouth-in-small-animals/oral-tumors-in-small-animals
   - name: International Cat Care
     url: https://icatcare.org
 last_reviewed: 2026-07
@@ -32,7 +32,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — International Cat Care (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 피부·점막의 편평상피세포에서 생기는 암이에요. 흔히 **햇빛에 노출되는 귀끝·

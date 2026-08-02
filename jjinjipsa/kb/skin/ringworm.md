@@ -22,18 +22,16 @@ risk_factors: [자묘, 구조·보호소 출신, 다묘 밀집 환경, 면역 �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/ringworm-serious-readily-treatable-affliction
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/skin-disorders-of-cats/ringworm-dermatophytosis-in-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/ringworm-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 곰팡이(피부사상균)가 털과 피부에 자리 잡아 생기는 감염이에요. 이름에 '웜'이

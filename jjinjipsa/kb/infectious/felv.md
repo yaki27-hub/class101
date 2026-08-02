@@ -24,18 +24,18 @@ risk_factors: [외출묘, 구조·길고양이 출신, 다묘 환경, 백신 미
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments/cornell-feline-health-center/health-information/feline-health-topics/feline-leukemia-virus
   - name: MSD Veterinary Manual
     url: https://www.msdvetmanual.com
   - name: AAFP / ISFM Guidelines
-    url: https://catvets.com
+    url: https://catvets.com/resource/feline-retrovirus-management-guidelines/
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — MSD Veterinary Manual (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 면역세포에 감염해 면역력을 떨어뜨리고 빈혈·림프종 위험을 높이는 바이러스예요.

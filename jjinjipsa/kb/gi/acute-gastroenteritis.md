@@ -26,7 +26,7 @@ sources:
   - name: Cornell Feline Health Center
     url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/digestive-disorders-of-cats/disorders-of-the-stomach-and-intestines-in-cats
   - name: International Cat Care
     url: https://icatcare.org
 last_reviewed: 2026-07
@@ -35,7 +35,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — Cornell Feline Health Center, International Cat Care (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 위와 장에 갑자기 염증이 생겨 설사나 구토가 나타나는 상태예요. 가벼우면 며칠

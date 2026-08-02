@@ -22,18 +22,16 @@ risk_factors: [환경 변화, 이사·새 식구, 다묘 갈등, 분리불안, �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cats-lick-too-much
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/over-grooming-in-cats
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/skin-disorders-of-cats/hair-loss-alopecia-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 스트레스나 불안을 달래려 **한 부위를 과도하게 핥아 털이 빠지는** 상태예요.

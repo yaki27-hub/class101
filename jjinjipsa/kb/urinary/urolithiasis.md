@@ -24,18 +24,16 @@ risk_factors: [낮은 음수량, 건사료 위주 식이, 비만, 실내 사육,
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/bladder-and-kidney-stones
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/kidney-and-urinary-tract-disorders-of-cats/urinary-stones-uroliths-calculi-in-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/feline-lower-urinary-tract-disease
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 소변 속 미네랄이 뭉쳐 방광이나 요관에 돌이 생기는 질환이에요. 종류에 따라

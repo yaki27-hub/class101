@@ -22,9 +22,9 @@ risk_factors: [허피스바이러스 감염, 단두종, 다묘 갈등·싸움, �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/corneal-ulcers
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/eye-disorders-of-cats/disorders-of-the-cornea-in-cats
   - name: International Cat Care
     url: https://icatcare.org
 last_reviewed: 2026-07
@@ -33,7 +33,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — International Cat Care (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 눈의 가장 바깥 투명한 막(각막)이 파여 상처가 난 상태예요. 매우 아프고

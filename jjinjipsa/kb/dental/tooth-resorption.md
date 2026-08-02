@@ -22,18 +22,16 @@ risk_factors: [5세 이상, 치주질환 동반, 순수 품종]
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/tooth-resorption
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/digestive-system/dentistry-in-small-animals/tooth-resorption-in-small-animals
   - name: AAFP / ISFM Guidelines
-    url: https://catvets.com
+    url: https://catvets.com/news/oral-health-dental-care-guidelines/
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 치아 조직이 안쪽에서부터 스스로 녹아 없어지는 질환이에요. 충치와 달리 세균이

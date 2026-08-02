@@ -24,16 +24,16 @@ sources:
   - name: Cornell Feline Health Center
     url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/special-pet-topics/emergencies/emergency-care-for-dogs-and-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/high-rise-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — Cornell Feline Health Center (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 높은 곳(주로 아파트 창문·베란다)에서 떨어져 다치는 것을 말해요. **겉이 멀쩡해

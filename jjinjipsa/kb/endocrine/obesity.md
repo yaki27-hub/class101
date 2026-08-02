@@ -23,9 +23,9 @@ risk_factors: [중성화, 실내 사육, 자율 급여, 운동 부족, 중년, �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/cat-health-news/fat-cats-how-do-management-approaches-measure
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/management-and-nutrition/nutrition-small-animals/nutrition-in-disease-management-in-small-animals
   - name: AAFP / ISFM Guidelines
     url: https://catvets.com
 last_reviewed: 2026-07
@@ -34,7 +34,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — AAFP / ISFM Guidelines (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 체지방이 과도하게 쌓인 상태로, 그 자체보다 **당뇨병·관절염·지방간 같은 다른

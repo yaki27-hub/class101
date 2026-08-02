@@ -22,9 +22,9 @@ risk_factors: [생고기·생식 급여, 사냥·외출묘, 면역 저하, 자�
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/toxoplasmosis-cats
   - name: CDC (Centers for Disease Control and Prevention)
-    url: https://www.cdc.gov
+    url: https://www.cdc.gov/toxoplasmosis/risk-factors/index.html
   - name: MSD Veterinary Manual
     url: https://www.msdvetmanual.com
 last_reviewed: 2026-07
@@ -33,7 +33,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — MSD Veterinary Manual (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 톡소플라즈마라는 기생충에 감염되는 병이에요. 건강한 고양이는 대부분 증상 없이

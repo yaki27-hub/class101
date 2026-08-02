@@ -23,9 +23,9 @@ risk_factors: [10세 이상, 노령묘, 갑상선 결절]
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hyperthyroidism-cats
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/hormonal-disorders-of-cats/disorders-of-the-thyroid-gland-in-cats
   - name: AAFP / ISFM Guidelines
     url: https://catvets.com
 last_reviewed: 2026-07
@@ -34,7 +34,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — AAFP / ISFM Guidelines (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 갑상선 호르몬이 과하게 나와 몸의 대사가 계속 과속 상태가 되는 병이에요.

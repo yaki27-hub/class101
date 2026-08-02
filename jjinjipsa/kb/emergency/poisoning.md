@@ -23,18 +23,18 @@ risk_factors: [실내 화분·절화, 주방 접근 가능, 사람 약 보관 �
 
 sources:
   - name: ASPCA Animal Poison Control
-    url: https://www.aspca.org
+    url: https://www.aspca.org/pet-care/animal-poison-control/cats-plant-list
   - name: MSD Veterinary Manual
     url: https://www.msdvetmanual.com
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/cats-and-poisons
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — MSD Veterinary Manual (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 고양이는 사람이나 개에게 괜찮은 물질도 해독하지 못하는 경우가 많아요.

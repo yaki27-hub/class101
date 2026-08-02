@@ -23,18 +23,16 @@ risk_factors: [벼룩 노출, 외출묘, 다묘 환경, 특정 단백질 급여 
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/challenge-skin-disorders
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/skin-disorders-of-cats/allergies-of-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/itchy-cat-when-it-is-not-fleas
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 음식이나 환경 속 물질에 과민 반응해 가려움과 피부 병변이 생기는 상태예요.
