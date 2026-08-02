@@ -23,18 +23,16 @@ risk_factors: [만성 신부전, 갑상선기능항진증, 노령, 당뇨병, �
 
 sources:
   - name: International Society of Feline Medicine (ISFM)
-    url: https://icatcare.org/veterinary/isfm
+    url: https://icatcare.org/articles/hypertension-in-cats
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hypertension
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/circulatory-system/various-cardiovascular-diseases-in-dogs-and-cats/systemic-and-pulmonary-hypertension-in-dogs-and-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 혈압이 지속적으로 높은 상태예요. 대부분 **신부전이나 갑상선기능항진증에

@@ -22,18 +22,16 @@ risk_factors: [외출묘, 다묘·다견 가정, 예방약 공백, 여름·초�
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/fleas-source-torment-your-cat
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/skin-disorders-of-cats/fleas-of-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/fleas-and-flea-control-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 벼룩이 피를 빨며 기생하는 상태예요. 가려움 자체보다 **벼룩 침에 대한 알레르기,

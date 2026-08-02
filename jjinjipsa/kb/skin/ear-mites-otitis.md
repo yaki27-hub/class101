@@ -23,18 +23,16 @@ risk_factors: [자묘, 구조·길고양이 출신, 다묘 환경, 외출묘, �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/otitis
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/ear-disorders-of-cats/otitis-externa-external-ear-infection-in-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/ear-problems-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 귀 안에 진드기가 살거나 세균·효모가 번식해 염증이 생기는 상태예요. 자묘에서는

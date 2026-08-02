@@ -22,18 +22,18 @@ risk_factors: [플라스틱 식기, 식기 세척 부족, 그루밍 저하, 지�
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-skin-diseases
   - name: MSD Veterinary Manual
     url: https://www.msdvetmanual.com
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/acne-and-stud-tail
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — MSD Veterinary Manual (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 턱의 피지선에서 분비물이 과해지거나 모공이 막혀 **턱에 검은 점(블랙헤드)이

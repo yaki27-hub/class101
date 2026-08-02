@@ -22,7 +22,7 @@ risk_factors: [중이·내이염, 귀 감염 병력, 노령, 특정 약물, 갑�
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/vestibular-syndrome
   - name: MSD Veterinary Manual
     url: https://www.msdvetmanual.com
   - name: International Cat Care
@@ -33,7 +33,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — MSD Veterinary Manual, International Cat Care (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 몸의 균형을 담당하는 전정 기관에 문제가 생겨 **갑자기 심하게 어지러워하는**

@@ -23,9 +23,9 @@ risk_factors: [스트레스, 다묘 가정, 실내 사육, 비만, 낮은 음수
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-lower-urinary-tract-disease
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/feline-idiopathic-cystitis-fic-in-cats
   - name: AAFP / ISFM Guidelines
     url: https://catvets.com
 last_reviewed: 2026-07
@@ -34,7 +34,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — AAFP / ISFM Guidelines (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 세균 감염이나 결석 없이 방광에 염증과 통증이 생기는 질환으로, 젊은~중년

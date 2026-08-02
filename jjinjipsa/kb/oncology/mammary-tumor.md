@@ -21,9 +21,9 @@ risk_factors: [중성화 안 함, 늦은 중성화, 노령 암컷, 호르몬제 
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/mammary-tumors
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/reproductive-disorders-of-cats/mammary-breast-tumors-in-cats
   - name: International Cat Care
     url: https://icatcare.org
 last_reviewed: 2026-07
@@ -32,7 +32,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — International Cat Care (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 젖(유선)에 생기는 종양이에요. 개와 달리 **고양이 유선종양은 약 80~90%가

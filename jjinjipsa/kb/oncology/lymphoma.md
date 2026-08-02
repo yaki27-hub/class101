@@ -22,18 +22,18 @@ risk_factors: [FeLV 감염, FIV 감염, 노령, 간접흡연 노출, 만성 염�
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments/cornell-feline-health-center/health-information/feline-health-topics/lymphoma
   - name: MSD Veterinary Manual
     url: https://www.msdvetmanual.com
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/lymphoma-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — MSD Veterinary Manual (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 림프구라는 면역세포가 암세포로 변해 자라는, **고양이에서 가장 흔한 암**이에요.

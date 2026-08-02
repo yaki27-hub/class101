@@ -22,18 +22,16 @@ risk_factors: [벼룩·진드기 감염, FeLV·FIV 감염, 만성 신부전, 중
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/anemia
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/blood-disorders-of-cats/anemia-in-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/anaemia-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 피 속 적혈구가 부족해 온몸에 산소가 모자란 상태예요. 빈혈은 병명이라기보다

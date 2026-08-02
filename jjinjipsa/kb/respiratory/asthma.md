@@ -23,18 +23,16 @@ risk_factors: [실내 흡연, 방향제·디퓨저, 먼지 많은 모래, 곰팡
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-asthma-what-you-need-know
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/lung-and-airway-disorders-of-cats/tracheobronchitis-bronchitis-bronchial-asthma-in-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/asthma-and-chronic-bronchitis-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 기관지가 알레르기 반응으로 좁아지면서 기침과 호흡곤란이 반복되는 질환이에요.

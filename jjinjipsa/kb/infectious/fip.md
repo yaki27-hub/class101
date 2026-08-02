@@ -26,14 +26,14 @@ sources:
   - name: MSD Veterinary Manual
     url: https://www.msdvetmanual.com
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/resources/cat-carer-guide-to-fip.pdf
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — Cornell Feline Health Center, MSD Veterinary Manual (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 고양이 장코로나바이러스가 몸 안에서 변이해 전신 염증을 일으키는 질환이에요.

@@ -22,9 +22,9 @@ risk_factors: [비만, 급격한 다이어트, 사료 급변, 스트레스·환�
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hepatic-lipidosis
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/digestive-system/hepatic-diseases-of-small-animals/feline-hepatic-lipidosis
   - name: International Cat Care
     url: https://icatcare.org
 last_reviewed: 2026-07
@@ -33,7 +33,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — International Cat Care (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 고양이가 며칠간 제대로 먹지 못하면 체지방이 한꺼번에 간으로 몰려 간이 제

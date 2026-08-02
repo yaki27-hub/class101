@@ -22,7 +22,7 @@ risk_factors: [중년 이상, 만성 구토·설사 병력, 췌장염 동반, �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/inflammatory-bowel-disease
   - name: MSD Veterinary Manual
     url: https://www.msdvetmanual.com
   - name: AAFP / ISFM Guidelines
@@ -33,7 +33,7 @@ reviewed_by: 자체 작성
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — MSD Veterinary Manual, AAFP / ISFM Guidelines (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 장 벽에 염증세포가 지속적으로 모여 소화·흡수를 방해하는 만성 질환이에요.

@@ -24,18 +24,16 @@ risk_factors: [수컷, 중년 이상, 품종 소인, 갑상선기능항진증 �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hypertrophic-cardiomyopathy
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/circulatory-system/cardiomyopathy-in-dogs-and-cats/hypertrophic-cardiomyopathy-in-dogs-and-cats
   - name: International Cat Care
-    url: https://icatcare.org
+    url: https://icatcare.org/articles/cardiomyopathy-heart-disease-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 심장 근육(특히 좌심실 벽)이 두꺼워져 피를 제대로 채우고 내보내기 어려워지는

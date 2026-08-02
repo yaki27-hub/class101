@@ -23,18 +23,16 @@ risk_factors: [예방약 공백, 모기 노출, 외출묘, 방충망 없는 환�
 
 sources:
   - name: American Heartworm Society
-    url: https://www.heartwormsociety.org
+    url: https://www.heartwormsociety.org/heartworms-in-cats
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/heartworm-cats
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/heart-and-blood-vessel-disorders-of-cats/heartworm-disease-in-cats
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 모기가 옮기는 기생충이 심장과 폐혈관에 자리 잡는 병이에요. 고양이에게는

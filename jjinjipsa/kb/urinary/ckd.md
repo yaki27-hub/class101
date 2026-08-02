@@ -19,7 +19,7 @@ breed_risk: [페르시안, 아비시니안]
 risk_factors: [7세 이상, 저수분 식이, 치주질환]
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease
   - name: IRIS (International Renal Interest Society)
     url: http://www.iris-kidney.com
 last_reviewed: 2026-07

@@ -24,18 +24,16 @@ risk_factors: [비만, 중성화 수컷, 7세 이상, 운동 부족, 고탄수 �
 
 sources:
   - name: Cornell Feline Health Center
-    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
+    url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-diabetes
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/endocrine-system/the-pancreas/diabetes-mellitus-in-dogs-and-cats
   - name: AAFP / ISFM Guidelines
-    url: https://catvets.com
+    url: https://catvets.com/resource/diabetes-educational-toolkit/
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
-
-<!-- TODO: 상세 URL 확인 필요 -->
 
 ## 한 줄 요약
 인슐린이 부족하거나 잘 듣지 않아 혈당이 높게 유지되는 병이에요. 비만이 가장

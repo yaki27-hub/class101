@@ -24,16 +24,16 @@ sources:
   - name: Cornell Feline Health Center
     url: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center
   - name: MSD Veterinary Manual
-    url: https://www.msdvetmanual.com
+    url: https://www.msdvetmanual.com/cat-owners/kidney-and-urinary-tract-disorders-of-cats/noninfectious-diseases-of-the-urinary-system-of-cats
   - name: IRIS (International Renal Interest Society)
-    url: http://www.iris-kidney.com
+    url: https://www.iris-kidney.com/differentiation-between-acute-kidney-injury-and-chronic-kidney-disease
 last_reviewed: 2026-07
 reviewed_by: 자체 작성
 # 수의사 감수 전이면 true. 감수 완료 시 reviewed_by를 감수자명으로 바꾸고 이 줄을 false로.
 draft: true
 ---
 
-<!-- TODO: 상세 URL 확인 필요 -->
+<!-- TODO: 상세 URL 미확인 — Cornell Feline Health Center (기관 대표 페이지 유지) -->
 
 ## 한 줄 요약
 신장 기능이 며칠 이내로 갑자기 무너지는 상태예요. 만성 신부전과 달리 짧은
