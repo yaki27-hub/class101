@@ -324,7 +324,7 @@ export default function ChatPage() {
 
         {/* 대화→증상 기록 원탭 제안 (T-10) */}
         {pendingLog && streaming === null && (
-          <div className="rounded-card border border-mint bg-mint/40 p-4 shadow-[0_2px_16px_rgba(122,92,67,0.05)]">
+          <div className="rounded-card border border-mint bg-mint/40 p-4 shadow-subtle">
             <p className="text-sm font-bold text-secondary">
               📓 오늘 대화를 {cat.name}의 증상 기록으로 남길까요?
             </p>

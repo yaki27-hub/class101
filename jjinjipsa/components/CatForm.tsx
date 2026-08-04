@@ -253,7 +253,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
           </button>
         )}
         <button onClick={() => void save()} disabled={saving} aria-busy={saving}
-          className="h-12 flex-1 rounded-button bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f] disabled:opacity-60">
+          className="h-12 flex-1 rounded-button bg-ink text-sm font-semibold text-white active:bg-primary-deep disabled:opacity-60">
           {saving ? (editing ? "저장 중…" : "등록 중…") : editing ? "수정 완료" : "등록하기"}
         </button>
       </div>

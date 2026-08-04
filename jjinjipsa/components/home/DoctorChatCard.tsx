@@ -32,14 +32,14 @@ export default function DoctorChatCard({
 
   return (
     <section
-      className="relative overflow-hidden rounded-card border border-[#ffd7ce] p-5"
-      style={{ background: "linear-gradient(135deg,#fff7f3,#fff0eb)" }}
+      className="relative overflow-hidden rounded-card border border-ink/15 p-5"
+      style={{ background: "var(--color-mint)" }}
     >
       {/* 하트 데코 */}
-      <span className="pointer-events-none absolute right-4 top-3 text-[18px] text-[#ffb7a8]" aria-hidden>
+      <span className="pointer-events-none absolute right-4 top-3 text-[18px] text-ink/25" aria-hidden>
         ♥
       </span>
-      <span className="pointer-events-none absolute right-9 top-5 text-[12px] text-[#ffd1c6]" aria-hidden>
+      <span className="pointer-events-none absolute right-9 top-5 text-[12px] text-ink/15" aria-hidden>
         ♥
       </span>
 
@@ -85,7 +85,7 @@ export default function DoctorChatCard({
           onClick={() =>
             toChat(`지난번 '${lastTag}' 기록이랑 오늘 상태를 비교해 줄 수 있어요?`)
           }
-          className="mt-3 flex w-full items-center justify-between rounded-[18px] border border-[#ffd7ce] bg-white px-4 py-3 text-left"
+          className="mt-3 flex w-full items-center justify-between rounded-input border border-ink/15 bg-white px-4 py-3 text-left"
         >
           <span className="min-w-0">
             <span className="block text-[13px] font-bold text-secondary">

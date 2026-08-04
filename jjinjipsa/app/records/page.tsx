@@ -172,7 +172,7 @@ export default function Records() {
           {cats.length > 0 && (
             <button
               onClick={addRecord}
-              className="mt-4 h-12 w-full rounded-button bg-primary text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
+              className="mt-4 h-12 w-full rounded-button bg-primary text-[15px] font-bold text-white shadow-subtle active:scale-[0.99]"
             >
               + 첫 기록 남기기
             </button>

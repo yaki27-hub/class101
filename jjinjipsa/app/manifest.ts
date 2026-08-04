@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "내 고양이를 기억하는, 편하게 물어보는 건강 챗봇",
     start_url: "/",
     display: "standalone",
-    background_color: "#fffaf0",
-    theme_color: "#fffaf0",
+    background_color: "#fcfaf5",
+    theme_color: "#fcfaf5",
     lang: "ko",
     icons: [
       { src: "/icon-192.png", sizes: "192x192", type: "image/png" },

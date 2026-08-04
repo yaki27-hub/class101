@@ -61,7 +61,7 @@ export default function BottomSheet({
       <div
         ref={panelRef}
         tabIndex={-1}
-        className="relative w-full max-w-[420px] rounded-t-card bg-white p-5 pb-[max(20px,env(safe-area-inset-bottom))] shadow-[0_-4px_24px_rgba(122,92,67,0.14)] outline-none [animation:sheet-up_.22s_ease]"
+        className="relative w-full max-w-[420px] rounded-t-card bg-white p-5 pb-[max(20px,env(safe-area-inset-bottom))] shadow-[0_-2px_12px_rgba(26,51,0,0.10)] outline-none [animation:sheet-up_.22s_ease]"
       >
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-hairline" aria-hidden />
         {title && (

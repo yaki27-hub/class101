@@ -1,38 +1,41 @@
 ---
 version: alpha
 name: 찐집사 (JjinJipsa)
-description: 반려묘 케어 앱 — 플랫 UI × 3D 마스코트. 도화지 크림 배경 + 흰 카드, 코랄은 주요 CTA 전용.
+description: 반려묘 케어 앱 — 크림 종이 위 스튜디오 스케치북. 포레스트 잉크가 텍스트·CTA·테두리를 모두 짊어지고, 하이라이터 옐로우는 마커 자국, 파스텔은 스티키노트처럼 드문드문.
 colors:
   # Surface
-  canvas: "#FBFAF6"
+  canvas: "#FCFAF5"
   surface: "#FFFFFF"
   surface-card: "#FFFFFF"
-  surface-soft: "#F5EFEA"
-  surface-strong: "#EFE7DD"
-  hairline: "#F0E5DE"
+  surface-soft: "#F2EFE4"
+  surface-strong: "#E7E2D3"
+  hairline: "#CFCABB"
+  pencil: "#B6B6B6"
+  whisper: "#F1F1F1"   # 면 전용 — 텍스트로 쓰면 크림 대비 1.08:1
   # Text (순수 검정 금지)
-  ink: "#403A39"
-  secondary: "#403A39"
-  body: "#6B635E"
-  muted: "#7E7876"
-  muted-soft: "#B8B0AC"
-  nav-inactive: "#78716E"
+  ink: "#1A3300"
+  secondary: "#1A3300"
+  body: "#3D5424"
+  muted: "#5F7349"
+  muted-soft: "#657552"
+  nav-inactive: "#5F7349"
   # Brand
-  primary: "#FF8D7B"
-  primary-deep: "#E9705C"
-  primary-soft: "#FFF0EB"
-  butter: "#FFD97B"
-  butter-soft: "#FFF8DF"
-  mint: "#BFE7D8"
-  mint-soft: "#EFF8F1"
-  sky: "#CFEAFF"
-  sky-soft: "#F0F8FF"
-  sky-ink: "#5B9BC9"
-  soft-pink: "#FFB7A8"
+  primary: "#1A3300"
+  primary-deep: "#0E1C00"
+  primary-soft: "#EEF3E4"
+  butter: "#FFE95C"
+  butter-soft: "#FFF8D0"
+  mint: "#D5F5C2"
+  mint-soft: "#EDFAE2"
+  sky: "#A8E5E5"
+  sky-soft: "#E8F7F7"
+  sky-ink: "#2B6B6B"
+  soft-pink: "#F6D0FF"
+  terracotta: "#CB5521"
   # Semantic
-  success: "#58A97B"
-  warning: "#F4A261"
-  error: "#F26B6B"
+  success: "#2F7A4D"
+  warning: "#8F6200"
+  error: "#C0392B"
 typography:
   page-title:
     fontFamily: Jua
@@ -70,14 +73,14 @@ typography:
     fontWeight: 500
     lineHeight: 1.2
 rounded:
-  xs: 8px
-  sm: 12px
-  md: 16px
-  tile: 16px
-  input: 18px
-  button: 18px
-  card: 20px
-  xl: 24px
+  xs: 3px
+  sm: 6px
+  md: 12px
+  tile: 12px
+  input: 6px
+  button: 6px
+  card: 12px
+  xl: 16px
   full: 9999px
 spacing:
   xs: 4px
@@ -90,7 +93,7 @@ spacing:
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
-    textColor: "#FFFFFF"
+    textColor: "{colors.canvas}"
     typography: "{typography.button}"
     rounded: "{rounded.button}"
     height: 52px
@@ -124,8 +127,8 @@ components:
     textColor: "{colors.success}"
     rounded: "{rounded.tile}"
   status-tile-warning:
-    backgroundColor: "#FFF4EC"
-    textColor: "{colors.primary}"
+    backgroundColor: "{colors.butter-soft}"
+    textColor: "{colors.warning}"
     rounded: "{rounded.tile}"
   bottom-nav:
     backgroundColor: "{colors.surface}"
@@ -141,20 +144,38 @@ components:
 
 ## 브랜드 시그니처
 
-**플랫 UI × 3D 마스코트.** UI 요소는 전부 플랫(면색·둥근 모서리·그림자 최소)이고,
-마스코트만 부드러운 3D 렌더다. 이 대비가 핵심이다.
+**크림 종이 위 스튜디오 스케치북 × 3D 마스코트.** UI는 전부 플랫이고 —
+면색과 1px 테두리로 층을 가른다 — 마스코트만 부드러운 3D 렌더다. 이 대비가 핵심이다.
 
 ## 컬러 사용 원칙
 
-- 크림 도화지 배경(`canvas`) + 흰 카드(`surface`)가 기본
-- **코랄(`primary`)은 주요 CTA에만** — 남용 금지
-- `mint` = 정상, `sky` = 정보, `butter` = 보상·긍정
-- `error`는 아껴서 사용. **순수 레드 금지, 순수 검정 텍스트 금지, 다크 배경 금지**
-- 텍스트는 짙은 브라운 차콜(`ink #403A39`)
+- 화면의 95%는 **크림(`canvas`) + 포레스트 잉크(`ink`)**. 나머지가 악센트다
+- **포레스트 잉크가 유일한 주색이다.** 본문·제목·링크·CTA 채움·테두리를 전부 짊어진다.
+  두 번째 주색을 들이지 않는다
+- **하이라이터 옐로우(`butter`)는 마커 자국이지 버튼이 아니다.** 강조할 낱말 뒤에 까는
+  배경 워시·배지에만 쓰고, CTA 채움으로 쓰지 않는다
+- 파스텔 3색은 **스티키노트**다 — 카드·배지 하나씩 띄엄띄엄. 큰 면을 덮지 않고,
+  한 줄에 두 장을 나란히 두지 않는다. `mint` = 정상, `sky`(틸) = 정보, `soft-pink`(블러시) = 장식
+- `error`는 아껴서 사용. **순수 검정 텍스트 금지, 다크 배경 금지**
+- `whisper(#F1F1F1)`는 **면 전용이다.** 크림 위 대비가 1.08:1이라 텍스트로 쓰면 안 보인다
+
+### 🚦 판정 색은 브랜드색과 분리한다
+
+응급도(🔴🟡🟢)는 안전 신호라 브랜드 팔레트와 섞이면 안 된다.
+
+| | 값 | 크림 대비 |
+|---|---|---|
+| success | `#2F7A4D` | 5.02:1 |
+| warning | `#8F6200` | 5.14:1 |
+| error | `#C0392B` | 5.21:1 |
+
+**하이라이터 옐로우는 🟡 자리를 침범하므로 판정 UI 근처에 쓰지 않는다.**
+셋은 명도가 비슷해 색각 이상에서는 구분이 약하다 — 그래서 판정에는 항상 🚦 이모지와
+문구가 함께 간다. 색은 보조 신호일 뿐이다.
 
 ### 배경 질감
 
-`canvas` 위에 채도 0의 fractal-noise를 아주 옅게(opacity ≈ 0.05) 올려 도화지 결을 표현한다.
+`canvas`(크림 종이) 위에 채도 0의 fractal-noise를 아주 옅게(opacity ≈ 0.05) 올려 도화지 결을 표현한다.
 구현: `.paper` 클래스 (SVG feTurbulence baseFrequency 0.9 → grayscale → opacity 0.05).
 
 ## 타이포그래피
@@ -165,25 +186,32 @@ components:
 
 ## 그림자
 
-그림자는 최소·아주 옅게. 대부분의 카드는 **그림자 없이 `1px hairline` 테두리**만 쓴다.
-코랄 CTA만 예외적으로 `0 8px 20px rgba(255,141,123,0.35)`를 쓴다.
+**층은 색과 1px 테두리가 가른다. 그림자가 아니다.** 대부분의 카드는 그림자 없이
+`1px hairline` 테두리만 쓴다. blur 2px를 넘는 그림자는 이 시스템의 평면성을 깬다.
+
+| 쓰는 곳 | 값 |
+|---|---|
+| 버튼 눌림 | `shadow-subtle` = `rgba(0,0,0,0.05) 0 1px 2px` |
+| 보조 버튼 hover/active | `shadow-subtle-2` |
+| 바텀시트 (유일한 예외) | `0 -2px 12px rgba(26,51,0,0.10)` — 화면을 덮는 층이라 분리가 필요하다 |
 
 ## 라운드 (버튼)
 
-**라벨이 있는 버튼은 예외 없이 `rounded-button`(18px) 하나만 쓴다.** 같은 화면에서
+**라벨이 있는 버튼은 예외 없이 `rounded-button`(6px) 하나만 쓴다.** 같은 화면에서
 pill과 사각 버튼이 섞이면 즉시 어색해 보이므로, 크기·중요도와 무관하게 통일한다.
+0px 각진 모서리는 쓰지 않는다 — 6px과 섞이면 시스템이 무너진다.
 
 `rounded-full`은 **형태 자체가 원/알약인 것**에만 허용한다:
 
 | 용도 | 라운드 | 예 |
 |---|---|---|
-| 모든 버튼 (주·보조·작은 액션) | `button` 18px | 등록하기, 저장, 취소, 수정, 메모, 삭제 |
+| 모든 버튼 (주·보조·작은 액션) | `button` 6px | 등록하기, 저장, 취소, 수정, 메모, 삭제 |
 | 아이콘 전용 원형 버튼 | `full` | 기록 삭제 🗑, 카메라 |
 | 선택 토큰(칩) | `full` | 추천 질문, 기저조건, 오늘의 체크 답변 |
-| 카드 전체가 탭 영역 | `card` 20px | 계정 설정 행, 추천 질문 카드 |
+| 카드 전체가 탭 영역 | `card` 12px | 계정 설정 행, 추천 질문 카드 |
 | 바텀시트 옵션 행 | `13px` | 식사/물/배변/활동 선택지 |
 
-판단 기준: **액션이면 버튼(18px), 선택 대상이면 칩(full).** "수정·메모·제거"는 작지만
+판단 기준: **액션이면 버튼(6px), 선택 대상이면 칩(full).** "수정·메모·제거"는 작지만
 액션이므로 버튼이다.
 
 ## 아이콘

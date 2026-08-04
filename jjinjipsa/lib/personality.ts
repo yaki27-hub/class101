@@ -295,11 +295,16 @@ export function summarize(rows: ReportRow[], catName: string): ReportSummary {
   return { filled, type, comment: body + tail };
 }
 
-/** 등급 배지 색 — 우열이 아니라 구분용이라 채도를 낮게 쓴다 */
+/*
+ * 등급 배지 색 — **우열이 아니라 구분**이다.
+ * 진하기 순으로 깔면 색 자체가 "A가 좋고 D가 나쁘다"를 말해버린다.
+ * 그래서 스티키노트 4색을 등급마다 하나씩 배정하고, 글자는 전부 잉크로 고정한다
+ * (파스텔 위 잉크는 9.9~11.6:1이라 어느 칸에서도 읽힌다).
+ */
 export const GRADE_STYLE: Record<Grade, string> = {
-  "A+": "bg-primary text-white",
-  A: "bg-primary/25 text-primary-deep",
-  B: "bg-mint-soft text-success",
-  C: "bg-surface-soft text-body",
-  D: "bg-sky-soft text-sky-ink",
+  "A+": "bg-ink text-canvas",
+  A: "bg-mint text-ink",
+  B: "bg-sky text-ink",
+  C: "bg-butter text-ink",
+  D: "bg-soft-pink text-ink",
 };

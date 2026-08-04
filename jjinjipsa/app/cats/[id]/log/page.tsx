@@ -140,7 +140,7 @@ export default function ManualLogPage() {
 
       <button
         onClick={() => void save()}
-        className="h-12 w-full rounded-button bg-ink text-sm font-semibold text-white active:bg-[#1f1f1f]"
+        className="h-12 w-full rounded-button bg-ink text-sm font-semibold text-white active:bg-primary-deep"
       >
         기록 저장하기
       </button>
