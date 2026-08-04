@@ -55,13 +55,14 @@
   --color-warning: #8f6200;         /* 5.14:1 (버터 배경 위에서도 5.00:1) */
   --color-error: #c0392b;           /* 5.21:1 */
 
-  /* Radius — 버튼 6 / 카드 12 / 네비 16 / pill 999 */
+  /* Radius — 버튼 10 / 카드 12 / 네비 16 / pill 999.
+   레퍼런스는 버튼 6px이지만, 냥박사·아바타 같은 귀여운 자산과 어긋나 10px로 올렸다 */
   --radius-xs: 3px;
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-tile: 12px;
-  --radius-input: 6px;
-  --radius-button: 6px;
+  --radius-input: 10px;
+  --radius-button: 10px;
   --radius-card: 12px;
   --radius-lg: 12px;
   --radius-xl: 16px;

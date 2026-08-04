@@ -34,13 +34,19 @@ export default function RootLayout({
   return (
     <html lang="ko" className="h-full antialiased">
       <head>
+        {/*
+          폰트 CSS 2장은 렌더 블로킹이다 — 받아오기 전에는 첫 화면이 안 그려진다.
+          구글 쪽에만 preconnect가 있었고 jsdelivr에는 없어서, Pretendard는 매번
+          DNS+TLS부터 새로 열고 있었다. 첫 페인트 앞의 왕복을 줄인다.
+        */}
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
           crossOrigin="anonymous"
         />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
