@@ -8,8 +8,8 @@ import type { DailyStatusLevel, StatusItem } from "@/lib/dailyStatus";
 // 핸드오프 §Bottom Sheet: 정상=민트 / 주의=버터 / 이상=코랄 / 기록안함=뉴트럴
 const LEVEL_STYLE: Record<DailyStatusLevel, string> = {
   normal: "bg-mint-soft text-success",
-  warning: "bg-butter-soft text-[#b8862e]",
-  danger: "bg-primary-soft text-[#d2685a]",
+  warning: "bg-butter-soft text-warning",
+  danger: "bg-error/10 text-error",
   unknown: "bg-surface-soft text-muted",
 };
 

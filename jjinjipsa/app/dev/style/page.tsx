@@ -1,10 +1,10 @@
 /* 디자인 토큰 QA 페이지 (T-02, D-03 Clay 시스템) — 배포 화면 아님 */
 
 const SURFACES = [
-  { name: "canvas", cls: "bg-canvas border border-hairline", hex: "#FFFAF0", role: "페이지 기본 바닥" },
-  { name: "surface-soft", cls: "bg-surface-soft", hex: "#FAF5E8", role: "푸터 · CTA 밴드" },
-  { name: "surface-card", cls: "bg-surface-card", hex: "#F5F0E0", role: "크림 카드 · 배지" },
-  { name: "surface-strong", cls: "bg-surface-strong", hex: "#EBE6D6", role: "강조 밴드" },
+  { name: "canvas", cls: "bg-canvas border border-hairline", hex: "#fcfaf5", role: "페이지 기본 바닥" },
+  { name: "surface-soft", cls: "bg-surface-soft", hex: "#f2efe4", role: "푸터 · CTA 밴드" },
+  { name: "surface-card", cls: "bg-surface-card", hex: "#ffffff", role: "크림 카드 · 배지" },
+  { name: "surface-strong", cls: "bg-surface-strong", hex: "#e7e2d3", role: "강조 밴드" },
 ];
 
 const BRAND = [
@@ -55,7 +55,7 @@ export default function StylePage() {
         <h2 className="text-[12px] font-semibold uppercase tracking-[1.5px] text-muted">
           Buttons
         </h2>
-        <button className="h-11 w-full rounded-md bg-ink px-5 text-sm font-semibold text-white active:bg-[#1f1f1f]">
+        <button className="h-11 w-full rounded-md bg-ink px-5 text-sm font-semibold text-white active:bg-primary-deep">
           궁금한 거 물어보기
         </button>
         <button className="h-11 w-full rounded-md border border-hairline bg-canvas px-5 text-sm font-semibold text-ink">

@@ -33,11 +33,13 @@
 ## 스택 & 컨벤션 (D-01: PWA 먼저)
 - Next.js 16 App Router + TypeScript + Tailwind v4. 배포 Vercel. PMF 후 Expo 전환 예정
 - 모바일 퍼스트. 데스크톱에선 420px 중앙 셸 (app/layout.tsx의 프레임)
-- **디자인 시스템 = docs/디자인시스템_Clay.md (D-03)**. 토큰은 app/globals.css @theme:
-  크림 캔버스(canvas #FFFAF0)·니어블랙 잉크/CTA(ink #0A0A0A)·브랜드 카드 6색
-  (brand-pink/teal/lavender/peach/ochre + surface-card) 순환 — 같은 색 연속 금지.
-  라운드 xs6/sm8/md12/lg16/xl24. 다크 푸터 금지, 무거운 그림자 금지(색 대비로 깊이).
-  🚦 판정 색: 🔴error 🟡warning 🟢success (브랜드색과 분리)
+- **디자인 시스템 = DESIGN.md (D-22, 크림 종이 위 스튜디오 스케치북)**. 토큰은
+  app/globals.css @theme: 크림(canvas #FCFAF5) + **포레스트 잉크(#1A3300)가 유일한 주색**
+  — 본문·제목·링크·CTA 채움·테두리를 전부 짊어진다. 하이라이터 옐로우(butter #FFE95C)는
+  마커 자국이지 버튼이 아니다. 파스텔 3색(mint/sky/soft-pink)은 스티키노트처럼 띄엄띄엄.
+  라운드 버튼6/카드12/네비16/pill999. 그림자 대신 색과 1px 테두리로 층을 가른다.
+  🚦 판정 색: 🔴error 🟡warning 🟢success — **브랜드색과 분리하고 하이라이터 옐로우를
+  판정 근처에 쓰지 않는다**
   폰트: Pretendard Variable — 디스플레이는 `.display`(600 + 타이트 자간), 700 이상 금지
   스타일 QA: /dev/style 페이지에서 토큰 눈으로 확인
 - UI 카피는 한국어. 아바타 시스템(털색×무늬×눈 SVG)은 핵심 브랜드 자산

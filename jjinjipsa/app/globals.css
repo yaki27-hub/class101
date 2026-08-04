@@ -2,65 +2,78 @@
 
 /*
  * 찐집사 디자인 시스템 (핸드오프 적용) — 플랫 UI × 3D 마스코트.
- * 도화지 크림 배경 + 흰 카드, 코랄은 주요 CTA 전용, 민트=정상·스카이=정보·버터=보상.
- * 제목 서체 Jua, 본문 Pretendard.
+ * 크림 종이 + 흰 카드, 포레스트 잉크가 텍스트·CTA·테두리를 모두 짊어진다.
+ * 하이라이터 옐로우는 마커 자국(강조)이지 버튼이 아니다. 파스텔은 스티키노트처럼 드문드문.
+ * 제목 서체 Jua, 본문 Pretendard (서체는 이번 개편에서 유지).
  */
 @theme {
-  /* Surface — 도화지 화이트 */
-  --color-canvas: #fbfaf6;
-  --color-surface-soft: #f5efea;
+  /* Surface — 크림 종이 */
+  --color-canvas: #fcfaf5;          /* Cream Paper */
+  --color-surface-soft: #f2efe4;
   --color-surface-card: #ffffff;
-  --color-surface-strong: #efe7dd;
+  --color-surface-strong: #e7e2d3;
+  --color-whisper: #f1f1f1;         /* 면 전용. 텍스트로 쓰면 크림 대비 1.08:1 — 안 보인다 */
 
-  /* Text — 순수 검정 금지 */
-  --color-ink: #403a39;
-  --color-body: #6b635e;
-  --color-muted: #7e7876;
-  --color-muted-soft: #b8b0ac;
-  --color-nav-inactive: #78716e; /* 하단탭 비활성 — WCAG AA 4.79:1 */
-  --color-hairline: #f0e5de;
+  /* Text — 포레스트 잉크 계열 (순수 검정 금지) */
+  --color-ink: #1a3300;             /* Forest Ink */
+  --color-body: #3d5424;
+  --color-muted: #5f7349;
+  --color-muted-soft: #657552;
+  --color-nav-inactive: #5f7349;    /* 하단탭 비활성 — 크림 대비 4.99:1 */
+  --color-hairline: #cfcabb;        /* Pencil Gray를 크림 쪽으로 눌렀다 (카드 테두리 82곳) */
+  --color-pencil: #b6b6b6;          /* 원값 — 네비·구분선처럼 또렷해야 하는 곳 */
 
-  /* Brand */
-  --color-primary: #ff8d7b;      /* 코랄 — 주요 CTA 전용 */
-  --color-primary-deep: #e9705c;
-  --color-primary-soft: #fff0eb;
-  --color-secondary: #403a39;    /* 제목·강조 = 잉크 */
-  --color-butter: #ffd97b;       /* 보상·긍정 */
-  --color-butter-soft: #fff8df;
-  --color-mint: #bfe7d8;         /* 정상 */
-  --color-mint-soft: #eff8f1;
-  --color-sky: #cfeaff;          /* 정보 */
-  --color-sky-soft: #f0f8ff;
-  --color-sky-ink: #5b9bc9;
-  --color-soft-pink: #ffb7a8;    /* 코랄 보더(주의) */
+  /* Brand — 포레스트 잉크가 유일한 주색, 나머지는 악센트 */
+  --color-primary: #1a3300;         /* CTA = Forest Ink */
+  --color-primary-deep: #0e1c00;
+  --color-primary-soft: #eef3e4;
+  --color-secondary: #1a3300;       /* 제목 = 잉크 */
+  --color-butter: #ffe95c;          /* Highlighter Yellow — 마커 자국. CTA로 쓰지 않는다 */
+  --color-butter-soft: #fff8d0;
+  --color-mint: #d5f5c2;            /* Sticky Note Mint — 정상 */
+  --color-mint-soft: #edfae2;
+  --color-sky: #a8e5e5;             /* Sticky Note Teal — 정보 */
+  --color-sky-soft: #e8f7f7;
+  --color-sky-ink: #2b6b6b;
+  --color-soft-pink: #f6d0ff;       /* Sticky Note Blush */
+  --color-terracotta: #cb5521;
 
   /* 기존 컴포넌트 호환 별칭 */
-  --color-brand-pink: #ffb7a8;
-  --color-brand-teal: #403a39;
-  --color-brand-lavender: #cfeaff;
-  --color-brand-peach: #fff0eb;
-  --color-brand-ochre: #ff8d7b;
-  --color-brand-mint: #bfe7d8;
+  --color-brand-pink: #f6d0ff;
+  --color-brand-teal: #a8e5e5;
+  --color-brand-lavender: #f6d0ff;
+  --color-brand-peach: #fff8d0;
+  --color-brand-ochre: #ffe95c;
+  --color-brand-mint: #d5f5c2;
 
-  /* 🚦 판정 시맨틱 */
-  --color-success: #58a97b;
-  --color-warning: #f4a261;
-  --color-error: #f26b6b;
+  /*
+   * 🚦 판정 시맨틱 — 브랜드색과 분리한다 (CLAUDE.md 규율).
+   * 하이라이터 옐로우(#ffe95c)는 🟡 자리를 침범하므로 판정 UI 근처에 쓰지 않는다.
+   * 셋 다 크림 배경에서 본문 크기 AA(4.5:1)를 넘긴다.
+   */
+  --color-success: #2f7a4d;         /* 5.02:1 */
+  --color-warning: #8f6200;         /* 5.14:1 (버터 배경 위에서도 5.00:1) */
+  --color-error: #c0392b;           /* 5.21:1 */
 
-  /* Radius (핸드오프: 타일16·버튼18·카드20·pill999) */
-  --radius-xs: 8px;
-  --radius-sm: 12px;
-  --radius-md: 16px;
-  --radius-tile: 16px;
-  --radius-input: 18px;
-  --radius-button: 18px;
-  --radius-card: 20px;
-  --radius-lg: 20px;
-  --radius-xl: 24px;
+  /* Radius — 버튼 6 / 카드 12 / 네비 16 / pill 999 */
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-tile: 12px;
+  --radius-input: 6px;
+  --radius-button: 6px;
+  --radius-card: 12px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 
-  /* 서체 */
+  /* 그림자 — 색과 1px 테두리가 층을 가른다. 그림자는 눌림 정도만 */
+  --shadow-subtle: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+  --shadow-subtle-2: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+
+  /* 서체 — 이번 적용에서 제외 (기존 유지) */
   --font-title: "Jua", "Pretendard Variable", Pretendard, sans-serif;
 }
+
 
 body {
   font-family:
@@ -70,7 +83,7 @@ body {
 
 /* 도화지 결 — 채도0 노이즈 아주 옅게 (핸드오프 §종이 질감) */
 .paper {
-  background-color: #fbfaf6;
+  background-color: #fcfaf5;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
 

@@ -22,11 +22,15 @@ import WeightSection from "@/components/WeightSection";
 import { loadHealthNote, saveHealthNote } from "@/lib/healthNote";
 import { IconCat, IconChat, IconPencil, IconTrash } from "@/components/icons";
 
+/*
+ * 생애 5단계는 서로 구분되는 것이 전부다.
+ * 잉크 계열을 여럿 쓰면 청년·중년·시니어가 같은 초록으로 뭉개진다 → 스티키노트 4색 + 잉크.
+ */
 const SEGMENT_COLORS: Record<string, string> = {
   kitten: "bg-mint",
-  junior: "bg-primary",
-  adult: "bg-soft-pink",
-  mature: "bg-primary-deep",
+  junior: "bg-sky",
+  adult: "bg-butter",
+  mature: "bg-soft-pink",
   senior: "bg-ink",
 };
 
@@ -264,7 +268,7 @@ export default function CatDetailPage() {
       <div className="space-y-2">
         <Link
           href={`/cats/${cat.id}/chat`}
-          className="flex h-12 w-full items-center justify-center gap-1.5 rounded-button bg-primary text-sm font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
+          className="flex h-12 w-full items-center justify-center gap-1.5 rounded-button bg-primary text-sm font-bold text-white shadow-subtle active:scale-[0.99]"
         >
           <IconChat size={18} /> 냥박사에게 물어보기
         </Link>

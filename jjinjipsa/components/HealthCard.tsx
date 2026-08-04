@@ -94,7 +94,7 @@ const HealthCard = forwardRef<
                     key={it.key}
                     className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
                       abnormal
-                        ? "bg-[#fff4ec] text-[#b8862e]"
+                        ? "bg-butter-soft text-warning"
                         : "bg-mint-soft text-success"
                     }`}
                   >

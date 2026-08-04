@@ -43,7 +43,7 @@ function tileState(level?: DailyStatusLevel): TileState {
 const TILE_BG: Record<TileState, string> = {
   unrecorded: "border-hairline bg-white",
   normal: "border-mint bg-mint-soft",
-  warning: "border-soft-pink bg-[#fff4ec]",
+  warning: "border-hairline bg-butter-soft",
 };
 
 function stateCopy(cat: Cat, summary: DailySummary): { title: string; sub: string } {
@@ -142,7 +142,7 @@ export default function DailyStatusCard({
       {abnormal && (
         <button
           onClick={askDoctor}
-          className="mt-4 flex h-12 w-full items-center justify-center rounded-button bg-primary text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(255,141,123,0.35)] active:scale-[0.99]"
+          className="mt-4 flex h-12 w-full items-center justify-center rounded-button bg-primary text-[15px] font-bold text-white shadow-subtle active:scale-[0.99]"
         >
           냥박사와 확인하기
         </button>
