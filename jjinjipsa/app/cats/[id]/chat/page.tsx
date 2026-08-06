@@ -3,7 +3,7 @@
 /* F-08 챗봇 대화 화면 (T-06: mock 왕복 + 세션 저장. Gemini 연결·컨텍스트 주입은 T-07) */
 
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
   newId,
@@ -22,6 +22,7 @@ import {
 } from "@/lib/redFlags";
 import NyangLoader from "@/components/NyangLoader";
 import Mascot from "@/components/Mascot";
+import { detectOtherCatMention } from "@/lib/chat/catMention";
 import { IconCamera, IconClose } from "@/components/icons";
 import BackButton from "@/components/BackButton";
 import AnswerBlocks from "@/components/chat/AnswerBlocks";
@@ -47,6 +48,14 @@ export default function ChatPage() {
   } | null>(null);
   const [logSaved, setLogSaved] = useState(false);
   const [photo, setPhoto] = useState<string | null>(null); // 첨부 사진
+  /** 다른 아이 지칭 감지 시 확인 카드 (지시서 P0-1). 질문을 들고 있다가 선택에 따라 보낸다 */
+  const [mentionCheck, setMentionCheck] = useState<{
+    other: Cat;
+    question: string;
+    image: string | null;
+  } | null>(null);
+  const [allCats, setAllCats] = useState<Cat[]>([]);
+  const router = useRouter();
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -81,6 +90,7 @@ export default function ChatPage() {
       const c = await storage.getCat(catId);
       setCat(c);
       if (!c) return;
+      setAllCats(await storage.listCats());
       const sessions = await storage.listSessions(catId);
       const last = sessions[sessions.length - 1];
       if (last) {
@@ -102,9 +112,24 @@ export default function ChatPage() {
       setTimeout(() => fileRef.current?.click(), 300);
   }, [searchParams]);
 
-  async function send(text?: string) {
+  async function send(text?: string, opts?: { skipMentionCheck?: boolean }) {
     const q = (text ?? draft).trim() || (photo ? "이 사진 좀 봐줄래요?" : "");
     if (!q || !cat || streaming !== null) return;
+
+    /*
+     * 개체 확인 게이트 (지시서 P0-1) — 질문에 다른 아이의 이름·별명이 보이면
+     * 보내기 전에 멈추고 묻는다. 다른 아이 질문에 이 아이의 체중·기록으로
+     * 답하는 것이 이 서비스에서 가장 신뢰를 깨는 실수라서다.
+     */
+    if (!opts?.skipMentionCheck) {
+      const other = detectOtherCatMention(q, allCats, cat.id);
+      if (other) {
+        setMentionCheck({ other, question: q, image: photo });
+        setDraft("");
+        setPhoto(null);
+        return;
+      }
+    }
     const img = photo;
     setDraft("");
     setPhoto(null);
@@ -319,6 +344,44 @@ export default function ChatPage() {
                 </div>
               </>
             )}
+          </div>
+        )}
+
+        {/* 개체 확인 — 다른 아이 이름이 질문에 보일 때 (지시서 P0-1) */}
+        {mentionCheck && streaming === null && (
+          <div className="rounded-card border border-butter bg-butter-soft p-4">
+            <p className="text-sm font-bold text-secondary">
+              {mentionCheck.other.name} 얘기가 맞을까요?
+            </p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-body">
+              지금은 {cat.name} 상담창이에요. {mentionCheck.other.name} 기준으로
+              보려면 {mentionCheck.other.name}의 프로필·기록으로 봐야 정확해요.
+            </p>
+            <div className="mt-3 flex gap-2">
+              <button
+                onClick={() => {
+                  const mc = mentionCheck;
+                  setMentionCheck(null);
+                  router.push(
+                    `/cats/${mc.other.id}/chat?q=${encodeURIComponent(mc.question)}`,
+                  );
+                }}
+                className="h-10 flex-1 rounded-button bg-primary text-[13px] font-bold text-white"
+              >
+                {mentionCheck.other.name}로 전환
+              </button>
+              <button
+                onClick={() => {
+                  const mc = mentionCheck;
+                  setMentionCheck(null);
+                  setPhoto(mc.image);
+                  void send(mc.question, { skipMentionCheck: true });
+                }}
+                className="h-10 flex-1 rounded-button border border-hairline bg-white text-[13px] font-semibold text-secondary"
+              >
+                {cat.name} 그대로
+              </button>
+            </div>
           </div>
         )}
 

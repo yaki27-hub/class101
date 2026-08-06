@@ -13,6 +13,11 @@ export interface CatAvatar {
 export interface Cat {
   id: string;
   name: string;
+  /**
+   * 별명·축약형 (로매↔로마 등) — 챗에서 다른 아이를 지칭했는지 알아보는 데 쓴다.
+   * 없거나 undefined면 이름만 매칭한다. (지시서 P0-1)
+   */
+  aliases?: string[];
   /** ISO date (YYYY-MM-DD). 추정 생일이면 birthEstimated=true */
   birthDate: string;
   birthEstimated: boolean;

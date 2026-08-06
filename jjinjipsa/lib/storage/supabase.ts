@@ -28,6 +28,7 @@ type CatRow = {
   birth_date: string; birth_estimated: boolean; gender: string; neutered: boolean;
   breed_group: string; weight_kg: number | null; conditions: string[]; indoor: boolean;
   avatar: Cat["avatar"]; photo: string | null; illust: string | null;
+  aliases?: string[] | null; // 0006 이전 스키마에는 없을 수 있다
   created_at: string; updated_at: string;
 };
 function toCat(r: CatRow): Cat {
@@ -36,6 +37,7 @@ function toCat(r: CatRow): Cat {
     gender: r.gender as Gender, neutered: r.neutered, breedGroup: r.breed_group,
     weightKg: r.weight_kg, conditions: r.conditions ?? [], indoor: r.indoor,
     avatar: r.avatar ?? null, photo: r.photo, illust: r.illust,
+    aliases: r.aliases ?? [],
     createdAt: r.created_at, updatedAt: r.updated_at,
   };
 }
@@ -60,6 +62,7 @@ export class SupabaseStorageAdapter implements StorageAdapter {
       birth_estimated: cat.birthEstimated, gender: cat.gender, neutered: cat.neutered,
       breed_group: cat.breedGroup, weight_kg: cat.weightKg, conditions: cat.conditions,
       indoor: cat.indoor, avatar: cat.avatar, photo: cat.photo, illust: cat.illust,
+      aliases: cat.aliases ?? [],
       updated_at: new Date().toISOString(),
     };
     const { error } = await supabase.from("cats").upsert(row);
