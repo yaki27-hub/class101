@@ -12,7 +12,9 @@ import type { KbRefBrief } from "@/lib/kb/retrieve";
 
 const LIMIT_MESSAGE =
   "오늘은 여기까지예요 🐾 하루에 물어볼 수 있는 횟수를 다 썼어요.\n" +
-  "내일 다시 만나요! 그동안 케어 카드나 오늘의 체크를 살펴보는 것도 좋아요.";
+  "내일 다시 만나요! 그동안 케어 카드나 오늘의 체크를 살펴보는 것도 좋아요.\n\n" +
+  "⚠️ 응급이 의심되면 저를 기다리지 마세요 — 지금 다니시는 병원이나 24시간 " +
+  "동물병원에 바로 연락하는 것이 맞아요.";
 
 async function* once(text: string): AsyncIterable<string> {
   yield text;
@@ -47,10 +49,16 @@ export class RemoteLlmAdapter implements LlmAdapter {
 
   async ask(req: LlmRequest): Promise<LlmChunkedResponse> {
     try {
-      const [traits, symptoms] = await Promise.all([
+      const [traits, symptoms, weights, allCats] = await Promise.all([
         storage.listTraits(req.cat.id),
         storage.listSymptoms(req.cat.id),
+        storage.listWeights(req.cat.id).catch(() => []),
+        storage.listCats().catch(() => []),
       ]);
+      // R8 개체 혼동 방지 — 다른 아이들의 이름·별명을 프롬프트에 알린다
+      const otherCatNames = allCats
+        .filter((c) => c.id !== req.cat.id)
+        .flatMap((c) => [c.name, ...(c.aliases ?? [])]);
       const { data } = await supabase.auth.getSession();
       const token = data.session?.access_token;
       const res = await fetch("/api/chat", {
@@ -63,6 +71,8 @@ export class RemoteLlmAdapter implements LlmAdapter {
           cat: req.cat,
           traits,
           symptoms,
+          weights: weights.slice(-12),
+          otherCatNames,
           history: req.history,
           question: req.question,
           image: req.image ?? null,

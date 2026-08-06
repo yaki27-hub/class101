@@ -100,6 +100,8 @@ export const RED_FLAG_RULES: RedFlagRule[] = [
       /(에센셜\s*오일|디퓨저|아로마).*(핥|먹|쏟|묻)/,
       /(담배|니코틴).*(먹|삼|핥)/,
       /(독|중독).*(먹|삼킨|의심)/,
+      // 이물 섭취 — 소화되지 않는 것을 먹거나 삼킴
+      /(이물질?|비닐|휴지|스펀지|솜|스티로폼|장난감(\s*조각)?|테이프|머리끈)(을|를)?\s*(약간\s*)?.*(먹|삼)/,
     ],
     reason:
       "백합(꽃가루·꽃병 물 포함 전부), 실·리본, 사람 약, 쥐약, 양파·마늘, 자일리톨, 가정용 화학물질은 고양이에게 치명적일 수 있어요. 증상을 기다리는 것 자체가 위험합니다 — 초기 처치가 예후를 가릅니다.",
@@ -287,7 +289,43 @@ export const RED_FLAG_RULES: RedFlagRule[] = [
   },
 ];
 
+/*
+ * 예방·정보 문의 인텐트 (지시서 P0-3, 기준표 §0-6).
+ *
+ * "몬스테라 둬도 될까?", "자일리톨 껌 먹여도 돼?"는 노출 **사건**이 아니라
+ * 앞으로에 대한 질문이다. 이걸 🔴로 돌려보내면 경보 피로가 쌓여
+ * 진짜 응급이 무시된다 — 과잉 🔴는 과잉 🟢만큼 해롭다.
+ *
+ * 가드는 보수적으로 건다: 예방 표지가 있어도 **노출 표지가 하나라도 보이면
+ * 룰이 그대로 발동한다** (애매하면 상향, §0-1). "백합을 집에 두고 나왔어"는
+ * 미래형이 없고 노출 표지(두고 나왔)가 있어 🔴 유지.
+ */
+const PREVENTION_PATTERNS: RegExp[] = [
+  /(둬도|두어도|놔둬도|들여도|들여놔도|키워도|사도|먹여도|줘도|해도|같이\s*있어도)\s*(될까|되나|괜찮|돼\s*\?|돼요|돼\s|될지|되는지)/,
+  /(들이|살|키울|기를)\s*(까|려고|고\s*싶|예정|생각)/,
+  /(뭐가|어떤\s*게|왜)\s*(위험|안\s*좋|해로|독이|나쁘)/,
+  /(위험한가요|괜찮은가요|괜찮을까요|되나요)\s*\??\s*$/,
+];
+
+/** 노출이 이미 있었다는 표지 — 하나라도 있으면 예방 가드를 무시하고 룰 발동 */
+const EXPOSURE_PATTERNS: RegExp[] = [
+  /(먹었|먹은\s*것\s*같|먹은거\s*같|먹은것같|삼켰|삼킨|핥았|핥은|씹었|씹은)/,
+  /(두고\s*나(왔|간|감)|두고\s*왔)/,
+  /(노출|접촉|묻었|묻은|쏟았|쏟은|엎질)/,
+  /(물고\s*놀|가지고\s*놀았|삼키는\s*걸\s*봤|먹는\s*걸\s*봤|발견)/,
+  /(방금|아까|어제|조금\s*전|이미)/,
+  /(토했|토해|구토|축\s*늘어|침을\s*흘)/,
+];
+
+/** 예방·정보 문의라서 룰을 건너뛰어야 하는가 */
+export function isPreventionQuestion(text: string): boolean {
+  if (EXPOSURE_PATTERNS.some((p) => p.test(text))) return false;
+  return PREVENTION_PATTERNS.some((p) => p.test(text));
+}
+
 export function checkRedFlags(text: string): RedFlagRule | null {
+  // 예방·정보 문의는 응급이 아니다 — LLM이 🟢 + 단호한 예방 안내로 답한다 (R1-4)
+  if (isPreventionQuestion(text)) return null;
   for (const rule of RED_FLAG_RULES) {
     if (rule.patterns.some((p) => p.test(text))) return rule;
   }
@@ -305,6 +343,8 @@ export function buildRedFlagResponse(rule: RedFlagRule, catName: string): string
     ``,
     `집사님, 말씀해 주신 내용은 **${rule.label}** 신호예요.`,
     rule.reason,
+    ``,
+    `판정 근거: ${rule.label} — 응급 룰`,
     ``,
     `지금 바로 ${catName}를 데리고 가까운 동물병원(야간·휴일이면 24시 동물병원)으로 이동해 주세요. 이 신호는 지켜보며 기다리는 것이 가장 위험해요.`,
     ``,

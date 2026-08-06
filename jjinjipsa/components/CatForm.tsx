@@ -30,6 +30,8 @@ export default function CatForm({ existing }: { existing?: Cat }) {
     existing?.conditions ?? [],
   );
   const [photo, setPhoto] = useState<string | null>(existing?.photo ?? null);
+  // 별명 — 챗에서 "로마 비만일까?"처럼 줄여 부를 때 어느 아이인지 알아보는 데 쓴다
+  const [aliasText, setAliasText] = useState((existing?.aliases ?? []).join(", "));
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   // 중복 제출 방지: state는 리렌더 배치로 빠른 더블탭을 못 막으므로 ref로 동기 차단
@@ -90,6 +92,11 @@ export default function CatForm({ existing }: { existing?: Cat }) {
       const cat: Cat = {
         id: existing?.id ?? newId(),
         name: name.trim(),
+        aliases: aliasText
+          .split(",")
+          .map((s) => s.trim())
+          .filter((s) => s.length >= 2)
+          .slice(0, 5),
         birthDate,
         birthEstimated,
         gender,
@@ -174,6 +181,17 @@ export default function CatForm({ existing }: { existing?: Cat }) {
           <label className={label} htmlFor="cat-name">이름</label>
           <input id="cat-name" className={input} value={name}
             onChange={(e) => setName(e.target.value)} placeholder="예: 츄르" maxLength={12} />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className={label} htmlFor="cat-alias">
+            별명 <span className="font-normal text-muted">(선택 · 쉼표로 구분)</span>
+          </label>
+          <input id="cat-alias" className={input} value={aliasText}
+            onChange={(e) => setAliasText(e.target.value)} placeholder="예: 츄츄, 츄르씨" maxLength={40} />
+          <p className="text-[11.5px] leading-relaxed text-muted">
+            평소 부르는 다른 이름을 적어두면, 냥박사가 어느 아이 얘기인지 알아들어요.
+          </p>
         </div>
 
         <div className="space-y-1.5">
