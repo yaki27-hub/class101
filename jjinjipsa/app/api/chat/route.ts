@@ -19,6 +19,12 @@ const VISION_MODEL = process.env.GEMINI_VISION_MODEL ?? "gemini-3.1-flash-lite";
 // 오픈 테스트 기본값은 10. 잠시 풀어야 하면 Vercel 환경변수 DAILY_CHAT_LIMIT을
 // 0으로 두면 되고(재배포 불필요), 기본값 자체는 건드리지 않는다.
 const DAILY_LIMIT = Number(process.env.DAILY_CHAT_LIMIT ?? "10");
+/*
+ * 게스트(익명 계정) 한도 (D-24) — 로그인 전에는 하루 3개.
+ * 캐시를 지워 새 익명 계정을 만들면 계정 카운트는 초기화되지만,
+ * ①한도가 3이라 얻는 게 적고 ②IP 상한(40)이 그대로 받아준다.
+ */
+const GUEST_DAILY_LIMIT = Number(process.env.GUEST_CHAT_LIMIT ?? "3");
 
 /*
  * IP 기준 하루 상한 — 계정 한도의 구멍을 메운다.
@@ -85,9 +91,15 @@ async function overAccountLimit(authHeader: string | null): Promise<boolean> {
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       global: { headers: { Authorization: `Bearer ${token}` } },
     });
-    const { data, error } = await sb.rpc("bump_chat_usage");
+    // 티어 판별 (D-24): 익명이면 게스트 한도. 판별 실패 시 게스트로 본다 —
+    // 후하게 틀리는 것보다 짜게 틀리는 쪽이 비용 통제 목적에 맞다
+    const [{ data: userData }, { data, error }] = await Promise.all([
+      sb.auth.getUser(token),
+      sb.rpc("bump_chat_usage"),
+    ]);
     if (error || typeof data !== "number") return false;
-    return data > DAILY_LIMIT;
+    const isMember = userData?.user?.is_anonymous === false;
+    return data > (isMember ? DAILY_LIMIT : GUEST_DAILY_LIMIT);
   } catch {
     return false;
   }

@@ -8,7 +8,7 @@ import { newId, storage, type Cat, type Gender } from "@/lib/storage";
 import { BREED_GROUPS, CONDITIONS } from "@/lib/catOptions";
 import { IconCamera } from "@/components/icons";
 import BackButton from "@/components/BackButton";
-import { MAX_CATS, MAX_CATS_MESSAGE } from "@/lib/limits";
+import { getTier, maxCatsFor, maxCatsMessage } from "@/lib/limits";
 
 export default function CatForm({ existing }: { existing?: Cat }) {
   const router = useRouter();
@@ -75,11 +75,13 @@ export default function CatForm({ existing }: { existing?: Cat }) {
     savingRef.current = true;
     setSaving(true);
     try {
-      // 오픈 테스트 한도 (신규 등록 시)
+      // 티어 등록 한도 (D-24) — 신규 등록 시에만. 기존 아이는 건드리지 않는다
       if (!editing) {
-        const count = (await storage.listCats()).length;
-        if (count >= MAX_CATS)
-          return setError(`${MAX_CATS_MESSAGE} 기존 아이를 삭제한 뒤 등록해 주세요.`);
+        const [count, tier] = await Promise.all([
+          storage.listCats().then((l) => l.length),
+          getTier(),
+        ]);
+        if (count >= maxCatsFor(tier)) return setError(maxCatsMessage(tier));
       }
       if (!name.trim()) return setError("이름을 입력해 주세요.");
       if (!birthDate)
