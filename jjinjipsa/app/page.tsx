@@ -94,9 +94,10 @@ function Home() {
   if (loading) return null;
 
   // 등록된 아이가 없으면 무드를 띄울 근거 자체가 없다 — 기존 빈 화면 유지
+  // pb-28: 하단 알약 내비가 마지막 76px를 덮으므로, 로그인 배너가 그 위에서 끝나야 한다
   if (!cat || !cats || cats.length === 0) {
     return (
-      <main className="flex flex-1 flex-col gap-5 px-5 pt-8 pb-6">
+      <main className="flex flex-1 flex-col gap-5 px-5 pt-8 pb-28">
         <EmptyCatCard />
         <div className="mt-auto pt-1">
           <LoginBanner />

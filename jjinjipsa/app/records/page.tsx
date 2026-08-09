@@ -129,8 +129,12 @@ export default function Records() {
       {today && (
         <section className="space-y-2 pt-1">
           <div className="flex items-center justify-between px-1">
-            <p className="display text-[16px] text-rd-ink">건강 카드</p>
-            <span className="text-[12px] text-rd-muted">병원·펫시터에게 한 장으로</span>
+            <p className="text-[16px] font-extrabold tracking-[-0.02em] text-rd-ink">
+              건강 카드
+            </p>
+            <span className="text-[12px] font-semibold text-rd-muted">
+              병원·펫시터에게 한 장으로
+            </span>
           </div>
           <HealthCard
             ref={cardRef}
@@ -158,75 +162,80 @@ export default function Records() {
         </section>
       )}
 
-      <p className="mt-2 px-1 text-[13px] font-bold text-rd-ink">
-        {multi ? "모든 아이의 증상 기록" : "증상 기록"}
-      </p>
-
-      {rows.length === 0 ? (
-        <div className="rounded-3xl bg-rd-card p-8 text-center">
-          <IconRecord size={40} className="mx-auto text-rd-faint" />
-          <p className="mt-2 font-bold text-rd-ink">아직 기록이 없어요</p>
-          <p className="mt-1 text-sm text-rd-body">
-            챗봇 대화나 증상 기록이 여기에 모여요.
-          </p>
-          {cats.length > 0 && (
-            <button
-              onClick={addRecord}
-              className="mt-4 h-12 w-full rounded-[14px] bg-rd-ink text-[15px] font-bold text-white shadow-subtle active:scale-[0.99]"
-            >
-              + 첫 기록 남기기
-            </button>
+      {/* 증상 기록 — 홈 카드 문법: 한 카드 안에 내부 헤더 + 행 목록 */}
+      <section className="mt-1 rounded-3xl bg-rd-card p-5">
+        <div className="flex items-center justify-between">
+          <h2 className="text-[16px] font-extrabold tracking-[-0.02em] text-rd-ink">
+            {multi ? "모든 아이의 증상 기록" : "증상 기록"}
+          </h2>
+          {rows.length > 0 && (
+            <span className="text-[12px] font-semibold text-rd-muted">
+              {rows.length}건
+            </span>
           )}
         </div>
-      ) : (
-        rows.map(({ cat, log }) => {
-          const accent = accents[cat.id] ?? ACCENTS[0];
-          return (
-            <div
-              key={log.id}
-              className="flex overflow-hidden rounded-3xl bg-rd-card"
-            >
-              {/* 어느 아이 기록인지 — 좌측 색 바 (다묘일 때만) */}
-              {multi && <span className={`w-1.5 flex-none ${accent.bar}`} aria-hidden />}
-              <div className="min-w-0 flex-1 p-4">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="flex min-w-0 items-center gap-2">
-                    <CatAvatar cat={cat} size={26} radius={9} />
-                    <span
-                      className={`truncate rounded-full px-2 py-0.5 text-[12px] font-bold ${accent.soft} ${accent.text}`}
-                    >
-                      {cat.name}
+
+        {rows.length === 0 ? (
+          <div className="py-4 text-center">
+            <IconRecord size={40} className="mx-auto text-rd-faint" />
+            <p className="mt-2 font-bold text-rd-ink">아직 기록이 없어요</p>
+            <p className="mt-1 text-sm text-rd-body">
+              챗봇 대화나 증상 기록이 여기에 모여요.
+            </p>
+            {cats.length > 0 && (
+              <button
+                onClick={addRecord}
+                className="mt-4 h-12 w-full rounded-[14px] bg-rd-ink text-[15px] font-bold text-white active:scale-[0.99]"
+              >
+                + 첫 기록 남기기
+              </button>
+            )}
+          </div>
+        ) : (
+          <ul className="mt-1.5 divide-y divide-rd-line-soft">
+            {rows.map(({ cat, log }) => {
+              const accent = accents[cat.id] ?? ACCENTS[0];
+              return (
+                <li key={log.id} className="py-3.5 first:pt-2 last:pb-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex min-w-0 items-center gap-2">
+                      <CatAvatar cat={cat} size={26} radius={9} />
+                      <span
+                        className={`truncate rounded-full px-2 py-0.5 text-[12px] font-bold ${accent.soft} ${accent.text}`}
+                      >
+                        {cat.name}
+                      </span>
                     </span>
-                  </span>
-                  <div className="flex flex-none items-center gap-1">
-                    <span className="text-[11px] text-rd-muted">
-                      {log.occurredAt.slice(0, 10).replace(/-/g, ".")}
-                    </span>
-                    <button
-                      onClick={() => void remove(cat.id, log.id)}
-                      aria-label={`${cat.name}의 ${log.occurredAt.slice(0, 10)} 기록 삭제`}
-                      className="-my-2.5 -mr-2.5 flex size-11 items-center justify-center rounded-full text-rd-muted active:bg-rd-page"
-                    >
-                      <IconTrash size={15} />
-                    </button>
+                    <div className="flex flex-none items-center gap-1">
+                      <span className="text-[11px] text-rd-muted">
+                        {log.occurredAt.slice(0, 10).replace(/-/g, ".")}
+                      </span>
+                      <button
+                        onClick={() => void remove(cat.id, log.id)}
+                        aria-label={`${cat.name}의 ${log.occurredAt.slice(0, 10)} 기록 삭제`}
+                        className="-my-2.5 -mr-2.5 flex size-11 items-center justify-center rounded-full text-rd-muted active:bg-rd-page"
+                      >
+                        <IconTrash size={15} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <p className="mt-2 flex flex-wrap gap-1">
-                  {log.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full bg-soft-pink px-2 py-0.5 text-[11px] font-semibold text-rd-ink"
-                    >
-                      #{t}
-                    </span>
-                  ))}
-                </p>
-                <p className="mt-1 text-[13px] text-rd-body">{log.summary}</p>
-              </div>
-            </div>
-          );
-        })
-      )}
+                  <p className="mt-2 flex flex-wrap gap-1">
+                    {log.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-full bg-rd-mint-soft px-2 py-0.5 text-[11px] font-semibold text-rd-forest"
+                      >
+                        #{t}
+                      </span>
+                    ))}
+                  </p>
+                  <p className="mt-1 text-[13px] text-rd-body">{log.summary}</p>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
 
       {/* 어느 아이 기록인지 선택 (다묘) */}
       <BottomSheet

@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { storage } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 import { IconCat } from "@/components/icons";
-import BackButton from "@/components/BackButton";
 
 const APP_VERSION = "v1.0 (오픈 테스트)";
 const CONTACT_EMAIL = "melona-yolo@naver.com";
@@ -62,15 +61,17 @@ export default function AccountPage() {
   if (auth === null) return null;
 
   return (
-    <main className="flex flex-1 flex-col gap-4 px-5 pt-8 pb-24">
-      <header className="flex items-center gap-2">
-        <BackButton fallback="/cats" />
-        <h1 className="display text-[22px] text-rd-ink">계정 설정</h1>
+    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-28">
+      {/* 하단 탭에서 오는 화면이라 뒤로가기 없이 제목만 둔다 (홈 문법) */}
+      <header className="mb-1">
+        <h1 className="display text-[22px] text-rd-ink">설정</h1>
       </header>
 
       {/* 로그인 상태 */}
-      <section className="rounded-3xl bg-white p-5 border border-rd-line">
-        <p className="text-sm font-bold text-rd-ink">로그인 상태</p>
+      <section className="rounded-3xl bg-rd-card p-5">
+        <p className="text-[16px] font-extrabold tracking-[-0.02em] text-rd-ink">
+          로그인 상태
+        </p>
         {auth.linked ? (
           <div className="mt-3 flex items-center gap-3">
             <span className="flex size-11 items-center justify-center rounded-full bg-rd-mint-soft text-rd-forest">
@@ -107,29 +108,31 @@ export default function AccountPage() {
         <button
           onClick={() => void logout()}
           disabled={busy}
-          className="rounded-[14px] bg-white py-4 text-sm font-semibold text-rd-ink border border-rd-line disabled:opacity-60"
+          className="rounded-[14px] border border-rd-line bg-white py-4 text-sm font-semibold text-rd-ink disabled:opacity-60"
         >
           로그아웃
         </button>
       )}
 
-      {/* 문의 · 면책 · 버전 */}
-      <section className="rounded-3xl bg-white border border-rd-line">
+      {/* 문의 · 면책 · 버전 — 한 카드 안의 행 목록 (홈 문법) */}
+      <section className="rounded-3xl bg-rd-card px-5">
         <a
           href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("[찐집사] 문의")}`}
-          className="flex items-center justify-between border-b border-rd-line px-5 py-4 text-sm text-rd-ink"
+          className="flex items-center justify-between border-b border-rd-line-soft py-4 text-sm font-semibold text-rd-ink"
         >
           <span>문의하기</span>
-          <span className="text-[12px] text-rd-muted">{CONTACT_EMAIL} ›</span>
+          <span className="text-[12px] font-medium text-rd-muted">
+            {CONTACT_EMAIL} ›
+          </span>
         </a>
-        <div className="border-b border-rd-line px-5 py-4">
+        <div className="border-b border-rd-line-soft py-4">
           <p className="text-[13px] leading-relaxed text-rd-muted">
             이 앱의 건강 정보는 참고용이며, 정확한 진단은 수의사 상담이 필요합니다.
           </p>
         </div>
-        <div className="flex items-center justify-between px-5 py-4 text-sm text-rd-ink">
+        <div className="flex items-center justify-between py-4 text-sm font-semibold text-rd-ink">
           <span>버전</span>
-          <span className="text-[12px] text-rd-muted">{APP_VERSION}</span>
+          <span className="text-[12px] font-medium text-rd-muted">{APP_VERSION}</span>
         </div>
       </section>
 
@@ -148,7 +151,7 @@ export default function AccountPage() {
 
       {/* 탈퇴 확인 */}
       {confirmDel && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondary/40 px-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
           <div className="w-full max-w-[340px] rounded-3xl bg-white p-6">
             <p className="text-lg font-bold text-rd-ink">정말 탈퇴할까요?</p>
             <p className="mt-2 text-sm leading-relaxed text-rd-body">
