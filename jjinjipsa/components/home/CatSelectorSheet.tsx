@@ -35,20 +35,20 @@ export default function CatSelectorSheet({
                 onSelect(c.id);
                 onClose();
               }}
-              className={`flex w-full items-center gap-3 rounded-card border p-3 text-left transition ${
-                on ? "border-primary bg-primary/10" : "border-hairline bg-white"
+              className={`flex w-full items-center gap-3 rounded-3xl border p-3 text-left transition ${
+                on ? "border-rd-mint-line bg-rd-mint-soft" : "border-rd-line bg-white"
               }`}
             >
               <CatAvatar cat={c} size={44} radius={14} accent={cats.length > 1 ? accentAt(i) : undefined} />
               <span className="min-w-0 flex-1">
-                <span className="block truncate font-bold text-secondary">
+                <span className="block truncate font-bold text-rd-ink">
                   {c.name}
                 </span>
-                <span className="block truncate text-[12px] text-muted">
+                <span className="block truncate text-[12px] text-rd-muted">
                   {age.ageLabel} · {c.breedGroup}
                 </span>
               </span>
-              {on && <span className="flex-none text-primary-deep">✓</span>}
+              {on && <span className="flex-none text-rd-forest">✓</span>}
             </button>
           );
         })}
@@ -58,7 +58,7 @@ export default function CatSelectorSheet({
         <Link
           href="/profile/new"
           onClick={onClose}
-          className="mt-3 flex h-12 items-center justify-center rounded-button border border-dashed border-hairline text-sm font-semibold text-muted"
+          className="mt-3 flex h-12 items-center justify-center rounded-[14px] border border-dashed border-rd-line text-sm font-semibold text-rd-muted"
         >
           + 다른 아이 등록
         </Link>

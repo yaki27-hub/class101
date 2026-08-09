@@ -65,7 +65,7 @@ export default function BottomSheet({
       >
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-hairline" aria-hidden />
         {title && (
-          <p className="text-center text-[16px] font-bold text-secondary">{title}</p>
+          <p className="text-center text-[16px] font-bold text-rd-ink">{title}</p>
         )}
         <div className="mt-4">{children}</div>
       </div>

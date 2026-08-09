@@ -15,7 +15,7 @@ import { setSelectedCatId } from "@/lib/selectedCat";
 import { getTier, maxCatsFor } from "@/lib/limits";
 
 const SEGMENT_COLORS: Record<string, string> = {
-  kitten: "bg-mint",
+  kitten: "bg-rd-mint",
   junior: "bg-primary",
   adult: "bg-soft-pink",
   mature: "bg-primary-deep",
@@ -92,12 +92,12 @@ export default function OnboardPrototype() {
     <main className="flex flex-1 flex-col gap-5 px-5 pt-10 pb-24">
       {/* Step 1 — 생일 한 칸 */}
       <section>
-        <p className="text-sm text-muted">반가워요 🐾</p>
-        <h1 className="display mt-1 text-[24px] leading-snug text-secondary">
+        <p className="text-sm text-rd-muted">반가워요 🐾</p>
+        <h1 className="display mt-1 text-[24px] leading-snug text-rd-ink">
           우리 아이 생일이<br />언제예요?
         </h1>
-        <p className="mt-2 text-[14px] text-body">
-          생일만 알려주면 <b className="text-secondary">사람 나이</b>로 바로 환산해드려요.
+        <p className="mt-2 text-[14px] text-rd-body">
+          생일만 알려주면 <b className="text-rd-ink">사람 나이</b>로 바로 환산해드려요.
         </p>
 
         {!dontKnow ? (
@@ -110,11 +110,11 @@ export default function OnboardPrototype() {
                 setBirthDate(e.target.value);
                 setEstimated(false);
               }}
-              className="mt-4 h-12 w-full rounded-input border border-hairline bg-white px-4 py-3 text-base text-ink focus:border-primary focus:outline-none"
+              className="mt-4 h-12 w-full rounded-[14px] bg-rd-card px-4 py-3 text-base text-rd-ink focus:border-rd-mint-line focus:outline-none"
             />
             <button
               onClick={() => setDontKnow(true)}
-              className="mt-2 text-[13px] font-semibold text-muted underline"
+              className="mt-2 text-[13px] font-semibold text-rd-muted underline"
             >
               생일을 몰라요
             </button>
@@ -131,10 +131,10 @@ export default function OnboardPrototype() {
                     setBirthDate(iso);
                     setEstimated(true);
                   }}
-                  className={`rounded-button border px-3 py-3 text-[13px] font-semibold transition ${
+                  className={`rounded-[14px] border px-3 py-3 text-[13px] font-semibold transition ${
                     on
-                      ? "border-primary bg-primary/10 text-primary-deep"
-                      : "border-hairline bg-white text-secondary"
+                      ? "border-rd-mint-line bg-rd-mint-soft text-rd-forest"
+                      : "border-rd-line bg-white text-rd-ink"
                   }`}
                 >
                   {r.label}
@@ -147,7 +147,7 @@ export default function OnboardPrototype() {
                 setEstimated(false);
                 setBirthDate("");
               }}
-              className="col-span-2 text-[13px] font-semibold text-muted underline"
+              className="col-span-2 text-[13px] font-semibold text-rd-muted underline"
             >
               ← 생일로 정확히 입력할래요
             </button>
@@ -158,13 +158,13 @@ export default function OnboardPrototype() {
       {/* Step 2 — 즉시 나이 결과 + 첫 질문 (생일 넣으면 바로 등장) */}
       {age && draftCat && (
         <>
-          <section className="rounded-card bg-white p-6 text-center border border-hairline">
-            <p className="text-[13px] font-semibold text-muted">
+          <section className="rounded-3xl bg-white p-6 text-center border border-rd-line">
+            <p className="text-[13px] font-semibold text-rd-muted">
               {age.stageEmoji} {age.stageLabel}
               {estimated ? " (추정)" : ""} · {age.ageLabel}
             </p>
-            <p className="display mt-1 text-[30px] text-secondary">
-              사람 나이 <span className="text-primary-deep">{age.humanAge}세</span>예요
+            <p className="display mt-1 text-[30px] text-rd-ink">
+              사람 나이 <span className="text-rd-forest">{age.humanAge}세</span>예요
             </p>
             {/* 미니 생애시계 */}
             <div className="mt-4 flex h-2.5 w-full overflow-hidden rounded-full">
@@ -178,13 +178,13 @@ export default function OnboardPrototype() {
                 />
               ))}
             </div>
-            <p className="mt-4 rounded-input bg-surface-soft/70 p-3.5 text-[13px] leading-relaxed text-body">
+            <p className="mt-4 rounded-[14px] bg-rd-well p-3.5 text-[13px] leading-relaxed text-rd-body">
               {age.stageMessage}
             </p>
           </section>
 
           <section>
-            <p className="px-1 text-[13px] font-bold text-secondary">
+            <p className="px-1 text-[13px] font-bold text-rd-ink">
               바로 물어볼 수 있어요 👇
             </p>
             <div className="mt-2 space-y-2">
@@ -193,7 +193,7 @@ export default function OnboardPrototype() {
                   key={q}
                   onClick={() => void startChat(q)}
                   disabled={busy}
-                  className="flex w-full items-center gap-2 rounded-card bg-white px-4 py-3.5 text-left text-[14px] font-semibold text-secondary border border-hairline active:scale-[0.99] disabled:opacity-60"
+                  className="flex w-full items-center gap-2 rounded-3xl bg-white px-4 py-3.5 text-left text-[14px] font-semibold text-rd-ink border border-rd-line active:scale-[0.99] disabled:opacity-60"
                 >
                   <span className="size-1.5 flex-none rounded-full bg-primary" aria-hidden />
                   {q}
@@ -203,18 +203,18 @@ export default function OnboardPrototype() {
             <button
               onClick={() => void startChat()}
               disabled={busy}
-              className="mt-3 h-12 w-full rounded-button bg-primary py-3.5 text-sm font-bold text-white active:scale-[0.99] disabled:opacity-60"
+              className="mt-3 h-12 w-full rounded-[14px] bg-primary py-3.5 text-sm font-bold text-white active:scale-[0.99] disabled:opacity-60"
             >
               {busy ? "준비 중…" : "냥박사와 대화 시작하기 →"}
             </button>
-            <p className="mt-2 text-center text-[12px] text-muted">
+            <p className="mt-2 text-center text-[12px] text-rd-muted">
               이름·품종·체중은 나중에 채워도 돼요.
             </p>
           </section>
         </>
       )}
 
-      <Link href="/" className="mt-auto text-center text-[12px] text-muted-soft underline">
+      <Link href="/" className="mt-auto text-center text-[12px] text-rd-faint underline">
         건너뛰고 홈으로
       </Link>
     </main>

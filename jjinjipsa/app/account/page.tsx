@@ -65,36 +65,36 @@ export default function AccountPage() {
     <main className="flex flex-1 flex-col gap-4 px-5 pt-8 pb-24">
       <header className="flex items-center gap-2">
         <BackButton fallback="/cats" />
-        <h1 className="display text-[22px] text-secondary">계정 설정</h1>
+        <h1 className="display text-[22px] text-rd-ink">계정 설정</h1>
       </header>
 
       {/* 로그인 상태 */}
-      <section className="rounded-card bg-white p-5 border border-hairline">
-        <p className="text-sm font-bold text-secondary">로그인 상태</p>
+      <section className="rounded-3xl bg-white p-5 border border-rd-line">
+        <p className="text-sm font-bold text-rd-ink">로그인 상태</p>
         {auth.linked ? (
           <div className="mt-3 flex items-center gap-3">
-            <span className="flex size-11 items-center justify-center rounded-full bg-primary-soft text-primary-deep">
+            <span className="flex size-11 items-center justify-center rounded-full bg-rd-mint-soft text-rd-forest">
               <IconCat size={24} />
             </span>
             <div className="min-w-0">
-              <p className="font-bold text-secondary">{auth.nick}님</p>
-              <p className="truncate text-[12px] text-muted">
+              <p className="font-bold text-rd-ink">{auth.nick}님</p>
+              <p className="truncate text-[12px] text-rd-muted">
                 {auth.email ?? "카카오 계정 연결됨"}
               </p>
             </div>
-            <span className="ml-auto rounded-full bg-mint/60 px-2.5 py-1 text-[11px] font-semibold text-secondary">
+            <span className="ml-auto rounded-full bg-rd-mint/60 px-2.5 py-1 text-[11px] font-semibold text-rd-ink">
               카카오 연결됨
             </span>
           </div>
         ) : (
           <div className="mt-3">
-            <p className="text-[13px] text-body">
-              지금은 <b className="text-secondary">게스트</b>로 이용 중이에요.
+            <p className="text-[13px] text-rd-body">
+              지금은 <b className="text-rd-ink">게스트</b>로 이용 중이에요.
               기록이 이 기기에만 저장돼요.
             </p>
             <Link
               href="/login"
-              className="mt-3 flex h-11 items-center justify-center rounded-button bg-[#FEE500] text-sm font-bold text-[#3A1D1D]"
+              className="mt-3 flex h-11 items-center justify-center rounded-[14px] bg-[#FEE500] text-sm font-bold text-[#3A1D1D]"
             >
               카카오로 로그인하고 기록 지키기
             </Link>
@@ -107,29 +107,29 @@ export default function AccountPage() {
         <button
           onClick={() => void logout()}
           disabled={busy}
-          className="rounded-button bg-white py-4 text-sm font-semibold text-secondary border border-hairline disabled:opacity-60"
+          className="rounded-[14px] bg-white py-4 text-sm font-semibold text-rd-ink border border-rd-line disabled:opacity-60"
         >
           로그아웃
         </button>
       )}
 
       {/* 문의 · 면책 · 버전 */}
-      <section className="rounded-card bg-white border border-hairline">
+      <section className="rounded-3xl bg-white border border-rd-line">
         <a
           href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("[찐집사] 문의")}`}
-          className="flex items-center justify-between border-b border-hairline px-5 py-4 text-sm text-secondary"
+          className="flex items-center justify-between border-b border-rd-line px-5 py-4 text-sm text-rd-ink"
         >
           <span>문의하기</span>
-          <span className="text-[12px] text-muted">{CONTACT_EMAIL} ›</span>
+          <span className="text-[12px] text-rd-muted">{CONTACT_EMAIL} ›</span>
         </a>
-        <div className="border-b border-hairline px-5 py-4">
-          <p className="text-[13px] leading-relaxed text-muted">
+        <div className="border-b border-rd-line px-5 py-4">
+          <p className="text-[13px] leading-relaxed text-rd-muted">
             이 앱의 건강 정보는 참고용이며, 정확한 진단은 수의사 상담이 필요합니다.
           </p>
         </div>
-        <div className="flex items-center justify-between px-5 py-4 text-sm text-secondary">
+        <div className="flex items-center justify-between px-5 py-4 text-sm text-rd-ink">
           <span>버전</span>
-          <span className="text-[12px] text-muted">{APP_VERSION}</span>
+          <span className="text-[12px] text-rd-muted">{APP_VERSION}</span>
         </div>
       </section>
 
@@ -137,21 +137,21 @@ export default function AccountPage() {
       <button
         onClick={() => setConfirmDel(true)}
         disabled={busy}
-        className="mt-2 text-center text-[13px] font-semibold text-error underline disabled:opacity-60"
+        className="mt-2 text-center text-[13px] font-semibold text-[#C4453A] underline disabled:opacity-60"
       >
         계정 탈퇴
       </button>
 
-      <p className="text-center text-[11px] text-muted-soft">
+      <p className="text-center text-[11px] text-rd-faint">
         찐집사 · 내 고양이를 기억하는 건강 챗봇
       </p>
 
       {/* 탈퇴 확인 */}
       {confirmDel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondary/40 px-6">
-          <div className="w-full max-w-[340px] rounded-card bg-white p-6">
-            <p className="text-lg font-bold text-secondary">정말 탈퇴할까요?</p>
-            <p className="mt-2 text-sm leading-relaxed text-body">
+          <div className="w-full max-w-[340px] rounded-3xl bg-white p-6">
+            <p className="text-lg font-bold text-rd-ink">정말 탈퇴할까요?</p>
+            <p className="mt-2 text-sm leading-relaxed text-rd-body">
               등록한 <b>모든 고양이·사진·증상 기록·대화</b>가 지워지고
               되돌릴 수 없어요.
             </p>
@@ -159,14 +159,14 @@ export default function AccountPage() {
               <button
                 onClick={() => setConfirmDel(false)}
                 disabled={busy}
-                className="h-11 flex-1 rounded-button border border-hairline text-sm font-semibold text-body"
+                className="h-11 flex-1 rounded-[14px] border border-rd-line text-sm font-semibold text-rd-body"
               >
                 취소
               </button>
               <button
                 onClick={() => void deleteAccount()}
                 disabled={busy}
-                className="h-11 flex-1 rounded-button bg-error text-sm font-bold text-white disabled:opacity-60"
+                className="h-11 flex-1 rounded-[14px] bg-rd-danger text-sm font-bold text-white disabled:opacity-60"
               >
                 {busy ? "처리 중…" : "탈퇴하기"}
               </button>

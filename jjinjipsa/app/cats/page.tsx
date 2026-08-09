@@ -21,29 +21,29 @@ export default function CatsList() {
   if (cats === null) return null;
 
   return (
-    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-6">
-      <h1 className="display text-[22px] text-secondary">우리 고양이</h1>
+    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-28">
+      <h1 className="display text-[22px] text-rd-ink">우리 고양이</h1>
       {cats.map((cat, i) => {
         const age = getCatAge(cat.birthDate);
         return (
           <div
             key={cat.id}
-            className="flex items-center gap-4 rounded-card bg-white p-4 border border-hairline"
+            className="flex items-center gap-4 rounded-3xl bg-rd-card p-4"
           >
             <Link href={`/cats/${cat.id}`} className="flex flex-1 items-center gap-4">
               <CatAvatar cat={cat} size={64} radius={18} accent={cats.length > 1 ? accentAt(i) : undefined} />
               <div>
-                <p className="font-bold text-secondary">{cat.name}</p>
-                <p className="text-[12px] text-muted">
+                <p className="font-bold text-rd-ink">{cat.name}</p>
+                <p className="text-[12px] text-rd-muted">
                   {age.stageEmoji} {age.stageLabel} · {age.ageLabel}
                   {cat.weightKg ? ` · ${cat.weightKg}kg` : ""}
                 </p>
-                <p className="text-[12px] text-muted-soft">{cat.breedGroup}</p>
+                <p className="text-[12px] text-rd-faint">{cat.breedGroup}</p>
               </div>
             </Link>
             <Link
               href={`/cats/${cat.id}/edit`}
-              className="flex min-h-11 flex-none items-center gap-1 rounded-button bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
+              className="flex min-h-11 flex-none items-center gap-1 rounded-[14px] bg-rd-page px-3.5 text-[12px] font-semibold text-rd-ink"
             >
               <IconPencil size={13} /> 수정
             </Link>
@@ -53,12 +53,12 @@ export default function CatsList() {
       {cats.length < maxCatsFor(tier) ? (
         <Link
           href="/profile/new"
-          className="rounded-button border border-dashed border-hairline bg-white py-3.5 text-center text-sm font-semibold text-muted"
+          className="rounded-[14px] border border-dashed border-rd-line bg-white py-3.5 text-center text-sm font-semibold text-rd-muted"
         >
           + 다른 아이 등록
         </Link>
       ) : (
-        <p className="rounded-button bg-surface-soft py-3.5 text-center text-[13px] text-muted">
+        <p className="rounded-[14px] bg-rd-page py-3.5 text-center text-[13px] text-rd-muted">
           {maxCatsMessage(tier)} 🐾
         </p>
       )}
@@ -66,12 +66,12 @@ export default function CatsList() {
       {/* 계정 설정 진입 */}
       <Link
         href="/account"
-        className="mt-2 flex items-center justify-between rounded-card bg-white px-5 py-4 text-sm font-semibold text-secondary border border-hairline"
+        className="mt-2 flex items-center justify-between rounded-3xl bg-white px-5 py-4 text-sm font-semibold text-rd-ink border border-rd-line"
       >
         <span className="flex items-center gap-2">
-          <IconGear size={18} className="text-muted" /> 계정 설정
+          <IconGear size={18} className="text-rd-muted" /> 계정 설정
         </span>
-        <span className="text-muted-soft">›</span>
+        <span className="text-rd-faint">›</span>
       </Link>
     </main>
   );

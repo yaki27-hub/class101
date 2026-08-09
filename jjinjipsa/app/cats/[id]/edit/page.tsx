@@ -20,8 +20,8 @@ export default function EditProfilePage() {
   if (cat === null)
     return (
       <main className="flex flex-1 flex-col items-center justify-center gap-3 px-6">
-        <p className="text-sm text-body">등록된 아이를 찾을 수 없어요.</p>
-        <Link href="/" className="text-sm font-semibold text-ink underline">홈으로</Link>
+        <p className="text-sm text-rd-body">등록된 아이를 찾을 수 없어요.</p>
+        <Link href="/" className="text-sm font-semibold text-rd-ink underline">홈으로</Link>
       </main>
     );
 

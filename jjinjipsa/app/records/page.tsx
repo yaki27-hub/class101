@@ -112,13 +112,13 @@ export default function Records() {
   if (rows === null) return null;
 
   return (
-    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-6">
+    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-28">
       <div className="flex items-center justify-between">
-        <h1 className="display text-[22px] text-secondary">건강 기록</h1>
+        <h1 className="display text-[22px] text-rd-ink">건강 기록</h1>
         {cats.length > 0 && (
           <button
             onClick={addRecord}
-            className="flex min-h-11 items-center gap-1 rounded-button bg-primary px-4 text-[13px] font-bold text-white active:scale-95"
+            className="flex min-h-11 items-center gap-1 rounded-[14px] bg-rd-ink px-4 text-[13px] font-bold text-white active:scale-95"
           >
             + 기록 추가
           </button>
@@ -129,8 +129,8 @@ export default function Records() {
       {today && (
         <section className="space-y-2 pt-1">
           <div className="flex items-center justify-between px-1">
-            <p className="display text-[16px] text-secondary">건강 카드</p>
-            <span className="text-[12px] text-muted">병원·펫시터에게 한 장으로</span>
+            <p className="display text-[16px] text-rd-ink">건강 카드</p>
+            <span className="text-[12px] text-rd-muted">병원·펫시터에게 한 장으로</span>
           </div>
           <HealthCard
             ref={cardRef}
@@ -143,14 +143,14 @@ export default function Records() {
           <div className="flex gap-2">
             <button
               onClick={() => void shareText()}
-              className="h-11 flex-1 rounded-button border border-hairline bg-white text-sm font-semibold text-secondary"
+              className="h-11 flex-1 rounded-[14px] border border-rd-line bg-white text-sm font-semibold text-rd-ink"
             >
               텍스트 공유
             </button>
             <button
               onClick={() => void shareImage()}
               disabled={busy}
-              className="h-11 flex-1 rounded-button bg-primary text-sm font-bold text-white disabled:opacity-60"
+              className="h-11 flex-1 rounded-[14px] bg-rd-ink text-sm font-bold text-white disabled:opacity-60"
             >
               {busy ? "만드는 중…" : "이미지로 저장·공유"}
             </button>
@@ -158,21 +158,21 @@ export default function Records() {
         </section>
       )}
 
-      <p className="mt-2 px-1 text-[13px] font-bold text-secondary">
+      <p className="mt-2 px-1 text-[13px] font-bold text-rd-ink">
         {multi ? "모든 아이의 증상 기록" : "증상 기록"}
       </p>
 
       {rows.length === 0 ? (
-        <div className="rounded-card bg-white p-8 text-center border border-hairline">
-          <IconRecord size={40} className="mx-auto text-muted-soft" />
-          <p className="mt-2 font-bold text-secondary">아직 기록이 없어요</p>
-          <p className="mt-1 text-sm text-body">
+        <div className="rounded-3xl bg-rd-card p-8 text-center">
+          <IconRecord size={40} className="mx-auto text-rd-faint" />
+          <p className="mt-2 font-bold text-rd-ink">아직 기록이 없어요</p>
+          <p className="mt-1 text-sm text-rd-body">
             챗봇 대화나 증상 기록이 여기에 모여요.
           </p>
           {cats.length > 0 && (
             <button
               onClick={addRecord}
-              className="mt-4 h-12 w-full rounded-button bg-primary text-[15px] font-bold text-white shadow-subtle active:scale-[0.99]"
+              className="mt-4 h-12 w-full rounded-[14px] bg-rd-ink text-[15px] font-bold text-white shadow-subtle active:scale-[0.99]"
             >
               + 첫 기록 남기기
             </button>
@@ -184,7 +184,7 @@ export default function Records() {
           return (
             <div
               key={log.id}
-              className="flex overflow-hidden rounded-card border border-hairline bg-white"
+              className="flex overflow-hidden rounded-3xl bg-rd-card"
             >
               {/* 어느 아이 기록인지 — 좌측 색 바 (다묘일 때만) */}
               {multi && <span className={`w-1.5 flex-none ${accent.bar}`} aria-hidden />}
@@ -199,13 +199,13 @@ export default function Records() {
                     </span>
                   </span>
                   <div className="flex flex-none items-center gap-1">
-                    <span className="text-[11px] text-muted">
+                    <span className="text-[11px] text-rd-muted">
                       {log.occurredAt.slice(0, 10).replace(/-/g, ".")}
                     </span>
                     <button
                       onClick={() => void remove(cat.id, log.id)}
                       aria-label={`${cat.name}의 ${log.occurredAt.slice(0, 10)} 기록 삭제`}
-                      className="-my-2.5 -mr-2.5 flex size-11 items-center justify-center rounded-full text-muted active:bg-surface-soft"
+                      className="-my-2.5 -mr-2.5 flex size-11 items-center justify-center rounded-full text-rd-muted active:bg-rd-page"
                     >
                       <IconTrash size={15} />
                     </button>
@@ -215,13 +215,13 @@ export default function Records() {
                   {log.tags.map((t) => (
                     <span
                       key={t}
-                      className="rounded-full bg-soft-pink px-2 py-0.5 text-[11px] font-semibold text-secondary"
+                      className="rounded-full bg-soft-pink px-2 py-0.5 text-[11px] font-semibold text-rd-ink"
                     >
                       #{t}
                     </span>
                   ))}
                 </p>
-                <p className="mt-1 text-[13px] text-body">{log.summary}</p>
+                <p className="mt-1 text-[13px] text-rd-body">{log.summary}</p>
               </div>
             </div>
           );
@@ -243,16 +243,16 @@ export default function Records() {
                 setPickOpen(false);
                 router.push(`/cats/${c.id}/log`);
               }}
-              className="flex w-full items-center gap-3 rounded-card border border-hairline bg-white p-3 text-left"
+              className="flex w-full items-center gap-3 rounded-3xl bg-rd-card p-3 text-left"
             >
               <CatAvatar cat={c} size={44} radius={14} accent={accentAt(i)} />
               <span className="min-w-0 flex-1">
-                <span className="block truncate font-bold text-secondary">{c.name}</span>
-                <span className="block truncate text-[12px] text-muted">
+                <span className="block truncate font-bold text-rd-ink">{c.name}</span>
+                <span className="block truncate text-[12px] text-rd-muted">
                   {c.breedGroup}
                 </span>
               </span>
-              <span className="flex-none text-muted-soft">›</span>
+              <span className="flex-none text-rd-faint">›</span>
             </button>
           ))}
         </div>
@@ -261,7 +261,7 @@ export default function Records() {
       {toast && (
         <div
           role="status"
-          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
+          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-rd-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
         >
           {toast}
         </div>

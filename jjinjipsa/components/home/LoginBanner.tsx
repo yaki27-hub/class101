@@ -56,18 +56,18 @@ export default function LoginBanner() {
   if (guest !== true || dismissed) return null;
 
   return (
-    <section className="relative rounded-card border border-hairline bg-white p-4">
+    <section className="relative rounded-3xl bg-rd-card p-4">
       <button
         type="button"
         onClick={close}
         aria-label="로그인 안내 닫기"
-        className="absolute right-2.5 top-2.5 flex size-7 items-center justify-center rounded-full text-muted-soft active:bg-surface-soft"
+        className="absolute right-2.5 top-2.5 flex size-7 items-center justify-center rounded-full text-rd-faint active:bg-rd-page"
       >
         <IconClose size={16} />
       </button>
 
-      <p className="pr-7 text-[13px] leading-relaxed text-body">
-        지금은 <b className="text-secondary">게스트</b>로 이용 중이에요.
+      <p className="pr-7 text-[13px] leading-relaxed text-rd-body">
+        지금은 <b className="text-rd-ink">게스트</b>로 이용 중이에요.
         <br />
         {USE_SUPABASE
           ? "지금은 1마리 등록 · 하루 3개 질문이고, 기기를 바꾸거나 캐시를 지우면 기록이 사라져요. 카카오로 로그인하면 2마리 등록 · 하루 10개 질문에 기록도 계정에 보관돼요."
@@ -77,7 +77,7 @@ export default function LoginBanner() {
       <button
         type="button"
         onClick={() => void onKakao()}
-        className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-button bg-[#FEE500] text-sm font-bold text-[#3A1D1D] active:brightness-95"
+        className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-[14px] bg-[#FEE500] text-sm font-bold text-[#3A1D1D] active:brightness-95"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
           <path d="M12 3C6.48 3 2 6.48 2 10.8c0 2.76 1.86 5.18 4.66 6.55l-.95 3.51c-.08.31.27.56.54.38l4.18-2.77c.51.06 1.03.13 1.57.13 5.52 0 10-3.48 10-7.8S17.52 3 12 3z" />
@@ -86,7 +86,7 @@ export default function LoginBanner() {
       </button>
 
       {error && (
-        <p className="mt-2 text-center text-[12px] text-error">{error}</p>
+        <p className="mt-2 text-center text-[12px] text-[#C4453A]">{error}</p>
       )}
     </section>
   );

@@ -7,19 +7,19 @@ import Mascot from "@/components/Mascot";
 
 export default function EmptyCatCard() {
   return (
-    <section className="rounded-card border border-hairline bg-white p-6 text-center">
+    <section className="rounded-3xl bg-rd-card p-6 text-center">
       <Mascot mood="empty" size={92} className="mx-auto" />
-      <p className="display mt-2 text-[19px] text-secondary">
+      <p className="display mt-2 text-[19px] text-rd-ink">
         우리 고양이를 소개해 주세요
       </p>
-      <p className="mt-2 text-[14px] leading-relaxed text-body">
+      <p className="mt-2 text-[14px] leading-relaxed text-rd-body">
         이름과 나이만 등록하면
         <br />
         냥박사가 맞춤 상담을 시작해요.
       </p>
       <Link
         href="/profile/new"
-        className="mt-5 flex h-12 items-center justify-center rounded-button bg-primary text-[15px] font-bold text-white shadow-subtle active:scale-[0.99]"
+        className="mt-5 flex h-12 items-center justify-center rounded-[14px] bg-rd-ink text-[15px] font-bold text-white shadow-subtle active:scale-[0.99]"
       >
         고양이 등록하기
       </Link>

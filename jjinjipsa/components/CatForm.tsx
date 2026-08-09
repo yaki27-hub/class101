@@ -132,19 +132,19 @@ export default function CatForm({ existing }: { existing?: Cat }) {
     }
   }
 
-  const label = "text-sm font-semibold text-ink";
+  const label = "text-sm font-semibold text-rd-ink";
   const input =
-    "h-11 w-full rounded-md border border-hairline bg-canvas px-4 text-base text-ink placeholder:text-muted-soft focus:border-ink focus:outline-none";
+    "h-11 w-full rounded-md border border-rd-line bg-rd-page px-4 text-base text-rd-ink placeholder:text-rd-faint focus:border-rd-ink focus:outline-none";
 
   return (
     <main className="flex-1 space-y-6 px-5 pt-4 pb-8">
       <header>
         {/* 나가기 — 수정 중이면 해당 아이 상세로, 신규 등록이면 우리 아이 목록으로 */}
         <BackButton fallback={existing ? `/cats/${existing.id}` : "/cats"} />
-        <h1 className="display mt-1 text-2xl text-ink">
+        <h1 className="display mt-1 text-2xl text-rd-ink">
           {editing ? "프로필 수정" : "우리 아이를 알려주세요"}
         </h1>
-        <p className="mt-1 text-sm text-body">입력한 정보만큼 답변이 정확해져요.</p>
+        <p className="mt-1 text-sm text-rd-body">입력한 정보만큼 답변이 정확해져요.</p>
       </header>
 
       <div className="space-y-5">
@@ -156,7 +156,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
             onClick={() => fileRef.current?.click()}
             className="flex w-full items-center gap-4 text-left"
           >
-            <span className="flex size-[76px] flex-none items-center justify-center overflow-hidden rounded-[20px] bg-surface-soft text-muted-soft">
+            <span className="flex size-[76px] flex-none items-center justify-center overflow-hidden rounded-[20px] bg-rd-page text-rd-faint">
               {photo ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={photo} alt="선택한 우리 아이 사진 미리보기" className="size-full object-cover" />
@@ -164,10 +164,10 @@ export default function CatForm({ existing }: { existing?: Cat }) {
                 <IconCamera size={30} />
               )}
             </span>
-            <span className="text-[13px] text-muted">
+            <span className="text-[13px] text-rd-muted">
               탭해서 사진 {photo ? "바꾸기" : "올리기"}
               <br />
-              <span className="text-muted-soft">나중에 AI 일러스트에도 쓰여요</span>
+              <span className="text-rd-faint">나중에 AI 일러스트에도 쓰여요</span>
             </span>
           </button>
           <input
@@ -187,11 +187,11 @@ export default function CatForm({ existing }: { existing?: Cat }) {
 
         <div className="space-y-1.5">
           <label className={label} htmlFor="cat-alias">
-            별명 <span className="font-normal text-muted">(선택 · 쉼표로 구분)</span>
+            별명 <span className="font-normal text-rd-muted">(선택 · 쉼표로 구분)</span>
           </label>
           <input id="cat-alias" className={input} value={aliasText}
             onChange={(e) => setAliasText(e.target.value)} placeholder="예: 츄츄, 츄르씨" maxLength={40} />
-          <p className="text-[11.5px] leading-relaxed text-muted">
+          <p className="text-[11.5px] leading-relaxed text-rd-muted">
             평소 부르는 다른 이름을 적어두면, 냥박사가 어느 아이 얘기인지 알아들어요.
           </p>
         </div>
@@ -201,7 +201,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
           <input id="cat-birth" type="date" className={input} value={birthDate}
             max={new Date().toISOString().slice(0, 10)}
             onChange={(e) => setBirthDate(e.target.value)} />
-          <label className="flex items-center gap-2 text-sm text-body">
+          <label className="flex items-center gap-2 text-sm text-rd-body">
             <input type="checkbox" checked={birthEstimated}
               onChange={(e) => setBirthEstimated(e.target.checked)}
               className="size-4 accent-ink" />
@@ -215,15 +215,15 @@ export default function CatForm({ existing }: { existing?: Cat }) {
             {([["male", "남아"], ["female", "여아"], ["unknown", "몰라요"]] as const).map(
               ([value, text]) => (
                 <button key={value} type="button" onClick={() => setGender(value)}
-                  className={`h-11 flex-1 rounded-button border text-sm font-semibold ${
-                    gender === value ? "border-ink bg-ink text-white"
-                      : "border-hairline bg-canvas text-body"}`}>
+                  className={`h-11 flex-1 rounded-[14px] border text-sm font-semibold ${
+                    gender === value ? "border-rd-ink bg-rd-ink text-white"
+                      : "border-rd-line bg-rd-page text-rd-body"}`}>
                   {text}
                 </button>
               ),
             )}
           </div>
-          <label className="flex min-h-11 items-center gap-2 text-sm text-body">
+          <label className="flex min-h-11 items-center gap-2 text-sm text-rd-body">
             <input type="checkbox" checked={neutered}
               onChange={(e) => setNeutered(e.target.checked)} className="size-5 accent-ink" />
             중성화 했어요
@@ -251,7 +251,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
             {CONDITIONS.map((c) => (
               <button key={c} type="button" onClick={() => toggleCondition(c)}
                 className={`flex min-h-11 items-center rounded-full px-3.5 text-[13px] font-medium ${
-                  conditions.includes(c) ? "bg-ink text-white" : "bg-surface-card text-ink"}`}>
+                  conditions.includes(c) ? "bg-rd-ink text-white" : "bg-surface-card text-rd-ink"}`}>
                 {c}
               </button>
             ))}
@@ -260,7 +260,7 @@ export default function CatForm({ existing }: { existing?: Cat }) {
       </div>
 
       {error && (
-        <p className="rounded-md border border-error/30 bg-error/5 px-4 py-3 text-sm text-error">
+        <p className="rounded-md border border-[#F0D5D2] bg-rd-danger/5 px-4 py-3 text-sm text-[#C4453A]">
           {error}
         </p>
       )}
@@ -268,16 +268,16 @@ export default function CatForm({ existing }: { existing?: Cat }) {
       <div className="flex gap-2">
         {editing && (
           <button type="button" onClick={() => router.push(`/cats/${existing.id}`)}
-            className="h-12 flex-none rounded-button border border-hairline px-5 text-sm font-semibold text-body">
+            className="h-12 flex-none rounded-[14px] border border-rd-line px-5 text-sm font-semibold text-rd-body">
             취소
           </button>
         )}
         <button onClick={() => void save()} disabled={saving} aria-busy={saving}
-          className="h-12 flex-1 rounded-button bg-ink text-sm font-semibold text-white active:bg-primary-deep disabled:opacity-60">
+          className="h-12 flex-1 rounded-[14px] bg-rd-ink text-sm font-semibold text-white active:bg-primary-deep disabled:opacity-60">
           {saving ? (editing ? "저장 중…" : "등록 중…") : editing ? "수정 완료" : "등록하기"}
         </button>
       </div>
-      <p className="text-center text-xs text-muted-soft">
+      <p className="text-center text-xs text-rd-faint">
         이 정보는 참고용이며, 정확한 진단은 수의사 상담이 필요합니다.
       </p>
     </main>

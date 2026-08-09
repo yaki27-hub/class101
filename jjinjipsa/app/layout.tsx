@@ -52,9 +52,9 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
         />
       </head>
-      <body className="min-h-full bg-surface-strong text-ink">
+      <body className="min-h-full bg-[#E9EBE6] text-rd-ink">
         {/* 모바일: 전체 화면 / 데스크톱: 420px 중앙 폰 프레임 (내부는 크림 캔버스) */}
-        <div className="paper mx-auto flex min-h-dvh w-full max-w-[420px] flex-col sm:border-x sm:border-hairline">
+        <div className="mx-auto flex min-h-dvh w-full max-w-[420px] flex-col bg-rd-page sm:border-x sm:border-rd-line">
           <AuthGate>
             <div className="flex flex-1 flex-col">{children}</div>
             <BottomNav />

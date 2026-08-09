@@ -80,7 +80,7 @@ export default function ReportPage() {
   if (cat === null)
     return (
       <main className="flex flex-1 items-center justify-center px-6">
-        <p className="text-sm text-body">등록된 아이를 찾을 수 없어요.</p>
+        <p className="text-sm text-rd-body">등록된 아이를 찾을 수 없어요.</p>
       </main>
     );
 
@@ -92,7 +92,7 @@ export default function ReportPage() {
     <main className="flex-1 space-y-4 px-5 pt-8 pb-24">
       <header className="flex items-center justify-between">
         <BackButton fallback={`/cats/${id}`} />
-        <span className="text-[12px] font-semibold text-muted tabular-nums">
+        <span className="text-[12px] font-semibold text-rd-muted tabular-nums">
           {summary.filled}/{TOTAL_QUESTIONS} 기재
         </span>
       </header>
@@ -102,21 +102,21 @@ export default function ReportPage() {
       <button
         onClick={() => void share()}
         disabled={busy || summary.filled === 0}
-        className="h-12 w-full rounded-button bg-primary text-sm font-bold text-white disabled:opacity-50"
+        className="h-12 w-full rounded-[14px] bg-rd-ink text-sm font-bold text-white disabled:opacity-50"
       >
         {busy ? "만드는 중…" : "이미지로 저장·공유"}
       </button>
       {summary.filled === 0 && (
-        <p className="-mt-2 text-center text-[12px] text-muted">
+        <p className="-mt-2 text-center text-[12px] text-rd-muted">
           한 칸이라도 채워야 기록부를 뽑을 수 있어요.
         </p>
       )}
 
       {/* 안 채운 칸 — 여기서 바로 답한다 */}
       {empty.length > 0 && (
-        <section className="rounded-card border border-hairline bg-white p-5">
-          <p className="text-sm font-bold text-secondary">아직 비어 있는 칸</p>
-          <p className="mt-1 text-[12.5px] leading-relaxed text-muted">
+        <section className="rounded-3xl bg-rd-card p-5">
+          <p className="text-sm font-bold text-rd-ink">아직 비어 있는 칸</p>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-rd-muted">
             홈의 &ldquo;오늘의 체크&rdquo;에서 하루 한 칸씩 채워지지만, 여기서 바로 답해도 돼요.
           </p>
           <ul className="mt-3 space-y-2">
@@ -124,10 +124,10 @@ export default function ReportPage() {
               <li key={r.key}>
                 <button
                   onClick={() => setEditing(r.question)}
-                  className="flex min-h-11 w-full items-center justify-between gap-3 rounded-input border border-hairline px-3.5 py-2.5 text-left active:bg-surface-soft/60"
+                  className="flex min-h-11 w-full items-center justify-between gap-3 rounded-[14px] border border-rd-line px-3.5 py-2.5 text-left active:bg-rd-well"
                 >
-                  <span className="text-[13px] font-semibold text-secondary">{r.key}</span>
-                  <span className="flex-none text-[12px] font-semibold text-primary-deep">
+                  <span className="text-[13px] font-semibold text-rd-ink">{r.key}</span>
+                  <span className="flex-none text-[12px] font-semibold text-rd-forest">
                     답하기 ›
                   </span>
                 </button>
@@ -139,8 +139,8 @@ export default function ReportPage() {
 
       {/* 채운 칸 — 고칠 수 있게 */}
       {summary.filled > 0 && (
-        <section className="rounded-card border border-hairline bg-white p-5">
-          <p className="text-sm font-bold text-secondary">기재한 칸 고치기</p>
+        <section className="rounded-3xl bg-rd-card p-5">
+          <p className="text-sm font-bold text-rd-ink">기재한 칸 고치기</p>
           <ul className="mt-3 space-y-2">
             {rows
               .filter((r): r is ReportRow & { answered: NonNullable<ReportRow["answered"]> } =>
@@ -150,9 +150,9 @@ export default function ReportPage() {
                 <li key={r.key}>
                   <button
                     onClick={() => setEditing(r.question)}
-                    className="flex min-h-11 w-full items-center gap-2.5 rounded-input border border-hairline px-3.5 py-2.5 text-left active:bg-surface-soft/60"
+                    className="flex min-h-11 w-full items-center gap-2.5 rounded-[14px] border border-rd-line px-3.5 py-2.5 text-left active:bg-rd-well"
                   >
-                    <span className="w-[74px] flex-none text-[13px] font-semibold text-secondary">
+                    <span className="w-[74px] flex-none text-[13px] font-semibold text-rd-ink">
                       {r.key}
                     </span>
                     <span
@@ -160,7 +160,7 @@ export default function ReportPage() {
                     >
                       {r.answered.grade}
                     </span>
-                    <span className="min-w-0 flex-1 truncate text-[12px] text-body">
+                    <span className="min-w-0 flex-1 truncate text-[12px] text-rd-body">
                       {r.answered.label}
                     </span>
                   </button>
@@ -170,7 +170,7 @@ export default function ReportPage() {
         </section>
       )}
 
-      <p className="text-center text-[11px] text-muted-soft">
+      <p className="text-center text-[11px] text-rd-faint">
         등급은 성격을 나타낸 것이지 잘하고 못하고가 아니에요.
       </p>
 
@@ -181,7 +181,7 @@ export default function ReportPage() {
       >
         {editing && (
           <>
-            <p className="text-[15px] font-semibold text-secondary">
+            <p className="text-[15px] font-semibold text-rd-ink">
               {editing.question(cat)}
             </p>
             <div className="mt-4 space-y-2">
@@ -189,14 +189,14 @@ export default function ReportPage() {
                 <button
                   key={o.label}
                   onClick={() => void answer(editing, o.label)}
-                  className="flex min-h-12 w-full items-center gap-2.5 rounded-input border border-hairline px-3.5 py-2.5 text-left active:bg-surface-soft/60"
+                  className="flex min-h-12 w-full items-center gap-2.5 rounded-[14px] border border-rd-line px-3.5 py-2.5 text-left active:bg-rd-well"
                 >
                   <span
                     className={`flex-none rounded-[6px] px-1.5 py-0.5 text-[11px] font-bold ${GRADE_STYLE[o.grade]}`}
                   >
                     {o.grade}
                   </span>
-                  <span className="min-w-0 flex-1 text-[13.5px] text-ink">{o.label}</span>
+                  <span className="min-w-0 flex-1 text-[13.5px] text-rd-ink">{o.label}</span>
                 </button>
               ))}
             </div>
@@ -207,7 +207,7 @@ export default function ReportPage() {
       {toast && (
         <div
           role="status"
-          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
+          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-rd-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
         >
           {toast}
         </div>
