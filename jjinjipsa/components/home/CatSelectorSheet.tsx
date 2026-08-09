@@ -3,10 +3,12 @@
 /* 고양이 선택 바텀시트 — 현재 선택 강조 + 다른 아이 등록 (지시서 §5) */
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import BottomSheet from "@/components/BottomSheet";
 import { getCatAge } from "@/lib/catAge";
 import CatAvatar from "@/components/CatAvatar";
 import { accentAt } from "@/lib/catColor";
+import { getTier, maxCatsFor, maxCatsMessage, type Tier } from "@/lib/limits";
 import type { Cat } from "@/lib/storage";
 
 export default function CatSelectorSheet({
@@ -22,6 +24,11 @@ export default function CatSelectorSheet({
   onSelect: (id: string) => void;
   onClose: () => void;
 }) {
+  // 등록 한도(D-24) — 한도를 다 썼는데 "+ 다른 아이 등록"이 보이면 거짓말이 된다
+  const [tier, setTier] = useState<Tier>("guest");
+  useEffect(() => {
+    if (open) void getTier().then(setTier);
+  }, [open]);
   return (
     <BottomSheet open={open} onClose={onClose} title="어떤 아이를 볼까요?">
       <div className="space-y-2">
@@ -54,7 +61,7 @@ export default function CatSelectorSheet({
         })}
       </div>
 
-      {cats.length < 3 && (
+      {cats.length < maxCatsFor(tier) ? (
         <Link
           href="/profile/new"
           onClick={onClose}
@@ -62,6 +69,10 @@ export default function CatSelectorSheet({
         >
           + 다른 아이 등록
         </Link>
+      ) : (
+        <p className="mt-3 px-1 text-center text-[12px] leading-relaxed text-rd-muted">
+          {maxCatsMessage(tier)}
+        </p>
       )}
     </BottomSheet>
   );

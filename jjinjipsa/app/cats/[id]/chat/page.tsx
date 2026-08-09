@@ -35,6 +35,7 @@ import BackButton from "@/components/BackButton";
 import AnswerBlocks from "@/components/chat/AnswerBlocks";
 import { bumpChatUsage, loadChatUsage, syncChatUsage } from "@/lib/chatUsage";
 import { FREE_DAILY_QUESTIONS, GUEST_DAILY_QUESTIONS, getTier } from "@/lib/limits";
+import { supabase } from "@/lib/supabase";
 
 /** AI 답변의 마크다운 ** 강조 기호 정리 */
 function clean(text: string) {
@@ -87,11 +88,24 @@ function ChatPage() {
   const [allCats, setAllCats] = useState<Cat[]>([]);
   /** 이 기기 기준 오늘 질문 수 — 안내용 (lib/chatUsage.ts 주석) */
   const [used, setUsed] = useState(0);
+  /** 카운터 저장 키의 사용자 구분 — 게스트 사용분이 계정 카운터에 섞이지 않게 */
+  const [usageScope, setUsageScope] = useState("guest");
   /** 티어별 한도 (D-24) — 게스트 3 / 로그인 10. 회원값으로 시작해 판별되면 갱신 */
   const [dailyLimit, setDailyLimit] = useState(FREE_DAILY_QUESTIONS);
+  /** 전송 실패 안내 — 조용히 사라지면 버튼이 고장난 걸로 보인다 */
+  const [toast, setToast] = useState<string | null>(null);
   const router = useRouter();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  /** 스크롤이 바닥 근처인가 — 긴 대화에서 강제 스크롤로 읽던 위치를 뺏지 않기 위해 */
+  const nearBottomRef = useRef(true);
+  const [showJump, setShowJump] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  function showToast(m: string) {
+    setToast(m);
+    window.setTimeout(() => setToast(null), 2200);
+  }
 
   // 사진 첨부: 600px JPEG 압축
   function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
@@ -132,15 +146,45 @@ function ChatPage() {
         setMessages(await storage.listMessages(last.id));
       }
     })();
-    setUsed(loadChatUsage());
+    // 카운터 키는 사용자별 — 게스트 사용분이 계정 카운터로 넘어오지 않는다 (QA #4)
+    void supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        const scope =
+          data.user && data.user.is_anonymous === false
+            ? data.user.id.slice(0, 8)
+            : "guest";
+        setUsageScope(scope);
+        setUsed(loadChatUsage(scope));
+      })
+      .catch(() => setUsed(loadChatUsage()));
     void getTier().then((tier) =>
       setDailyLimit(tier === "member" ? FREE_DAILY_QUESTIONS : GUEST_DAILY_QUESTIONS),
     );
   }, [catId]);
 
+  /*
+   * 자동 스크롤 (QA #5) — 바닥 근처에 있을 때만 따라간다.
+   * 긴 대화를 위로 읽는 중에 강제 스크롤하면 읽던 자리를 뺏는다.
+   * 바닥에서 떨어져 있는데 새 메시지가 오면 "새 답변" 점프 버튼을 띄운다.
+   */
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = listRef.current;
+    if (!el) return;
+    if (nearBottomRef.current) {
+      el.scrollTop = el.scrollHeight;
+      setShowJump(false);
+    } else if (messages.length > 0 || streaming !== null) {
+      setShowJump(true);
+    }
   }, [messages, streaming]);
+
+  function jumpToBottom() {
+    const el = listRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+    nearBottomRef.current = true;
+    setShowJump(false);
+  }
 
   // 홈/사진진단의 빠른 질문(?q=)·사진 요청(?photo=1)
   useEffect(() => {
@@ -185,30 +229,44 @@ function ChatPage() {
     setPhoto(null);
     setPendingLog(null);
     setLogSaved(false);
+    // 내가 보낸 메시지는 항상 바닥으로 — 위로 읽는 중이었어도 전송은 내 행동이다
+    nearBottomRef.current = true;
 
-    // 세션 없으면 생성
-    let sid = sessionId;
-    if (!sid) {
-      sid = newId();
-      await storage.createSession({
-        id: sid,
-        catId,
-        title: q.slice(0, 24),
-        startedAt: new Date().toISOString(),
-      });
-      setSessionId(sid);
-    }
-
+    /*
+     * 저장 실패는 입력을 되살리고 알린다 (QA #3) — 세션·메시지 insert가
+     * 실패했을 때 조용히 끝나면 "Enter를 눌렀는데 글만 사라졌다"가 된다.
+     */
     const userMsg: ChatMessage = {
       id: newId(),
-      sessionId: sid,
+      sessionId: sessionId ?? "",
       role: "user",
       content: q,
       imageUrl: img,
       model: null,
       createdAt: new Date().toISOString(),
     };
-    await storage.addMessage(userMsg);
+    let sid = sessionId;
+    try {
+      // 세션 없으면 생성
+      if (!sid) {
+        sid = newId();
+        await storage.createSession({
+          id: sid,
+          catId,
+          title: q.slice(0, 24),
+          startedAt: new Date().toISOString(),
+        });
+        setSessionId(sid);
+      }
+      userMsg.sessionId = sid;
+      await storage.addMessage(userMsg);
+    } catch (e) {
+      console.warn("[chat] 전송 저장 실패", e);
+      setDraft(q);
+      setPhoto(img);
+      showToast("전송하지 못했어요. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
     setMessages((prev) => [...prev, userMsg]);
 
     // 1단계: 레드플래그 룰 엔진 — 매칭 시 AI 호출 없이 즉시 응답 (F-09)
@@ -223,7 +281,8 @@ function ChatPage() {
         model: "rule-engine",
         createdAt: new Date().toISOString(),
       };
-      await storage.addMessage(alertMsg);
+      // 저장이 실패해도 응급 안내는 보여준다 — 안내가 저장보다 중요하다
+      await storage.addMessage(alertMsg).catch(() => {});
       setMessages((prev) => [...prev, alertMsg]);
       // 응급 대화도 기록 제안 (병원 방문 후 회고에 쓰임)
       setPendingLog({
@@ -242,7 +301,7 @@ function ChatPage() {
      * 않으므로 여기서도 세지 않아야 화면과 차단 시점이 일치한다.
      * 서버가 실카운트를 보내면(usage) 그 값으로 덮어쓴다.
      */
-    setUsed(bumpChatUsage());
+    setUsed(bumpChatUsage(usageScope));
     const history = messages.map((m) => ({
       role: m.role,
       content: m.content,
@@ -251,7 +310,7 @@ function ChatPage() {
     if (res.usage) {
       setUsed(res.usage.used);
       setDailyLimit(res.usage.limit);
-      syncChatUsage(res.usage.used);
+      syncChatUsage(res.usage.used, usageScope);
     }
     setStreaming("");
     let full = "";
@@ -269,7 +328,8 @@ function ChatPage() {
       kbRefs: res.kbRefs,
       createdAt: new Date().toISOString(),
     };
-    await storage.addMessage(botMsg);
+    // 저장이 실패해도 화면의 답변은 유지한다
+    await storage.addMessage(botMsg).catch(() => {});
     setMessages((prev) => [...prev, botMsg]);
     setStreaming(null);
 
@@ -340,7 +400,17 @@ function ChatPage() {
       </header>
 
       {/* 메시지 리스트 — grid로 둬야 자식이 flex-shrink로 눌리지 않는다 */}
-      <div className="grid min-h-0 flex-1 auto-rows-max gap-3 overflow-y-auto px-4 pt-4.5 pb-2">
+      <div
+        ref={listRef}
+        onScroll={() => {
+          const el = listRef.current;
+          if (!el) return;
+          const near = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+          nearBottomRef.current = near;
+          if (near) setShowJump(false);
+        }}
+        className="grid min-h-0 flex-1 auto-rows-max gap-3 overflow-y-auto px-4 pt-4.5 pb-2"
+      >
         {messages.length === 0 && streaming === null && (
           <>
             {/* 빈 상태 — 귀여운 냥박사 */}
@@ -518,6 +588,29 @@ function ChatPage() {
         )}
         <div ref={bottomRef} />
       </div>
+
+      {/* 새 답변 점프 — 위로 읽는 중에 새 메시지가 왔을 때 (QA #5) */}
+      {showJump && (
+        <div className="relative">
+          <button
+            type="button"
+            onClick={jumpToBottom}
+            className="absolute -top-12 left-1/2 z-20 -translate-x-1/2 rounded-full bg-rd-ink px-4 py-2 text-[12.5px] font-bold text-white shadow-[0_6px_18px_-4px_rgba(0,0,0,.4)]"
+          >
+            ↓ 새 답변 보기
+          </button>
+        </div>
+      )}
+
+      {/* 전송 실패 등 안내 */}
+      {toast && (
+        <div
+          role="status"
+          className="fixed bottom-28 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-rd-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
+        >
+          {toast}
+        </div>
+      )}
 
       {/* 입력 바 */}
       <div className="flex-none border-t border-rd-line bg-white px-4 pt-3 pb-[max(8px,env(safe-area-inset-bottom))]">

@@ -62,6 +62,7 @@ export default function DoctorTab() {
   }
 
   const selected = cats.find((c) => c.id === selectedId) ?? cats[0];
+  const shownConsults = consults.filter((c) => c.catId === selected.id);
 
   return (
     <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-nav">
@@ -122,28 +123,28 @@ export default function DoctorTab() {
         </span>
       </Link>
 
-      {/* 지난 상담 — 이 화면이 소유하는 정보. 홈 카드 문법(내부 헤더 + 행)으로 묶는다 */}
+      {/* 지난 상담 — 위 탭에서 고른 아이의 것만 (QA #6: 섞이면 헤더 약속과 어긋난다) */}
       <section className="rounded-3xl bg-rd-card p-5">
         <div className="flex items-center justify-between">
           <h2 className="text-[16px] font-extrabold tracking-[-0.02em] text-rd-ink">
-            지난 상담
+            {cats.length > 1 ? `${selected.name}의 지난 상담` : "지난 상담"}
           </h2>
-          {consults.length > 0 && (
+          {shownConsults.length > 0 && (
             <span className="text-[12px] font-semibold text-rd-muted">
-              최근 {consults.length}건
+              최근 {shownConsults.length}건
             </span>
           )}
         </div>
 
-        {consults.length === 0 ? (
+        {shownConsults.length === 0 ? (
           <p className="py-5 text-center text-[13px] leading-relaxed text-rd-muted">
-            아직 상담 기록이 없어요.
+            {selected.name}의 상담 기록이 아직 없어요.
             <br />
             궁금한 걸 물어보면 여기에 쌓여요.
           </p>
         ) : (
           <ul className="mt-1.5 divide-y divide-rd-line-soft">
-            {consults.map((c) => {
+            {shownConsults.map((c) => {
               const style = c.verdict ? VERDICT_STYLE[c.verdict] : null;
               return (
                 <li key={c.id}>
@@ -162,7 +163,6 @@ export default function DoctorTab() {
                         {c.question || "상담 기록"}
                       </span>
                       <span className="mt-0.5 block text-[12px] text-rd-muted">
-                        {cats.length > 1 && `${c.catName} · `}
                         {formatConsultDate(c.createdAt)}
                         {style && ` · ${style.short}`}
                       </span>

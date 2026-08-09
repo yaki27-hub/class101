@@ -16,6 +16,8 @@ type AuthState = {
   linked: boolean; // 카카오 등으로 연결된 정식 계정
   nick: string;
   email: string | null;
+  /** 카카오 프로필 사진 — 있으면 기본 고양이 아이콘 대신 쓴다 */
+  avatarUrl: string | null;
 };
 
 export default function AccountPage() {
@@ -30,7 +32,9 @@ export default function AccountPage() {
       const linked = !!u && u.is_anonymous === false;
       const nick =
         ((u?.user_metadata?.name || u?.user_metadata?.full_name) as string) || "집사";
-      setAuth({ linked, nick, email: u?.email ?? null });
+      const avatarUrl =
+        ((u?.user_metadata?.avatar_url || u?.user_metadata?.picture) as string) || null;
+      setAuth({ linked, nick, email: u?.email ?? null, avatarUrl });
     });
   }, []);
 
@@ -74,8 +78,18 @@ export default function AccountPage() {
         </p>
         {auth.linked ? (
           <div className="mt-3 flex items-center gap-3">
-            <span className="flex size-11 items-center justify-center rounded-full bg-rd-mint-soft text-rd-forest">
-              <IconCat size={24} />
+            <span className="flex size-11 flex-none items-center justify-center overflow-hidden rounded-full bg-rd-mint-soft text-rd-forest">
+              {auth.avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={auth.avatarUrl}
+                  alt=""
+                  className="size-full object-cover"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              ) : (
+                <IconCat size={24} />
+              )}
             </span>
             <div className="min-w-0">
               <p className="font-bold text-rd-ink">{auth.nick}님</p>

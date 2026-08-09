@@ -4,6 +4,7 @@
  */
 
 import { todayKey } from "@/lib/dailyStatus";
+import { pushKv } from "@/lib/kvSync";
 import { ROUTINES } from "@/lib/homeMood";
 
 const key = (catId: string) => `jjinjipsa:routine:${catId}:${todayKey()}`;
@@ -21,5 +22,6 @@ export function loadRoutine(catId: string): boolean[] {
 export function saveRoutine(catId: string, done: boolean[]): void {
   if (typeof window !== "undefined") {
     localStorage.setItem(key(catId), JSON.stringify(done));
+    pushKv(key(catId)); // 계정 동기화 (lib/kvSync)
   }
 }

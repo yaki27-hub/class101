@@ -33,9 +33,12 @@ function barHeight(kg: number, min: number, max: number): number {
   return Math.round(BAR_MIN + ((kg - min) / span) * BAR_SPAN);
 }
 
-/** "7/21" 형태 */
+/** "7/21" 형태 — 올해가 아니면 "'24 12/19"처럼 연도를 붙인다 (해 넘김 혼동 방지) */
 function shortDate(iso: string): string {
-  return iso.slice(5).replace("-", "/").replace(/^0/, "");
+  const md = iso.slice(5).replace("-", "/").replace(/^0/, "");
+  const year = iso.slice(0, 4);
+  if (year !== String(new Date().getFullYear())) return `'${year.slice(2)} ${md}`;
+  return md;
 }
 
 export default function WeightSection({

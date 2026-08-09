@@ -23,6 +23,12 @@ export default function CareCalendarCard({
         </Link>
       </div>
 
+      {/* 점의 의미 — 범례가 없으면 8/7의 점이 뭔지 알 수 없다 (QA 제보) */}
+      <p className="mx-1 mb-2.5 flex items-center gap-1.5 text-[11px] text-rd-muted">
+        <span aria-hidden className="size-[5px] rounded-full bg-rd-mint" />
+        기록한 날 (오늘 상태·증상 기록)
+      </p>
+
       <div className="flex justify-between gap-0.5">
         {days.map((d) => (
           <div key={`${d.dow}-${d.n}`} className="flex flex-1 flex-col items-center gap-1.5">

@@ -115,7 +115,7 @@ function Home() {
   return (
     <main className="relative flex-1 bg-rd-page">
       <MoodHomeHeader
-        catName={cat.name}
+        cat={cat}
         catHref={`/cats/${cat.id}`}
         onOpenSelector={() => setSheetOpen(true)}
       />

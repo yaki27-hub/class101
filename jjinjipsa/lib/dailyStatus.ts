@@ -4,6 +4,8 @@
  * ⚠️ 날짜 키는 로컬 시간 기준 — 한국 사용자 자정 경계 오류 방지 (UTC 사용 금지).
  */
 
+import { pushKv } from "@/lib/kvSync";
+
 export type DailyStatusType = "meal" | "water" | "toilet" | "activity";
 export type DailyStatusLevel = "normal" | "warning" | "danger" | "unknown";
 
@@ -118,6 +120,7 @@ export function saveDaily(
   const next: DailyRecord = { ...loadDaily(catId), [type]: { level, label } };
   if (typeof window !== "undefined") {
     localStorage.setItem(storeKey(catId), JSON.stringify(next));
+    pushKv(storeKey(catId)); // 계정 동기화 (lib/kvSync — 실패해도 화면은 정상)
   }
   return next;
 }

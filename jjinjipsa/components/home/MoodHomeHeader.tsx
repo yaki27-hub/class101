@@ -9,20 +9,24 @@
 
 import Link from "next/link";
 import { IconYarn } from "@/components/icons";
+import CatAvatar from "@/components/CatAvatar";
+import type { Cat } from "@/lib/storage";
 
 const GLASS = "rgba(10,20,16,.36)";
 const GLASS_CHIP = "rgba(10,20,16,.42)";
 
 export default function MoodHomeHeader({
-  catName,
+  cat,
   catHref,
   onOpenSelector,
 }: {
-  catName: string;
+  /** 지금 보고 있는 아이 — 칩에 사진(아바타)을 함께 보여 "누구 화면인지" 잇는다 */
+  cat: Pick<Cat, "id" | "name" | "photo">;
   /** 발바닥 버튼 — 지금 보고 있는 아이의 프로필 */
   catHref: string;
   onOpenSelector: () => void;
 }) {
+  const catName = cat.name;
   return (
     <header className="pointer-events-none absolute inset-x-0 top-0 z-30 pt-[max(12px,env(safe-area-inset-top))]">
       <div className="flex h-13 items-center justify-between px-4">
@@ -44,9 +48,10 @@ export default function MoodHomeHeader({
         <button
           type="button"
           onClick={onOpenSelector}
-          className="pointer-events-auto flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[14px] font-bold tracking-[-0.02em] text-white backdrop-blur-lg"
+          className="pointer-events-auto flex items-center gap-1.5 rounded-full py-1.5 pr-3.5 pl-1.5 text-[14px] font-bold tracking-[-0.02em] text-white backdrop-blur-lg"
           style={{ background: GLASS_CHIP }}
         >
+          <CatAvatar cat={cat} size={26} radius={13} />
           {catName}
           <svg width="11" height="7" viewBox="0 0 12 8" fill="#fff" aria-hidden>
             <path d="M1.1 1.4a1.2 1.2 0 0 1 1.7 0L6 4.5l3.2-3.1a1.2 1.2 0 1 1 1.7 1.7L6.85 7.2a1.2 1.2 0 0 1-1.7 0L1.1 3.1a1.2 1.2 0 0 1 0-1.7Z" />

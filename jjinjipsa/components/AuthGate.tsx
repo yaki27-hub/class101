@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { ALLOW_GUEST, supabase } from "@/lib/supabase";
 import { USE_SUPABASE } from "@/lib/storage";
 import { migrateLocalToServer } from "@/lib/storage/migrateLocal";
+import { hydrateKv } from "@/lib/kvSync";
 import { clearSignInRetryFlag, recoverFromOAuthError } from "@/lib/auth/kakao";
 
 /**
@@ -58,6 +59,14 @@ export default function AuthGate({
   // **이관이 끝나기 전에는 화면을 그리지 않는다.** 앱은 서버에서 읽으므로,
   // 업로드 전에 렌더하면 "기록 0건"이 잠깐 보였다가 나타나 집사를 놀라게 한다.
   const [migrating, setMigrating] = useState(USE_SUPABASE);
+  // 이관 결과 안내 — 조용히 실패하면 집사는 기록이 사라졌다고 느낀다 (QA 제보)
+  const [notice, setNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!notice) return;
+    const t = setTimeout(() => setNotice(null), 6000);
+    return () => clearTimeout(t);
+  }, [notice]);
 
   useEffect(() => {
     if (!USE_SUPABASE) return;
@@ -67,7 +76,20 @@ export default function AuthGate({
         const r = await migrateLocalToServer(uid);
         if (r.ran && (r.cats || r.failed)) {
           console.info("[migrate] 로컬→서버 이관", r);
+          const moved =
+            r.cats + r.traits + r.symptoms + r.weights + r.sessions + r.messages;
+          if (r.failed === 0 && moved > 0) {
+            setNotice(`이 기기의 예전 기록 ${moved}건을 계정으로 옮겼어요.`);
+          } else if (r.failed > 0) {
+            setNotice(
+              r.gaveUp
+                ? "예전 기록 일부를 계정으로 옮기지 못했어요. 기록은 이 기기에 남아 있어요."
+                : "예전 기록 일부를 옮기지 못했어요. 다음 접속에 다시 시도할게요.",
+            );
+          }
         }
+        // 오늘 상태·루틴·메모를 계정에서 내려받는다 (기기 간 동기화, 0007)
+        await hydrateKv(uid);
       } catch (e) {
         // 실패해도 화면은 열어준다 — 완료 표시를 안 남기므로 다음 실행에 재시도한다
         console.warn("[migrate] 실패 — 다음 실행에 재시도", e);
@@ -127,5 +149,18 @@ export default function AuthGate({
 
   // 로그인 페이지는 항상 렌더, 그 외엔 세션 확인 + 이관 완료 후 렌더 (깜빡임 방지)
   if (pathname !== "/login" && (!ready || migrating)) return null;
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      {notice && (
+        <div
+          role="status"
+          className="fixed bottom-24 left-1/2 z-[70] w-[calc(100%-48px)] max-w-[372px] -translate-x-1/2 rounded-2xl bg-rd-ink px-4 py-3 text-[13px] font-semibold leading-relaxed text-white shadow-[0_10px_26px_-8px_rgba(0,0,0,.4)]"
+          onClick={() => setNotice(null)}
+        >
+          {notice}
+        </div>
+      )}
+    </>
+  );
 }

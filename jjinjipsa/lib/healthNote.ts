@@ -5,6 +5,7 @@
 
 import { getCatAge } from "@/lib/catAge";
 import { STATUS_ITEMS, type DailyRecord } from "@/lib/dailyStatus";
+import { pushKv } from "@/lib/kvSync";
 import type { Cat, SymptomLog } from "@/lib/storage";
 
 function noteKey(catId: string) {
@@ -19,6 +20,7 @@ export function loadHealthNote(catId: string): string {
 export function saveHealthNote(catId: string, note: string): void {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(noteKey(catId), note);
+  pushKv(noteKey(catId)); // 계정 동기화 (lib/kvSync)
 }
 
 /** 공유용 텍스트 요약 */
