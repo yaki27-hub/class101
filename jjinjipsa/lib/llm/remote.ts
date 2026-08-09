@@ -10,11 +10,25 @@ import { MockLlmAdapter } from "./mock";
 import type { LlmAdapter, LlmChunkedResponse, LlmRequest } from "./types";
 import type { KbRefBrief } from "@/lib/kb/retrieve";
 
-const LIMIT_MESSAGE =
-  "오늘은 여기까지예요 🐾 하루에 물어볼 수 있는 횟수를 다 썼어요.\n" +
-  "내일 다시 만나요! 그동안 케어 카드나 오늘의 체크를 살펴보는 것도 좋아요.\n\n" +
-  "⚠️ 응급이 의심되면 저를 기다리지 마세요 — 지금 다니시는 병원이나 24시간 " +
+const LIMIT_TAIL =
+  "\n\n⚠️ 응급이 의심되면 저를 기다리지 마세요 — 지금 다니시는 병원이나 24시간 " +
   "동물병원에 바로 연락하는 것이 맞아요.";
+
+const LIMIT_MESSAGE_MEMBER =
+  "오늘은 여기까지예요 🐾 하루에 물어볼 수 있는 횟수를 다 썼어요.\n" +
+  "내일 다시 만나요! 그동안 케어 카드나 오늘의 체크를 살펴보는 것도 좋아요." +
+  LIMIT_TAIL;
+
+// 게스트에게는 다음 단계(로그인)를 알려준다 — 한도만 알리면 막다른 길이 된다
+const LIMIT_MESSAGE_GUEST =
+  "오늘은 여기까지예요 🐾 로그인 전에는 하루 3개까지 물어볼 수 있어요.\n" +
+  "카카오로 로그인하면 하루 10개로 늘어나고, 기록도 계정에 보관돼요." +
+  LIMIT_TAIL;
+
+async function limitMessage(): Promise<string> {
+  const { getTier } = await import("@/lib/limits");
+  return (await getTier()) === "member" ? LIMIT_MESSAGE_MEMBER : LIMIT_MESSAGE_GUEST;
+}
 
 async function* once(text: string): AsyncIterable<string> {
   yield text;
@@ -80,7 +94,7 @@ export class RemoteLlmAdapter implements LlmAdapter {
       });
       // 하루 한도 초과 → mock 폴백 대신 안내 메시지
       if (res.status === 429) {
-        return { stream: once(LIMIT_MESSAGE), model: "limit" };
+        return { stream: once(await limitMessage()), model: "limit" };
       }
       if (!res.ok || !res.body) throw new Error(`api/chat ${res.status}`);
       return {

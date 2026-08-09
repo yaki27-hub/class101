@@ -7,14 +7,16 @@ import { useEffect, useState } from "react";
 import { storage, type Cat } from "@/lib/storage";
 import { getCatAge } from "@/lib/catAge";
 import { IconPencil, IconGear } from "@/components/icons";
-import { MAX_CATS_MESSAGE } from "@/lib/limits";
+import { getTier, maxCatsFor, maxCatsMessage, type Tier } from "@/lib/limits";
 import CatAvatar from "@/components/CatAvatar";
 import { accentAt } from "@/lib/catColor";
 
 export default function CatsList() {
   const [cats, setCats] = useState<Cat[] | null>(null);
+  const [tier, setTier] = useState<Tier>("guest");
   useEffect(() => {
     void storage.listCats().then(setCats);
+    void getTier().then(setTier);
   }, []);
   if (cats === null) return null;
 
@@ -48,7 +50,7 @@ export default function CatsList() {
           </div>
         );
       })}
-      {cats.length < 3 ? (
+      {cats.length < maxCatsFor(tier) ? (
         <Link
           href="/profile/new"
           className="rounded-button border border-dashed border-hairline bg-white py-3.5 text-center text-sm font-semibold text-muted"
@@ -57,7 +59,7 @@ export default function CatsList() {
         </Link>
       ) : (
         <p className="rounded-button bg-surface-soft py-3.5 text-center text-[13px] text-muted">
-          {MAX_CATS_MESSAGE} 🐾
+          {maxCatsMessage(tier)} 🐾
         </p>
       )}
 
