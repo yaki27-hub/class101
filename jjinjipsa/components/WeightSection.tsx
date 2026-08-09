@@ -4,18 +4,18 @@
  * 체중 추이 — 고양이 상세가 소유한다 (그 아이의 시간축 정보, docs/정보구조.md).
  *
  * 그래프를 예쁘게 보여주는 게 목적이 아니라, **의미 있는 감소를 집사에게 알리는 것**이
- * 목적이다. 그래서 판정 문구가 맨 위, 그래프는 그 아래에 둔다.
+ * 목적이다. 그래서 판정 문구가 그래프보다 위에 있다.
+ *
+ * ⚠️ 시안(2b)에 맞춰 꺾은선 → 막대로 바꿨다. 원래 꺾은선이었던 이유는 축이 0부터가
+ * 아니라서 막대가 "거의 0까지 떨어짐"으로 과장돼 보이기 때문이었다. 막대를 쓰는 대신
+ * 시안이 쓰는 완화책을 그대로 가져왔다 — **막대마다 실제 kg를 머리에 적는다**.
+ * 숫자가 붙어 있으면 길이를 눈대중할 일이 없다. 이 라벨은 지우지 말 것.
  */
 
 import { useEffect, useState } from "react";
 import { newId, storage, type Cat, type WeightLog } from "@/lib/storage";
 import { getCatAge } from "@/lib/catAge";
-import {
-  analyzeWeights,
-  hasThisMonthLog,
-  sortWeights,
-  TREND_STYLE,
-} from "@/lib/weightTrend";
+import { analyzeWeights, hasThisMonthLog, sortWeights } from "@/lib/weightTrend";
 import BottomSheet from "@/components/BottomSheet";
 
 function todayISO(): string {
@@ -23,28 +23,19 @@ function todayISO(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-/*
- * 스파크라인은 **막대가 아니라 꺾은선**이다.
- * 막대는 밑동이 0이라는 인상을 주는데, 여기 축은 min~max라서
- * 5.0 → 4.4kg(12% 감소)가 "거의 0까지 떨어짐"처럼 보인다. 건강 정보에서
- * 그런 과장은 그 자체로 해롭다. 꺾은선은 0 기준선을 암시하지 않고,
- * 축 양끝에 실제 kg를 적어 눈금을 밝힌다.
- */
-const CHART_W = 100;
-const CHART_H = 36;
+/** 막대 높이 — 최솟값도 눈에 보이게 26px 바닥을 깔고, 범위를 52px에 편다 */
+const BAR_MIN = 26;
+const BAR_SPAN = 52;
 
-/** 값들을 차트 좌표로 — 위아래 여백 10%를 둬서 끝점이 잘리지 않게 한다 */
-function toPoints(values: number[]): { x: number; y: number }[] {
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const span = max - min;
-  const pad = CHART_H * 0.15;
-  const usable = CHART_H - pad * 2;
-  return values.map((v, i) => ({
-    x: values.length === 1 ? CHART_W / 2 : (i / (values.length - 1)) * CHART_W,
-    // 변화가 거의 없으면 가운데 선으로 (0으로 나누기 방지)
-    y: span < 0.01 ? CHART_H / 2 : pad + (1 - (v - min) / span) * usable,
-  }));
+function barHeight(kg: number, min: number, max: number): number {
+  // 변화가 거의 없을 때 0으로 나누지 않도록. 0.4kg보다 좁은 범위는 0.4로 본다
+  const span = Math.max(0.4, max - min);
+  return Math.round(BAR_MIN + ((kg - min) / span) * BAR_SPAN);
+}
+
+/** "7/21" 형태 */
+function shortDate(iso: string): string {
+  return iso.slice(5).replace("-", "/").replace(/^0/, "");
 }
 
 export default function WeightSection({
@@ -71,8 +62,8 @@ export default function WeightSection({
   // 아기 고양이는 늘어야 정상이라 증가 경고를 띄우지 않는다
   const growing = getCatAge(cat.birthDate).stage === "kitten";
   const trend = analyzeWeights(logs, { growing });
-  const style = TREND_STYLE[trend.level];
   const needsThisMonth = !hasThisMonthLog(logs);
+  const losing = trend.level === "loss" || trend.level === "loss-high";
 
   async function save() {
     if (saving) return;
@@ -114,108 +105,108 @@ export default function WeightSection({
     }
   }
 
-  // 최근 12개만 그린다 (오래된 건 화면에서 의미가 옅다)
-  const recent = logs.slice(-12);
+  // 막대는 최근 6개만 — 시안과 같은 밀도. 그보다 많으면 라벨이 서로 붙는다
+  const recent = logs.slice(-6);
   const values = recent.map((l) => l.weightKg);
-  const points = toPoints(values);
-  const chartMax = Math.max(...values);
-  const chartMin = Math.min(...values);
+  const min = values.length ? Math.min(...values) : 0;
+  const max = values.length ? Math.max(...values) : 0;
+
+  const deltaKg = trend.changeKg;
+  const deltaLabel = `${deltaKg > 0 ? "+" : ""}${deltaKg.toFixed(1)}kg`;
 
   return (
-    <section className="rounded-card border border-hairline bg-white p-5">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-bold text-secondary">체중 추이</p>
-        <button
-          type="button"
-          onClick={() => {
-            // 기록이 없으면 프로필에 적힌 체중을 기본값으로 (첫 입력 마찰 줄이기).
-            // 프로필 값을 기록으로 **자동 저장하지는 않는다** — 언제 잰 값인지
-            // 모르는데 날짜를 지어내면 없는 측정을 만들어내는 셈이다
-            setDraft(String(trend.latest?.weightKg ?? cat.weightKg ?? ""));
-            setDate(todayISO());
-            setError("");
-            setOpen(true);
-          }}
-          className="-my-2 -mr-2 flex min-h-11 items-center px-2 text-[12px] font-semibold text-primary-deep"
-        >
-          + 체중 기록
-        </button>
+    <section className="rounded-3xl bg-rd-card p-5">
+      <div className="mb-1.5 flex items-center justify-between gap-2">
+        <h2 className="text-[16px] font-extrabold tracking-[-0.02em] text-rd-ink">
+          체중 추이
+        </h2>
+        <div className="flex flex-none items-center gap-1.5">
+          {recent.length >= 2 && (
+            <span
+              className={`rounded-full px-2.5 py-1 text-[12px] font-bold ${
+                losing
+                  ? "bg-[#FFF5F3] text-[#C4453A]"
+                  : "bg-rd-mint-soft text-rd-forest"
+              }`}
+            >
+              {deltaLabel}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              // 기록이 없으면 프로필에 적힌 체중을 기본값으로 (첫 입력 마찰 줄이기).
+              // 프로필 값을 기록으로 **자동 저장하지는 않는다** — 언제 잰 값인지
+              // 모르는데 날짜를 지어내면 없는 측정을 만들어내는 셈이다
+              setDraft(String(trend.latest?.weightKg ?? cat.weightKg ?? ""));
+              setDate(todayISO());
+              setError("");
+              setOpen(true);
+            }}
+            className="-my-2 -mr-2 flex min-h-11 items-center px-2 text-[12px] font-bold text-rd-forest"
+          >
+            + 기록
+          </button>
+        </div>
       </div>
 
-      {/* 판정이 먼저 — 이 기능의 목적 */}
-      <div className="mt-2 flex items-start gap-2">
-        <span aria-hidden className={`mt-1.5 size-2 flex-none rounded-full ${style.dot}`} />
-        <p className={`text-[13px] leading-relaxed ${style.text}`}>{trend.message}</p>
-      </div>
-
-      {trend.latest && (
-        <p className="mt-1 pl-4 text-[12px] text-muted">
-          최근 {trend.latest.weightKg}kg · {trend.latest.measuredAt.slice(5).replace("-", "/")}
+      {trend.latest ? (
+        <p className="text-[13px] text-rd-muted">
+          최근 {trend.latest.weightKg}kg · {shortDate(trend.latest.measuredAt)} 기준
         </p>
+      ) : (
+        <p className="text-[13px] text-rd-muted">아직 기록이 없어요</p>
       )}
 
-      {/* 꺾은선 — 변화의 방향과 기울기를 훑어본다 */}
+      {/* 판정 — 이 기능의 목적. 그래프보다 위에 둔다 */}
+      <p
+        className={`mt-2 text-[13px] leading-[1.6] ${
+          losing ? "text-[#C4453A]" : "text-rd-body"
+        }`}
+      >
+        {trend.message}
+      </p>
+
       {recent.length >= 2 && (
-        <div className="mt-4">
-          <div className="flex items-stretch gap-2">
-            {/* 세로 눈금 — 축이 0부터가 아니라는 걸 숫자로 밝힌다 */}
-            <div className="flex flex-col justify-between py-0.5 text-[10px] text-muted-soft tabular-nums">
-              <span>{chartMax.toFixed(1)}</span>
-              <span>{chartMin.toFixed(1)}</span>
-            </div>
-            {/*
-              선은 SVG로 늘려 그리고(preserveAspectRatio=none), 점은 CSS로 얹는다.
-              점까지 SVG에 넣으면 가로로 늘어나면서 타원이 된다.
-            */}
+        <div
+          className="mt-4.5 flex h-26 items-end gap-2.5"
+          role="img"
+          aria-label={`체중 변화: ${recent
+            .map((l) => `${l.measuredAt} ${l.weightKg}킬로그램`)
+            .join(", ")}`}
+        >
+          {recent.map((l, i) => (
             <div
-              className="relative h-16 flex-1"
-              role="img"
-              aria-label={`체중 변화: ${recent.map((l) => `${l.measuredAt} ${l.weightKg}킬로그램`).join(", ")}`}
+              key={l.id}
+              className="flex h-full flex-1 flex-col items-center justify-end gap-1.5"
             >
-              <svg
-                viewBox={`0 0 ${CHART_W} ${CHART_H}`}
-                preserveAspectRatio="none"
-                className="absolute inset-0 size-full text-primary"
-                aria-hidden
-              >
-                <polyline
-                  points={points.map((p) => `${p.x},${p.y}`).join(" ")}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  vectorEffect="non-scaling-stroke"
-                />
-              </svg>
-              {points.map((p, i) => (
-                <span
-                  key={recent[i].id}
-                  title={`${recent[i].measuredAt} · ${recent[i].weightKg}kg`}
-                  className={`absolute size-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full ${
-                    i === points.length - 1 ? "bg-primary-deep" : "bg-primary"
-                  }`}
-                  style={{ left: `${p.x}%`, top: `${(p.y / CHART_H) * 100}%` }}
-                />
-              ))}
+              {/* 막대 길이를 눈대중하지 않도록 실제 값을 머리에 적는다 */}
+              <span className="text-[11px] font-bold text-rd-body tabular-nums">
+                {l.weightKg.toFixed(1)}
+              </span>
+              <div
+                className={`w-full rounded-t-lg ${
+                  i === recent.length - 1 ? "bg-rd-forest" : "bg-[#CFE7DC]"
+                }`}
+                style={{ height: barHeight(l.weightKg, min, max) }}
+              />
+              <span className="text-[10.5px] text-rd-faint">
+                {shortDate(l.measuredAt)}
+              </span>
             </div>
-          </div>
-          <div className="mt-1 flex justify-between pl-7 text-[11px] text-muted-soft">
-            <span>{recent[0].measuredAt.slice(2, 7).replace("-", "/")}</span>
-            <span>{recent[recent.length - 1].measuredAt.slice(2, 7).replace("-", "/")}</span>
-          </div>
+          ))}
         </div>
       )}
 
       {/* 이번 달 기록이 없으면 짧게 짚어준다 (월 1회 유도) */}
       {needsThisMonth && logs.length > 0 && (
-        <p className="mt-3 rounded-input bg-surface-soft/70 px-3 py-2.5 text-[12px] text-body">
+        <p className="mt-3.5 rounded-[14px] bg-[#F7F8F5] px-3.5 py-3 text-[12px] text-rd-body">
           이번 달 체중을 아직 기록하지 않았어요.
         </p>
       )}
 
       {trend.needsVisit && (
-        <p className="mt-3 rounded-input bg-warning/10 px-3 py-2.5 text-[12px] leading-relaxed text-body">
+        <p className="mt-3.5 rounded-[14px] bg-[#FFF9E8] px-3.5 py-3 text-[12px] leading-[1.6] text-rd-body">
           체중 변화만으로 병을 알 수는 없어요. 다만 눈에 띄는 감소는 갑상선·당뇨·신장
           문제의 이른 신호일 수 있어, 진료 때 이 기록을 보여주시면 도움이 돼요.
         </p>

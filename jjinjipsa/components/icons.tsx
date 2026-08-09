@@ -1,7 +1,12 @@
 /* 채움형(solid) 아이콘 세트 — 라인·채움 혼용 금지 (핸드오프 §Iconography).
  * currentColor로 채우므로 부모 text-색으로 카테고리 색 지정. */
 
-type P = { size?: number; className?: string };
+/*
+ * dotFill — 눈·모래 같은 "뚫린 점"의 색.
+ * 흰 카드 위에서는 #fff가 진짜 구멍처럼 보이지만, 무드 히어로의 반투명 칩이나
+ * 검정 내비 위에 얹으면 흰 점이 그냥 흰 점으로 남는다. 그럴 때 뒤 배경색을 넣는다.
+ */
+type P = { size?: number; className?: string; dotFill?: string };
 
 const S = (size: number) => ({
   width: size,
@@ -31,13 +36,13 @@ export function IconWater({ size = 24, className }: P) {
 }
 
 /** 화장실 트레이 (배변) */
-export function IconLitter({ size = 24, className }: P) {
+export function IconLitter({ size = 24, className, dotFill = "#fff" }: P) {
   return (
     <svg {...S(size)} className={className} aria-hidden>
       <path d="M4 10h16l-1.3 8.2a2 2 0 0 1-2 1.8H7.3a2 2 0 0 1-2-1.8L4 10Z" />
-      <circle cx="9" cy="14" r="1.2" fill="#fff" />
-      <circle cx="13.5" cy="15.5" r="1.2" fill="#fff" />
-      <circle cx="15" cy="12.5" r="1" fill="#fff" />
+      <circle cx="9" cy="14" r="1.2" fill={dotFill} />
+      <circle cx="13.5" cy="15.5" r="1.2" fill={dotFill} />
+      <circle cx="15" cy="12.5" r="1" fill={dotFill} />
       <rect x="3" y="7.5" width="18" height="3" rx="1.2" />
     </svg>
   );
@@ -57,11 +62,11 @@ export function IconYarn({ size = 24, className }: P) {
 }
 
 /** 카메라 */
-export function IconCamera({ size = 24, className }: P) {
+export function IconCamera({ size = 24, className, dotFill = "#fff" }: P) {
   return (
     <svg {...S(size)} className={className} aria-hidden>
       <path d="M9 4h6l1.2 2H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.8L9 4Z" />
-      <circle cx="12" cy="13" r="3.4" fill="#fff" />
+      <circle cx="12" cy="13" r="3.4" fill={dotFill} />
     </svg>
   );
 }
@@ -85,23 +90,23 @@ export function IconHome({ size = 24, className }: P) {
 }
 
 /** 냥 말풍선 */
-export function IconChat({ size = 24, className }: P) {
+export function IconChat({ size = 24, className, dotFill = "#fff" }: P) {
   return (
     <svg {...S(size)} className={className} aria-hidden>
       <path d="M4 3.5h16A1.5 1.5 0 0 1 21.5 5v9A1.5 1.5 0 0 1 20 15.5H9.8L6 19.2A1 1 0 0 1 4.3 18.5V15.5H4A1.5 1.5 0 0 1 2.5 14V5A1.5 1.5 0 0 1 4 3.5Z" />
-      <circle cx="9" cy="9.6" r="1.15" fill="#fff" />
-      <circle cx="15" cy="9.6" r="1.15" fill="#fff" />
+      <circle cx="9" cy="9.6" r="1.15" fill={dotFill} />
+      <circle cx="15" cy="9.6" r="1.15" fill={dotFill} />
     </svg>
   );
 }
 
 /** 달력 메모 (기록) */
-export function IconRecord({ size = 24, className }: P) {
+export function IconRecord({ size = 24, className, dotFill = "#fff" }: P) {
   return (
     <svg {...S(size)} className={className} aria-hidden>
       <path d="M7 2.5a1 1 0 0 1 1 1V4h8v-.5a1 1 0 1 1 2 0V4h1A1.5 1.5 0 0 1 20.5 5.5V19A1.5 1.5 0 0 1 19 20.5H5A1.5 1.5 0 0 1 3.5 19V5.5A1.5 1.5 0 0 1 5 4h1v-.5a1 1 0 0 1 1-1ZM4.8 9.5v9.2h14.4V9.5H4.8Z" />
-      <rect x="7" y="12" width="6.5" height="1.6" rx=".8" fill="#fff" />
-      <rect x="7" y="15" width="4.5" height="1.6" rx=".8" fill="#fff" />
+      <rect x="7" y="12" width="6.5" height="1.6" rx=".8" fill={dotFill} />
+      <rect x="7" y="15" width="4.5" height="1.6" rx=".8" fill={dotFill} />
     </svg>
   );
 }

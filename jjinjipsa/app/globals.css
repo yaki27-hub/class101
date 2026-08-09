@@ -73,6 +73,67 @@
 
   /* 서체 — 이번 적용에서 제외 (기존 유지) */
   --font-title: "Jua", "Pretendard Variable", Pretendard, sans-serif;
+
+  /*
+   * 🎨 리디자인 토큰 (rd-*) — "날씨돌" 문법 홈·상담·프로필 3화면 전용.
+   *
+   * 위 크림/포레스트 잉크 토큰은 그대로 둔다. 기록·계정·온보딩 등 나머지 화면이
+   * 전부 그 위에 지어져 있어서, 갈아끼우면 이번 범위 밖 화면이 다 깨진다.
+   * 무드별로 갈리는 색(그라디언트·딥)은 런타임 값이라 토큰이 아니라
+   * lib/homeMood.ts 가 들고 있다.
+   */
+  --color-rd-page: #f4f5f2; /* 2뎁스 라이트 그레이 — 무드 그라디언트 금지 구역 */
+  --color-rd-card: #ffffff;
+  --color-rd-ink: #1a1a1a;
+  --color-rd-body: #3f4642;
+  --color-rd-muted: #7a7f7b;
+  --color-rd-faint: #9aa09b;
+  --color-rd-line: #eceee9;
+  --color-rd-line-soft: #f1f2ee;
+  --color-rd-well: #fafbf9;
+  --color-rd-mint: #6fd9c5; /* accent/mint — 토글 on, 기록 점 */
+  --color-rd-mint-soft: #e7f7f2;
+  --color-rd-mint-line: #b9e9de;
+  --color-rd-forest: #0e5b41; /* 링크·보조 CTA */
+  --color-rd-coral: #ff9e8c;
+  --color-rd-lemon: #ffe066;
+  --color-rd-danger: #e5484d;
+  --color-rd-track: #e4e6e2; /* 토글 off */
+}
+
+/*
+ * 히어로 발자국 텍스처 — 씬 하단(440px)부터 깔리고 마스크로 페이드인한다.
+ * 경계에서 툭 끊기면 씬과 무드 색 사이에 이음매가 그대로 보인다.
+ */
+.mood-paws {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='74'%3E%3Cg fill='%23fff'%3E%3Cellipse cx='20' cy='26' rx='7.5' ry='6'/%3E%3Cellipse cx='11' cy='16' rx='3.4' ry='4.4'/%3E%3Cellipse cx='19' cy='12' rx='3.4' ry='4.6'/%3E%3Cellipse cx='27' cy='15' rx='3.2' ry='4.2'/%3E%3Cellipse cx='56' cy='60' rx='6' ry='4.8'/%3E%3Cellipse cx='49' cy='52' rx='2.7' ry='3.5'/%3E%3Cellipse cx='56' cy='49' rx='2.7' ry='3.7'/%3E%3Cellipse cx='62' cy='51' rx='2.6' ry='3.4'/%3E%3C/g%3E%3C/svg%3E");
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 34%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 34%);
+}
+
+/* 광고 자리 썸네일 — 브랜드 이미지가 들어오기 전 사선 플레이스홀더 */
+.ad-thumb {
+  background: repeating-linear-gradient(
+    45deg,
+    #edefea,
+    #edefea 6px,
+    #f6f7f4 6px,
+    #f6f7f4 12px
+  );
+}
+
+/* 냥박사 타이핑 점 3개 */
+@keyframes dot-blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
 }
 
 
