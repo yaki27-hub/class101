@@ -1,11 +1,11 @@
 "use client";
 
 /*
- * 우리 고양이 상세 — **그 아이 고유 정보만** 소유한다 (docs/정보구조.md 2단계).
+ * 우리 고양이 상세 — 리디자인 시안 2b 적용.
  *
- * 전에는 오늘 상태·건강 카드·최근 증상을 그대로 안고 있어서 홈·기록 탭을
- * 통째로 복제했다. 지금은 히어로·생애 시계·메모만 두고, 나머지는
- * **한 줄 요약 + 소유 화면 링크**로 넘긴다.
+ * 정보구조는 그대로다 (docs/정보구조.md 2단계): **그 아이 고유 정보만** 소유하고,
+ * 오늘 상태·기록은 한 줄 요약 + 소유 화면 링크로 넘긴다.
+ * 2뎁스라 무드 그라디언트는 쓰지 않는다 — 라이트 그레이 위 플랫 카드.
  */
 
 import Link from "next/link";
@@ -19,20 +19,25 @@ import { useTodayStatus } from "@/hooks/useTodayStatus";
 import BottomSheet from "@/components/BottomSheet";
 import BackButton from "@/components/BackButton";
 import WeightSection from "@/components/WeightSection";
+import AdCard from "@/components/home/AdCard";
+import CatAvatar from "@/components/CatAvatar";
 import { loadHealthNote, saveHealthNote } from "@/lib/healthNote";
-import { IconCat, IconChat, IconPencil, IconTrash } from "@/components/icons";
+import { IconChat, IconPencil } from "@/components/icons";
 
 /*
- * 생애 5단계는 서로 구분되는 것이 전부다.
- * 잉크 계열을 여럿 쓰면 청년·중년·시니어가 같은 초록으로 뭉개진다 → 스티키노트 4색 + 잉크.
+ * 생애 5단계는 서로 구분되는 것이 전부다. 시안의 스티키노트 4색 + 잉크를 그대로 쓴다.
+ * 잉크 계열을 여럿 쓰면 청년·중년·시니어가 같은 초록으로 뭉개진다.
  */
 const SEGMENT_COLORS: Record<string, string> = {
-  kitten: "bg-mint",
-  junior: "bg-sky",
-  adult: "bg-butter",
-  mature: "bg-soft-pink",
-  senior: "bg-ink",
+  kitten: "#6FD9C5",
+  junior: "#8FCACF",
+  adult: "#FFE066",
+  mature: "#FF9E8C",
+  senior: "#1A1A1A",
 };
+
+/** 시안 라벨 — CLOCK_SEGMENTS는 온보딩도 함께 쓰므로 여기서만 갈아 끼운다 */
+const SEGMENT_LABELS: Record<string, string> = { kitten: "아깽이" };
 
 export default function CatDetailPage() {
   const router = useRouter();
@@ -98,210 +103,214 @@ export default function CatDetailPage() {
         ? `오늘 ${summary.recordedCount}/${summary.totalCount}개 기록했어요`
         : "아직 오늘 기록이 없어요";
 
+  const rows = [
+    {
+      // 리디자인으로 홈의 4항목 입력이 빠져(T-51) "기록"이라 쓰면 거짓말이 된다
+      href: "/",
+      title: "오늘 상태",
+      sub: todaySummaryText,
+      cta: "홈에서 보기",
+    },
+    {
+      href: "/records",
+      title: `기록${logs.length > 0 ? ` · ${logs.length}건` : ""}`,
+      sub: latestLog
+        ? `${latestLog.occurredAt.slice(5, 10).replace("-", "/")} ${latestLog.summary}`
+        : "아직 기록이 없어요",
+      cta: "전체 보기",
+    },
+    {
+      href: `/cats/${cat.id}/report`,
+      title: `${cat.name}의 생활기록부`,
+      sub:
+        reportFilled > 0
+          ? `${reportFilled}/${TOTAL_QUESTIONS} 기재 · 자랑용으로 뽑아보세요`
+          : "성격 항목을 채우면 자랑용 카드가 나와요",
+      cta: "보러 가기",
+    },
+  ];
+
   return (
-    <main className="flex-1 space-y-4 px-5 pt-8 pb-24">
-      <header className="flex items-center justify-between">
-        <BackButton fallback="/cats" />
-        <Link
-          href={`/cats/${cat.id}/edit`}
-          className="flex min-h-11 items-center gap-1 rounded-button bg-surface-soft px-3.5 text-[12px] font-semibold text-secondary"
-        >
-          <IconPencil size={13} /> 프로필 수정
-        </Link>
-      </header>
-
-      {/* 히어로 — 사진 + 이름 + 나이 */}
-      <section className="flex items-center gap-4 rounded-card bg-white p-5 border border-hairline">
-        {cat.photo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={cat.photo}
-            alt={`${cat.name} 사진`}
-            className="size-[84px] flex-none rounded-[22px] object-cover"
-          />
-        ) : (
-          <span className="flex size-[84px] flex-none items-center justify-center rounded-[22px] bg-surface-soft text-muted-soft">
-            <IconCat size={44} />
-          </span>
-        )}
-        <div className="min-w-0">
-          <p className="display text-[22px] text-secondary">{cat.name}</p>
-          <p className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary/15 px-2.5 py-1 text-[12px] font-semibold text-primary-deep">
-            {age.stageEmoji} {age.stageLabel}
-          </p>
-          <p className="mt-1.5 text-[13px] text-body">
-            {age.ageLabel}
-            {cat.birthEstimated ? " (추정)" : ""} · 사람 나이 {age.humanAge}세
-          </p>
-          <p className="text-[12px] text-muted-soft">
-            {cat.breedGroup}
-            {cat.weightKg ? ` · ${cat.weightKg}kg` : ""}
-            {cat.neutered ? " · 중성화 완료" : ""}
-          </p>
-        </div>
-      </section>
-
-      {/* 생애 시계 */}
-      <section className="rounded-card border border-hairline bg-white p-5">
-        <p className="text-sm font-bold text-secondary">{cat.name}의 생애 시계</p>
-        <div className="relative mt-4">
-          <div className="flex h-3 w-full overflow-hidden rounded-full">
-            {CLOCK_SEGMENTS.map((s) => (
-              <div
-                key={s.stage}
-                className={`${SEGMENT_COLORS[s.stage]} ${
-                  s.stage === age.stage ? "" : "opacity-35"
-                }`}
-                style={{ width: `${100 / CLOCK_SEGMENTS.length}%` }}
-              />
-            ))}
-          </div>
-          <div
-            className="absolute -top-1.5 h-6 w-1.5 -translate-x-1/2 rounded-full bg-secondary"
-            style={{ left: `${age.markerRatio * 100}%` }}
-            aria-hidden
-          />
-        </div>
-        <div className="mt-2 flex text-[11px] text-muted">
-          {CLOCK_SEGMENTS.map((s) => (
-            <span
-              key={s.stage}
-              className={`text-center ${
-                s.stage === age.stage ? "font-bold text-secondary" : ""
-              }`}
-              style={{ width: `${100 / CLOCK_SEGMENTS.length}%` }}
-            >
-              {s.label}
-            </span>
-          ))}
-        </div>
-        <p className="mt-4 rounded-input bg-surface-soft/70 p-3.5 text-sm leading-relaxed text-body">
-          {age.stageMessage}
-        </p>
-      </section>
-
-      {/*
-        체중 추이 — 생애 시계와 같은 '그 아이의 시간축' 정보라 상세가 소유한다.
-        홈·기록 탭에는 두지 않는다 (docs/정보구조.md §3-1).
-      */}
-      <WeightSection cat={cat} onCatChange={setCat} />
-
-      {/*
-        오늘·기록 요약 — 소유는 홈/기록 탭. 여기서는 상태만 보여주고 넘긴다.
-        건강 카드는 따로 줄을 두지 않는다 — 기록 탭의 첫 섹션이라 도착하면 바로 보이고,
-        같은 곳으로 가는 링크를 두 줄 두면 그 자체가 새로운 중복이 된다.
-      */}
-      <section className="overflow-hidden rounded-card border border-hairline bg-white">
-        <Link
-          href="/"
-          className="flex min-h-[60px] items-center gap-3 border-b border-hairline px-5 py-3.5"
-        >
-          <span className="min-w-0 flex-1">
-            <span className="block text-[13px] font-bold text-secondary">오늘 상태</span>
-            <span className="mt-0.5 block truncate text-[12.5px] text-muted">
-              {todaySummaryText}
-            </span>
-          </span>
-          <span className="flex-none text-[12px] font-semibold text-primary-deep">
-            홈에서 기록 ›
-          </span>
-        </Link>
-
-        <Link href="/records" className="flex min-h-[60px] items-center gap-3 px-5 py-3.5">
-          <span className="min-w-0 flex-1">
-            <span className="block text-[13px] font-bold text-secondary">
-              기록{logs.length > 0 ? ` · ${logs.length}건` : ""}
-            </span>
-            <span className="mt-0.5 block truncate text-[12.5px] text-muted">
-              {latestLog
-                ? `${latestLog.occurredAt.slice(5, 10).replace("-", "/")} ${latestLog.summary}`
-                : "아직 기록이 없어요"}
-            </span>
-          </span>
-          <span className="flex-none text-[12px] font-semibold text-primary-deep">
-            전체 보기 ›
-          </span>
-        </Link>
-
-      </section>
-
-      {/* 생활기록부 — 성격은 이 아이 고유 정보라 상세가 소유한다 (건강 정보 없음) */}
-      <Link
-        href={`/cats/${cat.id}/report`}
-        className="flex min-h-[60px] items-center gap-3 rounded-card border border-hairline bg-white px-5 py-3.5"
+    <main className="relative flex-1 bg-rd-page">
+      {/* 헤더 — 스크롤되는 카드 위로 페이드아웃하며 덮는다 */}
+      <div
+        className="fixed inset-x-0 top-0 z-30 mx-auto max-w-[420px] pt-[max(8px,env(safe-area-inset-top))]"
+        style={{
+          background: "linear-gradient(180deg,#F4F5F2 72%,rgba(244,245,242,0))",
+        }}
       >
-        <span className="min-w-0 flex-1">
-          <span className="block text-[13px] font-bold text-secondary">
-            {cat.name}의 생활기록부
-          </span>
-          <span className="mt-0.5 block truncate text-[12.5px] text-muted">
-            {reportFilled > 0
-              ? `${reportFilled}/${TOTAL_QUESTIONS} 기재 · 자랑용으로 뽑아보세요`
-              : "성격 항목을 채우면 자랑용 카드가 나와요"}
-          </span>
-        </span>
-        <span className="flex-none text-[12px] font-semibold text-primary-deep">
-          보러 가기 ›
-        </span>
-      </Link>
-
-      {/* 꼭 기억할 것 — 이 아이 고유 정보라 상세가 소유한다 */}
-      <section className="rounded-card border border-hairline bg-white p-5">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-bold text-secondary">꼭 기억할 것</p>
-          <button
-            onClick={() => {
-              setNoteDraft(note);
-              setNoteOpen(true);
-            }}
-            className="-my-2 -mr-2 flex min-h-11 items-center gap-1 px-2 text-[12px] font-semibold text-primary-deep"
+        <div className="flex h-12.5 items-center justify-between px-4">
+          <BackButton fallback="/cats" icon="chevron" className="text-rd-ink" />
+          <Link
+            href={`/cats/${cat.id}/edit`}
+            className="flex min-h-11 items-center gap-1.5 rounded-full bg-white px-3.5 text-[12.5px] font-bold text-rd-ink"
           >
-            <IconPencil size={13} /> {note ? "수정" : "추가"}
-          </button>
+            <IconPencil size={13} /> 프로필 수정
+          </Link>
         </div>
-        <p className="mt-2 text-[13px] leading-relaxed whitespace-pre-wrap text-body">
-          {note || "알레르기, 복용 중인 약, 병원에 꼭 알려야 할 것을 적어두세요."}
-        </p>
-      </section>
-
-      {/* CTA */}
-      <div className="space-y-2">
-        <Link
-          href={`/cats/${cat.id}/chat`}
-          className="flex h-12 w-full items-center justify-center gap-1.5 rounded-button bg-primary text-sm font-bold text-white shadow-subtle active:scale-[0.99]"
-        >
-          <IconChat size={18} /> 냥박사에게 물어보기
-        </Link>
-        <button
-          onClick={() => setConfirmDel(true)}
-          className="flex h-11 w-full items-center justify-center gap-1.5 rounded-button border border-error/30 text-sm font-semibold text-error"
-        >
-          <IconTrash size={16} /> 이 아이 삭제
-        </button>
       </div>
 
-      <p className="text-center text-[11px] text-muted-soft">
-        나이 환산은 참고값이에요. 정확한 진단은 수의사 상담이 필요합니다.
-      </p>
+      {/* grid + auto-rows로 둬야 카드가 flex-shrink에 눌리지 않는다 */}
+      <div className="grid auto-rows-max gap-3 px-4 pt-24 pb-32">
+        {/* 히어로 */}
+        <section className="flex items-center gap-4 rounded-3xl bg-rd-card p-5">
+          <CatAvatar cat={cat} size={88} radius={26} />
+          <div className="min-w-0">
+            <p className="display text-[23px] text-rd-ink">{cat.name}</p>
+            <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-rd-mint-soft px-2.5 py-1 text-[12px] font-extrabold text-rd-forest">
+              {age.stageEmoji} {age.stageLabel}
+            </span>
+            <p className="mt-1.5 text-[13px] tracking-[-0.01em] text-rd-body">
+              {age.ageLabel}
+              {cat.birthEstimated ? " (추정)" : ""} · 사람 나이 {age.humanAge}세
+            </p>
+            <p className="mt-0.5 text-[12px] text-rd-faint">
+              {cat.breedGroup}
+              {cat.weightKg ? ` · ${cat.weightKg}kg` : ""}
+              {cat.neutered ? " · 중성화 완료" : ""}
+            </p>
+          </div>
+        </section>
+
+        {/* 생애 시계 */}
+        <section className="rounded-3xl bg-rd-card p-5">
+          <h2 className="mb-4 text-[16px] font-extrabold tracking-[-0.02em] text-rd-ink">
+            {cat.name}의 생애 시계
+          </h2>
+          <div className="relative mb-2">
+            <div className="flex h-3 overflow-hidden rounded-full">
+              {CLOCK_SEGMENTS.map((s) => (
+                <div
+                  key={s.stage}
+                  className="flex-1"
+                  style={{
+                    background: SEGMENT_COLORS[s.stage],
+                    opacity: s.stage === age.stage ? 1 : 0.32,
+                  }}
+                />
+              ))}
+            </div>
+            <div
+              className="absolute -top-1.5 h-6 w-1.5 -translate-x-1/2 rounded-full bg-rd-ink"
+              style={{ left: `${age.markerRatio * 100}%` }}
+              aria-hidden
+            />
+          </div>
+          <div className="flex">
+            {CLOCK_SEGMENTS.map((s) => (
+              <span
+                key={s.stage}
+                className={`flex-1 text-center text-[11px] ${
+                  s.stage === age.stage
+                    ? "font-extrabold text-rd-ink"
+                    : "font-medium text-rd-faint"
+                }`}
+              >
+                {SEGMENT_LABELS[s.stage] ?? s.label}
+              </span>
+            ))}
+          </div>
+          <p className="mt-4 rounded-[14px] bg-[#F7F8F5] p-3.5 text-[13.5px] leading-[1.65] tracking-[-0.01em] text-rd-body text-pretty">
+            {age.stageMessage}
+          </p>
+        </section>
+
+        {/*
+          체중 추이 — 생애 시계와 같은 '그 아이의 시간축' 정보라 상세가 소유한다.
+          홈·기록 탭에는 두지 않는다 (docs/정보구조.md §3-1).
+        */}
+        <WeightSection cat={cat} onCatChange={setCat} />
+
+        {/*
+          오늘·기록·생활기록부 — 소유는 각 탭. 여기서는 상태만 보여주고 넘긴다.
+        */}
+        <section className="overflow-hidden rounded-3xl bg-rd-card">
+          {rows.map((r, i) => (
+            <Link
+              key={r.title}
+              href={r.href}
+              className={`flex min-h-[60px] items-center gap-3 px-5 py-4 ${
+                i < rows.length - 1 ? "border-b border-rd-line-soft" : ""
+              }`}
+            >
+              <span className="min-w-0 flex-1">
+                <span className="block text-[14px] font-bold tracking-[-0.02em] text-rd-ink">
+                  {r.title}
+                </span>
+                <span className="mt-0.5 block truncate text-[12.5px] text-rd-muted">
+                  {r.sub}
+                </span>
+              </span>
+              <span className="flex-none text-[12px] font-bold text-rd-forest">
+                {r.cta} ›
+              </span>
+            </Link>
+          ))}
+        </section>
+
+        {/* 꼭 기억할 것 — 이 아이 고유 정보라 상세가 소유한다 */}
+        <section className="rounded-3xl bg-rd-card p-5">
+          <div className="mb-2 flex items-center justify-between">
+            <h2 className="text-[16px] font-extrabold tracking-[-0.02em] text-rd-ink">
+              꼭 기억할 것
+            </h2>
+            <button
+              onClick={() => {
+                setNoteDraft(note);
+                setNoteOpen(true);
+              }}
+              className="-my-2 -mr-2 flex min-h-11 items-center gap-1 px-2 text-[12px] font-bold text-rd-forest"
+            >
+              <IconPencil size={13} /> {note ? "수정" : "추가"}
+            </button>
+          </div>
+          <p className="text-[13.5px] leading-[1.65] tracking-[-0.01em] whitespace-pre-wrap text-rd-body text-pretty">
+            {note || "알레르기, 복용 중인 약, 병원에 꼭 알려야 할 것을 적어두세요."}
+          </p>
+        </section>
+
+        {/* 광고 자리 — 프로필 정보와 연동된 네이티브 카드 */}
+        <AdCard meta="사료 · 프로필 연동" copy="우리 아이 나이에 맞춘 사료 고르기" />
+
+        <button
+          onClick={() => setConfirmDel(true)}
+          className="flex h-13 w-full items-center justify-center gap-2 rounded-2xl border border-[#F0D5D2] bg-rd-card text-[14px] font-semibold text-[#C4453A]"
+        >
+          이 아이 삭제
+        </button>
+
+        <p className="text-center text-[11px] text-rd-faint">
+          나이 환산은 참고값이에요. 정확한 진단은 수의사 상담이 필요합니다.
+        </p>
+      </div>
+
+      {/* 고정 CTA */}
+      <Link
+        href={`/cats/${cat.id}/chat`}
+        className="fixed inset-x-4 z-40 mx-auto flex h-13.5 max-w-[388px] items-center justify-center gap-2 rounded-2xl bg-rd-forest text-[15px] font-extrabold tracking-[-0.02em] text-white shadow-[0_10px_26px_-10px_rgba(14,91,65,.6)]"
+        style={{ bottom: "max(26px, env(safe-area-inset-bottom))" }}
+      >
+        <IconChat size={19} dotFill="#0E5B41" /> 냥박사에게 물어보기
+      </Link>
 
       {/* 삭제 확인 */}
       {confirmDel && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondary/40 px-6">
-          <div className="w-full max-w-[340px] rounded-card bg-white p-6">
-            <p className="text-lg font-bold text-secondary">{cat.name}를 삭제할까요?</p>
-            <p className="mt-2 text-sm text-body">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
+          <div className="w-full max-w-[340px] rounded-3xl bg-white p-6">
+            <p className="text-lg font-bold text-rd-ink">{cat.name}를 삭제할까요?</p>
+            <p className="mt-2 text-sm text-rd-body">
               프로필·사진·증상 기록·대화가 모두 지워지고 되돌릴 수 없어요.
             </p>
             <div className="mt-4 flex gap-2">
               <button
                 onClick={() => setConfirmDel(false)}
-                className="h-11 flex-1 rounded-button border border-hairline text-sm font-semibold text-body"
+                className="h-11 flex-1 rounded-[14px] border border-rd-line text-sm font-semibold text-rd-body"
               >
                 취소
               </button>
               <button
                 onClick={() => void deleteCat()}
-                className="h-11 flex-1 rounded-button bg-error text-sm font-bold text-white"
+                className="h-11 flex-1 rounded-[14px] bg-rd-danger text-sm font-bold text-white"
               >
                 삭제
               </button>
@@ -331,7 +340,7 @@ export default function CatDetailPage() {
       {toast && (
         <div
           role="status"
-          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
+          className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-rd-ink px-4 py-2.5 text-[13px] font-semibold text-white [animation:toast-in_.2s_ease]"
         >
           {toast}
         </div>

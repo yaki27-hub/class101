@@ -11,16 +11,28 @@
 import { useRouter } from "next/navigation";
 import { IconArrowLeft } from "@/components/icons";
 
+/** 시안(2a·2b)의 얇은 셰브론 — 채움형이라 라인·채움 혼용 규칙에 걸리지 않는다 */
+function IconChevronLeft({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M14.7 4.3a1.2 1.2 0 0 1 0 1.7L8.4 12l6.3 6a1.2 1.2 0 1 1-1.7 1.8l-7.2-6.9a1.2 1.2 0 0 1 0-1.75L13 4.3a1.2 1.2 0 0 1 1.7 0Z" />
+    </svg>
+  );
+}
+
 export default function BackButton({
   fallback,
   label,
   className = "",
+  icon = "arrow",
 }: {
   /** 히스토리가 없을 때 갈 상위 화면 */
   fallback: string;
   /** 화살표 옆 텍스트 (없으면 아이콘만) */
   label?: string;
   className?: string;
+  /** 리디자인 화면은 셰브론을 쓴다 */
+  icon?: "arrow" | "chevron";
 }) {
   const router = useRouter();
 
@@ -41,7 +53,7 @@ export default function BackButton({
       aria-label="뒤로 가기"
       className={`-ml-3 flex min-h-11 min-w-11 items-center justify-center gap-1 px-3 text-muted active:opacity-60 ${className}`}
     >
-      <IconArrowLeft size={20} />
+      {icon === "chevron" ? <IconChevronLeft size={20} /> : <IconArrowLeft size={20} />}
       {label && <span className="text-sm font-medium">{label}</span>}
     </button>
   );

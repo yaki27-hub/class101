@@ -1,10 +1,18 @@
 "use client";
 
-/* F-08 챗봇 대화 화면 (T-06: mock 왕복 + 세션 저장. Gemini 연결·컨텍스트 주입은 T-07) */
+/*
+ * F-08 냥박사 상담 — 리디자인 시안 2a 적용.
+ *
+ * 로직(레드플래그 룰 엔진 → LLM 스트리밍 → 대화·기록 저장, 개체 확인 게이트)은
+ * 그대로다. 바뀐 건 껍데기와 위계뿐이다: 흰 헤더 / 라이트 그레이 본문 /
+ * 말풍선 라운드 20-20-20-6, 그리고 "새 대화"·사용량 표시가 새로 붙었다.
+ *
+ * 2뎁스라서 무드 그라디언트는 쓰지 않는다 (가이드 §하지 말 것).
+ */
 
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import {
   newId,
   storage,
@@ -20,19 +28,41 @@ import {
   buildRedFlagResponse,
   checkRedFlags,
 } from "@/lib/redFlags";
-import NyangLoader from "@/components/NyangLoader";
 import Mascot from "@/components/Mascot";
 import { detectOtherCatMention } from "@/lib/chat/catMention";
 import { IconCamera, IconClose } from "@/components/icons";
 import BackButton from "@/components/BackButton";
 import AnswerBlocks from "@/components/chat/AnswerBlocks";
+import { bumpChatUsage, loadChatUsage } from "@/lib/chatUsage";
+import { FREE_DAILY_QUESTIONS, GUEST_DAILY_QUESTIONS, getTier } from "@/lib/limits";
 
 /** AI 답변의 마크다운 ** 강조 기호 정리 */
 function clean(text: string) {
   return text.replace(/\*\*/g, "").replace(/^#+\s*/gm, "");
 }
 
-export default function ChatPage() {
+/** 냥박사 아바타 — 말풍선 옆 32px 원 */
+function BotAvatar({ urgent = false }: { urgent?: boolean }) {
+  return (
+    <span
+      className={`flex size-8 flex-none items-center justify-center overflow-hidden rounded-full ${
+        urgent ? "bg-[#FFEDEA]" : "bg-rd-mint-soft"
+      }`}
+    >
+      <Mascot mood={urgent ? "concerned" : "calm"} size={28} />
+    </span>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <ChatPage />
+    </Suspense>
+  );
+}
+
+function ChatPage() {
   const { id: catId } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
@@ -55,6 +85,10 @@ export default function ChatPage() {
     image: string | null;
   } | null>(null);
   const [allCats, setAllCats] = useState<Cat[]>([]);
+  /** 이 기기 기준 오늘 질문 수 — 안내용 (lib/chatUsage.ts 주석) */
+  const [used, setUsed] = useState(0);
+  /** 티어별 한도 (D-24) — 게스트 3 / 로그인 10. 회원값으로 시작해 판별되면 갱신 */
+  const [dailyLimit, setDailyLimit] = useState(FREE_DAILY_QUESTIONS);
   const router = useRouter();
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -98,6 +132,10 @@ export default function ChatPage() {
         setMessages(await storage.listMessages(last.id));
       }
     })();
+    setUsed(loadChatUsage());
+    void getTier().then((tier) =>
+      setDailyLimit(tier === "member" ? FREE_DAILY_QUESTIONS : GUEST_DAILY_QUESTIONS),
+    );
   }, [catId]);
 
   useEffect(() => {
@@ -111,6 +149,18 @@ export default function ChatPage() {
     if (searchParams.get("photo") === "1")
       setTimeout(() => fileRef.current?.click(), 300);
   }, [searchParams]);
+
+  /** 새 대화 — 다음 질문부터 새 세션에 쌓인다 (기존 세션은 지우지 않는다) */
+  function resetChat() {
+    setSessionId(null);
+    setMessages([]);
+    setStreaming(null);
+    setPendingLog(null);
+    setLogSaved(false);
+    setMentionCheck(null);
+    setDraft("");
+    setPhoto(null);
+  }
 
   async function send(text?: string, opts?: { skipMentionCheck?: boolean }) {
     const q = (text ?? draft).trim() || (photo ? "이 사진 좀 봐줄래요?" : "");
@@ -135,6 +185,7 @@ export default function ChatPage() {
     setPhoto(null);
     setPendingLog(null);
     setLogSaved(false);
+    setUsed(bumpChatUsage());
 
     // 세션 없으면 생성
     let sid = sessionId;
@@ -245,65 +296,91 @@ export default function ChatPage() {
       </main>
     );
 
+  const canSend = streaming === null && (!!draft.trim() || !!photo);
+
   return (
-    <main className="flex h-dvh flex-col">
+    <main className="flex h-dvh flex-col bg-rd-page">
       {/* 헤더 */}
-      <header className="flex items-center justify-between border-b border-hairline bg-canvas px-5 py-3.5">
-        <BackButton fallback={`/cats/${catId}`} />
-        <div className="flex items-center gap-2">
-          <span className="flex size-9 items-center justify-center rounded-full bg-primary-soft">
-            <Mascot mood="calm" size={30} />
+      <header className="flex-none border-b border-rd-line bg-white pt-[max(8px,env(safe-area-inset-top))]">
+        <div className="flex h-14 items-center gap-2.5 px-4">
+          <BackButton
+            fallback={`/cats/${catId}`}
+            icon="chevron"
+            className="!min-w-9 !px-0 text-rd-ink"
+          />
+          <span className="flex size-9.5 flex-none items-center justify-center overflow-hidden rounded-full bg-rd-mint-soft">
+            <Mascot mood="happy" size={34} />
           </span>
-          <div className="text-left">
-            <p className="text-sm font-bold text-secondary">냥박사</p>
-            <p className="text-[11px] text-muted">{cat.name}를 아는 건강 도우미</p>
-          </div>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-[14.5px] font-extrabold tracking-[-0.02em] text-rd-ink">
+              냥박사
+            </span>
+            <span className="mt-px block truncate text-[11.5px] font-medium text-rd-muted">
+              {cat.name}를 아는 건강 도우미
+            </span>
+          </span>
+          <button
+            type="button"
+            onClick={resetChat}
+            className="flex-none p-2 text-[12px] font-semibold text-rd-muted"
+          >
+            새 대화
+          </button>
         </div>
-        <span className="w-4" />
       </header>
 
-      {/* 메시지 리스트 */}
-      <div className="flex-1 space-y-3 overflow-y-auto bg-surface-soft/40 px-4 py-5">
+      {/* 메시지 리스트 — grid로 둬야 자식이 flex-shrink로 눌리지 않는다 */}
+      <div className="grid min-h-0 flex-1 auto-rows-max gap-3 overflow-y-auto px-4 pt-4.5 pb-2">
         {messages.length === 0 && streaming === null && (
           <>
             {/* 빈 상태 — 귀여운 냥박사 */}
-            <div className="rounded-card border border-hairline bg-white p-6 text-center">
-              <Mascot mood="calm" size={84} className="mx-auto" />
-              <p className="display mt-3 text-[18px] text-secondary">무엇이든 물어보세요</p>
-              <p className="mt-1 text-[13px] leading-relaxed text-body">
+            <div className="rounded-3xl bg-white px-5 py-6.5 text-center">
+              <Mascot mood="happy" size={96} className="mx-auto" />
+              <p className="display mt-2.5 mb-1.5 text-[19px] text-rd-ink">
+                무엇이든 물어보세요
+              </p>
+              <p className="text-[13px] leading-[1.65] text-rd-muted">
                 {cat.name}의 나이·기록을 아는 냥박사가
-                <br />사료·행동·건강 신호까지 살펴드려요.
+                <br />
+                사료·행동·건강 신호까지 살펴드려요.
               </p>
             </div>
-            {/* 추천 질문 칩 — 프로필 기반 (T-08) */}
-            <div className="space-y-2 pt-1">
-              <p className="px-1 text-[12px] font-semibold text-muted">이런 게 궁금하다면</p>
-              {getSuggestedQuestions(cat).map((q) => (
-                <button
-                  key={q}
-                  onClick={() => void send(q)}
-                  className="flex w-full items-center gap-2 rounded-card bg-white px-4 py-3 text-left text-[13px] font-semibold text-secondary border border-hairline active:scale-[0.99]"
-                >
-                  <span className="size-1.5 flex-none rounded-full bg-primary" aria-hidden />
+            {/* 추천 질문 — 프로필 기반 (T-08) */}
+            <p className="mx-0.5 -mb-1 text-[12px] font-bold text-rd-faint">
+              이런 게 궁금하다면
+            </p>
+            {getSuggestedQuestions(cat).map((q) => (
+              <button
+                key={q}
+                onClick={() => void send(q)}
+                className="flex w-full items-center gap-2.5 rounded-[18px] bg-white px-4 py-3.5 text-left active:scale-[0.99]"
+              >
+                <span className="size-1.5 flex-none rounded-full bg-rd-mint" aria-hidden />
+                <span className="text-[13.5px] font-semibold tracking-[-0.01em] text-rd-ink">
                   {q}
-                </button>
-              ))}
-            </div>
+                </span>
+              </button>
+            ))}
           </>
         )}
+
         {messages.map((m) =>
           m.model === "rule-engine" ? (
             /* 레드플래그 고정 응답 — 룰 엔진이 AI 없이 낸 응급 안내 (F-09) */
-            <div key={m.id} className="flex">
-              <div className="max-w-[92%] space-y-3 rounded-card border-2 border-error/40 bg-error/5 px-4 py-3.5">
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-body">
+            <div key={m.id} className="flex items-start gap-2">
+              <BotAvatar urgent />
+              <div className="flex max-w-[86%] flex-col gap-2.5 rounded-[20px] rounded-bl-md border-[1.5px] border-[#FFC9BF] bg-[#FFF5F3] p-3.5">
+                <p className="text-[11px] font-extrabold tracking-[0.02em] text-[#D6452F]">
+                  🔴 지금 바로 병원
+                </p>
+                <p className="text-[13.5px] leading-[1.65] tracking-[-0.01em] whitespace-pre-wrap text-rd-ink text-pretty">
                   {clean(m.content)}
                 </p>
                 <a
                   href={EMERGENCY_MAP_URL}
                   target="_blank"
                   rel="noopener"
-                  className="flex h-11 items-center justify-center rounded-button bg-error text-sm font-semibold text-white"
+                  className="flex h-11.5 items-center justify-center gap-1.5 rounded-[14px] bg-rd-danger text-[14px] font-extrabold text-white"
                 >
                   🗺️ 가까운 24시 동물병원 찾기
                 </a>
@@ -311,7 +388,7 @@ export default function ChatPage() {
             </div>
           ) : m.role === "user" ? (
             <div key={m.id} className="flex justify-end">
-              <div className="max-w-[80%] rounded-card rounded-br-md bg-secondary px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap text-white">
+              <div className="max-w-[80%] rounded-[20px] rounded-br-md bg-rd-ink px-3.5 py-2.5 text-[14px] leading-[1.6] tracking-[-0.01em] whitespace-pre-wrap text-white">
                 {m.imageUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={m.imageUrl} alt="첨부 사진" className="mb-2 max-h-52 rounded-md" />
@@ -320,40 +397,44 @@ export default function ChatPage() {
               </div>
             </div>
           ) : (
-            <div key={m.id} className="flex items-end gap-1.5">
-              <span className="mb-1 flex size-8 flex-none items-center justify-center rounded-full bg-primary-soft">
-              <Mascot mood="calm" size={26} />
-            </span>
-              <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed text-body">
+            <div key={m.id} className="flex items-start gap-2">
+              <BotAvatar />
+              <div className="max-w-[86%] rounded-[20px] rounded-bl-md bg-white p-3.5">
                 <AnswerBlocks content={m.content} refs={m.kbRefs} />
               </div>
             </div>
           ),
         )}
+
         {streaming !== null && (
-          <div className="flex items-end gap-1.5">
+          <div className="flex items-end gap-2">
+            <BotAvatar />
             {streaming === "" ? (
-              <NyangLoader />
+              /* 타이핑 — 점 3개 */
+              <span className="flex gap-1.5 rounded-[20px] rounded-bl-md bg-white px-4.5 py-3.5">
+                {[0, 0.2, 0.4].map((d) => (
+                  <span
+                    key={d}
+                    className="size-[7px] rounded-full bg-[#C9CEC9]"
+                    style={{ animation: `dot-blink 1.2s ease-in-out ${d}s infinite` }}
+                  />
+                ))}
+              </span>
             ) : (
-              <>
-                <span className="mb-1 flex size-8 flex-none items-center justify-center rounded-full bg-primary-soft">
-              <Mascot mood="calm" size={26} />
-            </span>
-                <div className="max-w-[85%] rounded-card rounded-bl-md border border-hairline bg-white px-4 py-3 text-sm leading-relaxed text-body">
-                  <AnswerBlocks content={streaming} />
-                </div>
-              </>
+              <div className="max-w-[86%] rounded-[20px] rounded-bl-md bg-white p-3.5">
+                <AnswerBlocks content={streaming} />
+              </div>
             )}
           </div>
         )}
 
         {/* 개체 확인 — 다른 아이 이름이 질문에 보일 때 (지시서 P0-1) */}
         {mentionCheck && streaming === null && (
-          <div className="rounded-card border border-butter bg-butter-soft p-4">
-            <p className="text-sm font-bold text-secondary">
+          <div className="rounded-[20px] border border-[#F5E2A8] bg-[#FFF9E8] p-4">
+            <p className="text-[14px] font-extrabold tracking-[-0.02em] text-rd-ink">
               {mentionCheck.other.name} 얘기가 맞을까요?
             </p>
-            <p className="mt-1 text-[12.5px] leading-relaxed text-body">
+            <p className="mt-1.5 text-[12.5px] leading-[1.6] text-rd-body">
               지금은 {cat.name} 상담창이에요. {mentionCheck.other.name} 기준으로
               보려면 {mentionCheck.other.name}의 프로필·기록으로 봐야 정확해요.
             </p>
@@ -366,7 +447,7 @@ export default function ChatPage() {
                     `/cats/${mc.other.id}/chat?q=${encodeURIComponent(mc.question)}`,
                   );
                 }}
-                className="h-10 flex-1 rounded-button bg-primary text-[13px] font-bold text-white"
+                className="h-11.5 flex-1 rounded-[14px] bg-rd-ink text-[14px] font-extrabold text-white"
               >
                 {mentionCheck.other.name}로 전환
               </button>
@@ -377,7 +458,7 @@ export default function ChatPage() {
                   setPhoto(mc.image);
                   void send(mc.question, { skipMentionCheck: true });
                 }}
-                className="h-10 flex-1 rounded-button border border-hairline bg-white text-[13px] font-semibold text-secondary"
+                className="h-11.5 flex-1 rounded-[14px] border border-[#C7D6D0] bg-white text-[14px] font-semibold text-rd-body"
               >
                 {cat.name} 그대로
               </button>
@@ -387,33 +468,33 @@ export default function ChatPage() {
 
         {/* 대화→증상 기록 원탭 제안 (T-10) */}
         {pendingLog && streaming === null && (
-          <div className="rounded-card border border-mint bg-mint/40 p-4 shadow-subtle">
-            <p className="text-sm font-bold text-secondary">
-              📓 오늘 대화를 {cat.name}의 증상 기록으로 남길까요?
+          <div className="rounded-[20px] border border-rd-mint-line bg-rd-mint-soft p-4">
+            <p className="mb-2.5 text-[14px] font-extrabold tracking-[-0.02em] text-rd-ink">
+              📓 오늘 대화를 {cat.name}의 기록으로 남길까요?
             </p>
-            <div className="mt-2 flex flex-wrap gap-1.5">
+            <div className="mb-2.5 flex flex-wrap gap-1.5">
               {pendingLog.tags.map((t) => (
                 <span
                   key={t}
-                  className="rounded-full bg-white px-2.5 py-1 text-[12px] font-semibold text-secondary"
+                  className="rounded-full bg-white px-2.5 py-1 text-[12px] font-bold text-rd-ink"
                 >
                   #{t}
                 </span>
               ))}
             </div>
-            <p className="mt-2 text-[12px] text-body/80">
-              기록이 쌓이면 "평소랑 다른지"를 알려드릴 수 있어요.
+            <p className="mb-3.5 text-[12px] leading-[1.6] text-[#5D6862]">
+              기록이 쌓이면 &ldquo;평소랑 다른지&rdquo;를 알려드릴 수 있어요.
             </p>
-            <div className="mt-3 flex gap-2">
+            <div className="flex gap-2">
               <button
                 onClick={() => void saveSymptomLog()}
-                className="h-11 flex-1 rounded-button bg-secondary text-sm font-bold text-white active:scale-[0.99]"
+                className="h-11.5 flex-1 rounded-[14px] bg-rd-ink text-[14px] font-extrabold text-white active:scale-[0.99]"
               >
                 기록 남기기
               </button>
               <button
                 onClick={() => setPendingLog(null)}
-                className="h-11 rounded-button border border-secondary/20 px-4 text-sm font-semibold text-body"
+                className="h-11.5 rounded-[14px] border border-[#C7D6D0] px-4.5 text-[14px] font-semibold text-rd-body"
               >
                 괜찮아요
               </button>
@@ -421,7 +502,7 @@ export default function ChatPage() {
           </div>
         )}
         {logSaved && (
-          <p className="rounded-input bg-mint/50 px-4 py-2.5 text-center text-[13px] font-semibold text-secondary">
+          <p className="rounded-[14px] bg-rd-mint-soft p-3 text-center text-[13px] font-bold text-rd-ink">
             🐾 기록했어요! 다음 답변부터 이 기록을 함께 볼게요.
           </p>
         )}
@@ -429,23 +510,23 @@ export default function ChatPage() {
       </div>
 
       {/* 입력 바 */}
-      <div className="border-t border-hairline bg-white px-4 py-3">
+      <div className="flex-none border-t border-rd-line bg-white px-4 pt-3 pb-[max(8px,env(safe-area-inset-bottom))]">
         {/* 첨부 사진 미리보기 */}
         {photo && (
           <div className="mb-2 flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={photo} alt="첨부" className="size-14 rounded-input object-cover" />
-            <span className="text-[12px] font-medium text-secondary">사진 첨부됨</span>
+            <img src={photo} alt="첨부" className="size-14 rounded-[14px] object-cover" />
+            <span className="text-[12px] font-medium text-rd-ink">사진 첨부됨</span>
             <button
               onClick={() => setPhoto(null)}
               aria-label="첨부한 사진 제거"
-              className="-my-2 ml-auto flex min-h-11 items-center gap-1 rounded-button px-2.5 text-[12px] text-muted"
+              className="-my-2 ml-auto flex min-h-11 items-center gap-1 px-2.5 text-[12px] text-rd-muted"
             >
               <IconClose size={12} /> 제거
             </button>
           </div>
         )}
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <input
             ref={fileRef}
             type="file"
@@ -456,9 +537,9 @@ export default function ChatPage() {
           <button
             onClick={() => fileRef.current?.click()}
             aria-label="사진 첨부"
-            className="flex size-11 shrink-0 items-center justify-center rounded-button border border-hairline bg-surface-soft/60 text-muted active:scale-95"
+            className="flex size-11 flex-none items-center justify-center rounded-[14px] bg-rd-page text-rd-muted active:scale-95"
           >
-            <IconCamera size={20} />
+            <IconCamera size={21} dotFill="#F4F5F2" />
           </button>
           <input
             value={draft}
@@ -467,18 +548,20 @@ export default function ChatPage() {
               if (e.key === "Enter" && !e.nativeEvent.isComposing) void send();
             }}
             placeholder={photo ? "사진에 대해 물어보세요 (선택)" : `${cat.name}에 대해 물어보세요`}
-            className="h-11 min-w-0 flex-1 rounded-input border border-hairline bg-surface-soft/40 px-4 text-base text-ink placeholder:text-muted-soft focus:border-primary focus:bg-white focus:outline-none"
+            className="h-11 min-w-0 flex-1 rounded-[14px] bg-rd-page px-4 text-base text-rd-ink placeholder:text-rd-faint focus:outline-none"
           />
           <button
             onClick={() => void send()}
-            disabled={streaming !== null || (!draft.trim() && !photo)}
-            className="h-11 shrink-0 rounded-button bg-primary px-4 text-sm font-bold whitespace-nowrap text-white active:scale-95 disabled:bg-surface-strong disabled:text-muted-soft"
+            disabled={!canSend}
+            className={`h-11 flex-none rounded-[14px] px-4 text-[14px] font-extrabold whitespace-nowrap active:scale-95 ${
+              canSend ? "bg-rd-ink text-white" : "bg-[#EFF1ED] text-[#B4BAB5]"
+            }`}
           >
             전송
           </button>
         </div>
-        <p className="mt-2 text-center text-[11px] text-muted-soft">
-          참고 정보이며, 진단·처방은 수의사의 영역이에요.
+        <p className="mt-2.5 text-center text-[11px] text-rd-faint">
+          오늘 {used}/{dailyLimit}회 사용 · 진단·처방은 수의사의 영역이에요.
         </p>
       </div>
     </main>

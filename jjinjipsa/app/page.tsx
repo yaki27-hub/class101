@@ -1,74 +1,112 @@
 "use client";
 
 /*
- * 홈 대시보드 (UX 개편) — 지시서 §3 정보구조:
- * Header → 고양이 선택 → 오늘 상태 기록 → 냥박사 질문 → 최근 기록.
- * 건강 점수 제거, 사진진단·AI상담을 냥박사 카드로 통합, 오늘 기록 4항목(식사·물·배변·활동).
+ * 홈 — "날씨돌" 무드 문법 (찐집사 홈 리디자인.dc.html 1a–1e 이식).
+ *
+ * 구조: 무드 히어로(씬 + 멘트 + 스코어 + 3칩) → 라이트 그레이 카드 스택.
+ * 레이아웃은 5무드가 전부 동일하고 lib/homeMood.ts의 값만 갈린다.
+ *
+ * ⚠️ 무드·건강 점수·3칩은 아직 **정적 더미**다 (lib/homeMood.ts 주석 참고).
+ *    ?mood=sunny|cloudy|warning|sick|night 로 5장을 전부 확인할 수 있다.
  */
 
-import { useState } from "react";
-import HomeHeader from "@/components/home/HomeHeader";
-import LoginBanner from "@/components/home/LoginBanner";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import MoodHero from "@/components/home/MoodHero";
+import MoodHomeHeader from "@/components/home/MoodHomeHeader";
+import CareRoutineCard from "@/components/home/CareRoutineCard";
+import CareCalendarCard from "@/components/home/CareCalendarCard";
+import DdayCard from "@/components/home/DdayCard";
+import DoctorTipCard from "@/components/home/DoctorTipCard";
+import AdCard from "@/components/home/AdCard";
 import EmptyCatCard from "@/components/home/EmptyCatCard";
-import CatSelectorCard from "@/components/home/CatSelectorCard";
+import LoginBanner from "@/components/home/LoginBanner";
 import CatSelectorSheet from "@/components/home/CatSelectorSheet";
-import DailyStatusCard from "@/components/home/DailyStatusCard";
-import DoctorChatCard from "@/components/home/DoctorChatCard";
-import RecentRecordsSection from "@/components/home/RecentRecordsSection";
 import { useSelectedCat } from "@/hooks/useSelectedCat";
-import { useTodayStatus } from "@/hooks/useTodayStatus";
-import { useRecentRecords } from "@/hooks/useRecentRecords";
-import { accentAt } from "@/lib/catColor";
+import { DEFAULT_MOOD, getMood } from "@/lib/homeMood";
 
-export default function Home() {
+/** 광고 자리 on/off — 시안 Tweaks의 showAd */
+const SHOW_AD = true;
+
+export default function Page() {
+  // useSearchParams(무드 미리보기)는 서스펜스 경계가 필요하다 — 홈은 정적 프리렌더 대상
+  return (
+    <Suspense fallback={null}>
+      <Home />
+    </Suspense>
+  );
+}
+
+function Home() {
   const { cats, cat, select, loading } = useSelectedCat();
-  const { record, summary, setStatus } = useTodayStatus(cat?.id);
-  const recent = useRecentRecords(cat?.id, 2);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [routines, setRoutines] = useState<boolean[] | null>(null);
+  const searchParams = useSearchParams();
+
+  const mood = getMood(searchParams.get("mood") ?? DEFAULT_MOOD);
+  // 루틴을 아직 만지지 않았으면 무드의 기본 완료 상태를 보여준다
+  const routineState = routines ?? [...mood.routineDone];
 
   if (loading) return null;
 
-  return (
-    <main className="flex flex-1 flex-col gap-5 px-5 pb-6">
-      <HomeHeader />
-
-      {!cat || !cats || cats.length === 0 ? (
+  // 등록된 아이가 없으면 무드를 띄울 근거 자체가 없다 — 기존 빈 화면 유지
+  if (!cat || !cats || cats.length === 0) {
+    return (
+      <main className="flex flex-1 flex-col gap-5 px-5 pt-8 pb-6">
         <EmptyCatCard />
-      ) : (
-        <>
-          <CatSelectorCard
-            cat={cat}
-            multiple={cats.length > 1}
-            accent={
-              cats.length > 1
-                ? accentAt(cats.findIndex((c) => c.id === cat.id))
-                : undefined
-            }
-            onOpen={() => setSheetOpen(true)}
-          />
-          <DailyStatusCard
-            cat={cat}
-            record={record}
-            summary={summary}
-            onSet={setStatus}
-          />
-          <DoctorChatCard cat={cat} recent={recent ?? []} />
-          <RecentRecordsSection rows={recent ?? []} />
+        <div className="mt-auto pt-1">
+          <LoginBanner />
+        </div>
+      </main>
+    );
+  }
 
-          <CatSelectorSheet
-            open={sheetOpen}
-            cats={cats}
-            selectedId={cat.id}
-            onSelect={select}
-            onClose={() => setSheetOpen(false)}
-          />
-        </>
-      )}
+  return (
+    <main className="relative flex-1 bg-rd-page">
+      <MoodHomeHeader
+        catName={cat.name}
+        catHref={`/cats/${cat.id}`}
+        onOpenSelector={() => setSheetOpen(true)}
+      />
 
-      {/* 로그인 유도 배너 — 하단 내비 바로 위에 붙도록 남은 공간을 채워 아래로 밀어냄 */}
-      <div className="mt-auto pt-1">
+      <MoodHero mood={mood} />
+
+      {/* 카드 스택 — 히어로를 덮으며 올라온다 */}
+      <div className="relative z-[1] flex flex-col gap-3 rounded-t-3xl bg-rd-page px-4 pt-5.5 pb-35">
+        <CareRoutineCard
+          done={routineState}
+          onToggle={(i) =>
+            setRoutines(routineState.map((v, j) => (j === i ? !v : v)))
+          }
+        />
+        <CareCalendarCard />
+        <DdayCard />
+        <DoctorTipCard mood={mood} href={`/cats/${cat.id}/chat`} />
+        {SHOW_AD && <AdCard bordered />}
+
+        {/*
+          오늘 상태 기록 진입 — 무드 히어로가 기존 DailyStatusCard(4항목 입력)를
+          걷어내면서 홈에서 기록을 남길 길이 사라졌다. 3칩은 표시 전용이라
+          입력 경로를 여기 한 줄로 남겨둔다.
+        */}
+        <Link
+          href={`/cats/${cat.id}/log`}
+          className="flex min-h-[52px] items-center justify-center gap-1.5 rounded-2xl border border-black/5 bg-rd-card text-[14px] font-bold tracking-[-0.02em] text-rd-forest"
+        >
+          오늘 상태 기록하기 ›
+        </Link>
+
         <LoginBanner />
       </div>
+
+      <CatSelectorSheet
+        open={sheetOpen}
+        cats={cats}
+        selectedId={cat.id}
+        onSelect={select}
+        onClose={() => setSheetOpen(false)}
+      />
     </main>
   );
 }
