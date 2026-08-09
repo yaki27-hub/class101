@@ -296,15 +296,48 @@ export function summarize(rows: ReportRow[], catName: string): ReportSummary {
 }
 
 /*
+ * 성격 레이더 5축 (리디자인 핸드오프) — 새 문항 없이 오각형을 만든다.
+ *
+ * 호기심 = 상자 사랑·점프력·사냥 실력의 평균. 이 셋은 axis '활동'이기도 하다 —
+ * **의도된 중복**이다: 활동은 "얼마나 움직이나", 호기심은 "새것에 어떻게 반응하나"로
+ * 서로 다른 질문이고, 문항을 늘리지 않고 다섯 축을 채우는 방법이다.
+ */
+export const RADAR_AXES = ["애교", "활동", "사교", "식탐", "호기심"] as const;
+const CURIOUS_KEYS = ["상자 사랑", "점프력", "사냥 실력"];
+
+export interface RadarAxis {
+  axis: (typeof RADAR_AXES)[number];
+  /** 축 평균 점수 0~4. 답한 문항이 없는 축은 null */
+  avg: number | null;
+  /** 표시용 등급 라벨. 미답 축은 "–" */
+  grade: string;
+}
+
+export function radarAxes(rows: ReportRow[]): RadarAxis[] {
+  const s = axisScores(rows);
+  const curious = rows.filter((r) => CURIOUS_KEYS.includes(r.key) && r.answered);
+  const curiousAvg =
+    curious.length > 0
+      ? curious.reduce((t, r) => t + GRADE_SCORE[r.answered!.grade], 0) / curious.length
+      : null;
+  const label = (avg: number | null) =>
+    avg === null ? "–" : ["D", "C", "B", "A", "A+"][Math.round(avg)];
+  return RADAR_AXES.map((axis) => {
+    const avg = axis === "호기심" ? curiousAvg : (s[axis] ?? null);
+    return { axis, avg, grade: label(avg) };
+  });
+}
+
+/*
  * 등급 배지 색 — **우열이 아니라 구분**이다.
  * 진하기 순으로 깔면 색 자체가 "A가 좋고 D가 나쁘다"를 말해버린다.
- * 그래서 스티키노트 4색을 등급마다 하나씩 배정하고, 글자는 전부 잉크로 고정한다
- * (파스텔 위 잉크는 9.9~11.6:1이라 어느 칸에서도 읽힌다).
+ * 그래서 스티키노트 4색을 등급마다 하나씩 배정하고, 글자는 전부 잉크로 고정한다.
+ * hex 직접 지정: 생활기록부 카드는 이미지 캡처 대상이라 자체 완결이어야 한다.
  */
 export const GRADE_STYLE: Record<Grade, string> = {
-  "A+": "bg-ink text-canvas",
-  A: "bg-mint text-ink",
-  B: "bg-sky text-ink",
-  C: "bg-butter text-ink",
-  D: "bg-soft-pink text-ink",
+  "A+": "bg-[#1A1A1A] text-[#FFFDF7]",
+  A: "bg-[#B9E9DE] text-[#1A1A1A]",
+  B: "bg-[#BFDDF5] text-[#1A1A1A]",
+  C: "bg-[#FFE9A8] text-[#1A1A1A]",
+  D: "bg-[#FFC9BF] text-[#1A1A1A]",
 };

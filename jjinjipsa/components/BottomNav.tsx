@@ -32,7 +32,9 @@ export default function BottomNav() {
     pathname === "/login" ||
     pathname === "/onboard" ||
     /^\/cats\/[^/]+$/.test(pathname) ||
-    /\/cats\/[^/]+\/chat$/.test(pathname)
+    /\/cats\/[^/]+\/chat$/.test(pathname) ||
+    // 생활기록부는 자체 스티키 CTA가 있다 — 알약과 겹치면 CTA를 가린다
+    /\/cats\/[^/]+\/report$/.test(pathname)
   )
     return null;
 
