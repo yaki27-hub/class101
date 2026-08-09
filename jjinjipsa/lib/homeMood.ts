@@ -5,9 +5,9 @@
  * 레이아웃은 5무드 모두 같고, 여기 있는 값만 갈린다:
  *   무드 그라디언트 · 씬 일러스트 · 위트 멘트 · 스코어 · 3칩 · 냥박사 한마디.
  *
- * ⚠️ 이 파일의 수치는 전부 **정적 더미**다. 무드 판정·건강 점수·3칩 집계를
- * 실제 기록에서 뽑는 로직은 아직 없다 (docs 상 건강 점수는 한 번 걷어냈던 지표다).
- * 실제 데이터로 갈아끼울 때는 pickMood()만 바꾸면 화면은 손대지 않아도 된다.
+ * MOODS의 수치(score·sub·chip)는 **?mood= 미리보기 전용 더미**로만 남아 있다.
+ * 실제 홈은 computeHome()이 오늘 상태 기록(식사·물·배변·활동)에서 무드·점수·칩을
+ * 계산해 덮어쓴다 (T-53). 판정 규칙은 computeHome 주석 참고.
  */
 
 export type MoodId = "sunny" | "cloudy" | "warning" | "sick" | "night";
@@ -103,8 +103,8 @@ export const MOODS: Mood[] = [
     chipLitter: "1회",
     routineDone: [false, false, false],
     tip: [
-      "이틀 연속 음수량이 낮아요. 습식 사료나 물그릇 추가를 먼저 시도해 보세요.",
-      "음수 부족이 3일 이어지면 기록을 챙겨 병원에 문의하세요.",
+      "주의 신호가 보이는 날이에요. 물그릇·화장실·밥그릇을 한 번씩 더 살펴봐 주세요.",
+      "이런 변화가 며칠 이어지면 기록을 챙겨 병원에 문의하세요.",
     ],
     scene: "/scenes/warning.webp",
     charNote: "빈 물그릇 클로즈업 · 노을빛",
@@ -128,8 +128,8 @@ export const MOODS: Mood[] = [
     chipLitter: "0회",
     routineDone: [false, false, false],
     tip: [
-      "24시간 안에 구토 2회 + 식사 거부는 병원 상담 기준이에요. 기록을 그대로 보여주세요.",
-      "지금 기록을 챙겨 병원에 전화하세요. 냥박사가 요약본을 만들어 드려요.",
+      "이상 신호가 기록된 날이에요. 오늘 기록을 그대로 챙겨 병원 상담을 권해요.",
+      "지금 기록을 챙겨 병원에 문의하세요. 냥박사에게 물어보면 정리도 도와드려요.",
     ],
     scene: "/scenes/sick.webp",
     charNote: "창밖 비 · 담요에 파묻힘",
@@ -203,32 +203,156 @@ export interface CalendarDay {
   logged: boolean;
 }
 
-/** 케어 캘린더 11일치 — 시안과 동일 (더미) */
-export const CALENDAR_RANGE = "12/13 – 12/23";
-export const CALENDAR_DAYS: CalendarDay[] = [
-  "월",
-  "화",
-  "수",
-  "목",
-  "금",
-  "토",
-  "일",
-  "월",
-  "화",
-  "수",
-  "목",
-].map((dow, i) => {
-  const n = 13 + i;
-  return { dow, n, today: n === 20, logged: n <= 20 && n !== 16 };
-});
+const DOW = ["일", "월", "화", "수", "목", "금", "토"];
 
-/** 두근두근 냥 D-day — 시안과 동일 (더미) */
-export const DDAY = {
-  glyph: "💉",
-  label: "두근두근 냥 D-day",
-  title: "종합백신 3차 접종",
-  badge: "D-7",
+function localKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+/**
+ * 케어 캘린더 11일치 — **실데이터**. 민트 점 = 그날 기록이 있음.
+ * @param loggedDates 기록이 있는 날짜(yyyy-MM-dd) 집합 — 오늘 상태 + 증상 기록
+ */
+export function buildCalendar(
+  loggedDates: Set<string>,
+  now = new Date(),
+): { days: CalendarDay[]; range: string } {
+  const days: CalendarDay[] = [];
+  for (let i = 10; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    days.push({
+      dow: DOW[d.getDay()],
+      n: d.getDate(),
+      today: i === 0,
+      logged: loggedDates.has(localKey(d)),
+    });
+  }
+  const first = new Date(now);
+  first.setDate(now.getDate() - 10);
+  const range = `${first.getMonth() + 1}/${first.getDate()} – ${now.getMonth() + 1}/${now.getDate()}`;
+  return { days, range };
+}
+
+/* ── 실데이터 무드 판정 (T-53) ─────────────────────────────── */
+
+/** 칩에 들어가는 짧은 표현 — 기록 라벨을 그대로 넣으면 칩이 두 줄이 된다 */
+const CHIP_SHORT: Record<string, string> = {
+  "잘 먹었어요": "잘 먹음",
+  "평소보다 적어요": "적음",
+  "거의 안 먹었어요": "안 먹음",
+  "평소와 같아요": "평소만큼",
+  "평소보다 많이 마셨어요": "많음",
+  "평소보다 적게 마셨어요": "적음",
+  묽어요: "묽음",
+  딱딱해요: "딱딱함",
+  "평소보다 활발해요": "활발",
+  "거의 움직이지 않아요": "거의 없음",
 };
+
+interface DailyEntry {
+  level: "normal" | "warning" | "danger" | "unknown";
+  label: string;
+}
+export interface HomeInput {
+  /** 오늘 상태 기록 (식사·물·배변·활동) */
+  record: Partial<Record<"meal" | "water" | "toilet" | "activity", DailyEntry>>;
+  /** 체중 추이가 진료 권고 수준인가 (lib/weightTrend) */
+  weightNeedsVisit: boolean;
+  now?: Date;
+}
+
+export interface HomeView {
+  mood: Mood;
+  /** null = 아직 기록 전 (숫자 대신 "기록 전"을 보여준다) */
+  score: number | null;
+  wit: string;
+  sub: string;
+  chipMeal: string;
+  chipWater: string;
+  chipLitter: string;
+}
+
+/**
+ * 오늘 상태 기록 → 무드·점수·칩.
+ *
+ * 판정 순서 — **아픈 신호가 시간대를 이긴다**:
+ *   danger 항목 ≥1 → sick
+ *   warning 항목 ≥1 또는 체중 진료 권고 → warning
+ *   밤(21시~새벽 5시) → night
+ *   그 외 → 점수 85 이상 sunny / 미만 cloudy
+ *
+ * 점수는 의학 지표가 아니라 **오늘 기록의 상태 요약**이다: 58 + 기록 항목×10
+ * − 주의×14 − 이상×30 (15~99). 4항목 모두 정상이면 98, 기록 전이면 null.
+ * 수의학적 건강 점수처럼 읽히지 않게, 기록이 없으면 숫자를 아예 보여주지 않는다.
+ */
+export function computeHome(input: HomeInput): HomeView {
+  const now = input.now ?? new Date();
+  const entries = (["meal", "water", "toilet", "activity"] as const)
+    .map((k) => ({ key: k, e: input.record[k] }))
+    .filter((x): x is { key: typeof x.key; e: DailyEntry } => !!x.e && x.e.level !== "unknown");
+
+  const warn = entries.filter((x) => x.e.level === "warning").length;
+  const danger = entries.filter((x) => x.e.level === "danger").length;
+  const recorded = entries.length;
+
+  const score =
+    recorded === 0
+      ? null
+      : Math.max(15, Math.min(99, 58 + recorded * 10 - warn * 14 - danger * 30));
+
+  const hour = now.getHours();
+  const night = hour >= 21 || hour < 5;
+
+  let id: MoodId;
+  if (danger > 0) id = "sick";
+  else if (warn > 0 || input.weightNeedsVisit) id = "warning";
+  else if (night) id = "night";
+  else if (score !== null && score >= 85) id = "sunny";
+  else id = "cloudy";
+
+  const mood = getMood(id);
+
+  const chip = (k: "meal" | "water" | "toilet"): string => {
+    const e = input.record[k];
+    if (!e || e.level === "unknown") return "기록 전";
+    return CHIP_SHORT[e.label] ?? e.label;
+  };
+
+  const ITEM_KO: Record<string, string> = {
+    meal: "식사", water: "음수", toilet: "화장실", activity: "활동",
+  };
+  const sub =
+    recorded === 0
+      ? "기록을 남기면 오늘의 무드가 채워져요"
+      : entries
+          .slice(0, 3)
+          .map((x) => `${ITEM_KO[x.key]} ${CHIP_SHORT[x.e.label] ?? x.e.label}`)
+          .join(" · ") + (input.weightNeedsVisit ? " · 체중 살펴보기" : "");
+
+  return {
+    mood,
+    score,
+    wit: recorded === 0 ? "오늘은 어떤 하루였나요?" : witOf(mood),
+    sub,
+    chipMeal: chip("meal"),
+    chipWater: chip("water"),
+    chipLitter: chip("toilet"),
+  };
+}
+
+/** ?mood= 미리보기 — 시안 더미 값 그대로 (개발·시연용) */
+export function previewHome(mood: Mood): HomeView {
+  return {
+    mood,
+    score: mood.score,
+    wit: witOf(mood),
+    sub: mood.sub,
+    chipMeal: mood.chipMeal,
+    chipWater: mood.chipWater,
+    chipLitter: mood.chipLitter,
+  };
+}
 
 /** 카피 톤 — 시안 Tweaks의 "집사어 위트 강하게 / 담백하게" */
 export type CopyTone = "witty" | "plain";

@@ -16,8 +16,7 @@ import {
   SCENE_SIZE,
   heroBg,
   heroScrim,
-  witOf,
-  type Mood,
+  type HomeView,
 } from "@/lib/homeMood";
 
 const HERO_H = 720;
@@ -42,7 +41,15 @@ function Chip({
   );
 }
 
-export default function MoodHero({ mood }: { mood: Mood }) {
+export default function MoodHero({
+  view,
+  onChipsClick,
+}: {
+  view: HomeView;
+  /** 칩을 누르면 오늘 상태 입력으로 — 표시 전용 칩이 막다른 길이 되지 않게 */
+  onChipsClick?: () => void;
+}) {
+  const { mood } = view;
   return (
     <>
       {/*
@@ -106,37 +113,50 @@ export default function MoodHero({ mood }: { mood: Mood }) {
           className="display mb-4.5 text-[19px] leading-[1.35] tracking-[-0.01em] text-balance"
           style={{ textShadow: "0 2px 12px rgba(0,0,0,.28)" }}
         >
-          {witOf(mood)}
+          {view.wit}
         </p>
 
-        <div className="flex items-start justify-center gap-2">
-          <span
-            className="mt-4 text-[26px] leading-none"
-            style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,.25))" }}
-            aria-hidden
-          >
-            {mood.glyph}
-          </span>
-          <span
-            className="text-[68px] leading-none font-extrabold tracking-[-0.03em] tabular-nums"
-            style={{ textShadow: "0 4px 20px rgba(0,0,0,.22)" }}
-          >
-            {mood.score}
-          </span>
-          <span className="mt-[34px] text-[20px] font-bold opacity-85">점</span>
-        </div>
+        {view.score !== null ? (
+          <div className="flex items-start justify-center gap-2">
+            <span
+              className="mt-4 text-[26px] leading-none"
+              style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,.25))" }}
+              aria-hidden
+            >
+              {mood.glyph}
+            </span>
+            <span
+              className="text-[68px] leading-none font-extrabold tracking-[-0.03em] tabular-nums"
+              style={{ textShadow: "0 4px 20px rgba(0,0,0,.22)" }}
+            >
+              {view.score}
+            </span>
+            <span className="mt-[34px] text-[20px] font-bold opacity-85">점</span>
+          </div>
+        ) : (
+          /* 기록 전 — 없는 점수를 지어내지 않는다 (T-53) */
+          <div className="flex items-center justify-center">
+            <span className="rounded-full bg-white/15 px-5 py-3 text-[17px] font-extrabold tracking-[-0.02em] backdrop-blur-lg">
+              오늘 기록 전이에요
+            </span>
+          </div>
+        )}
         <p className="mt-3 text-[13.5px] font-medium tracking-[-0.01em] text-white/85">
-          {mood.sub}
+          {view.sub}
         </p>
 
-        <div className="mt-5 grid grid-cols-3 gap-2.5">
-          <Chip value={mood.chipMeal} label="식사">
+        <div
+          className="mt-5 grid grid-cols-3 gap-2.5"
+          onClick={onChipsClick}
+          role={onChipsClick ? "button" : undefined}
+        >
+          <Chip value={view.chipMeal} label="식사">
             <IconBowl size={24} className="text-white" />
           </Chip>
-          <Chip value={mood.chipWater} label="음수">
+          <Chip value={view.chipWater} label="음수">
             <IconWater size={24} className="text-white" />
           </Chip>
-          <Chip value={mood.chipLitter} label="화장실">
+          <Chip value={view.chipLitter} label="화장실">
             {/* 뚫린 점을 무드색으로 채운다 — 흰 배경이 아니라 반투명 칩 위라서 */}
             <IconLitter size={24} className="text-white" dotFill={mood.bottom} />
           </Chip>

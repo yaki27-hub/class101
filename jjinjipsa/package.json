@@ -12,6 +12,7 @@
     "kb:index": "node scripts/build-kb-index.mjs",
     "test:redflags": "node scripts/test-redflags.mjs",
     "test:mention": "node scripts/test-cat-mention.mjs",
+    "test:mood": "node scripts/test-home-mood.mjs",
     "products:index": "node scripts/build-product-index.mjs",
     "test:weight": "node scripts/test-weight-trend.mjs"
   },

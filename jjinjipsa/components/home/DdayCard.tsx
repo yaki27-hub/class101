@@ -1,8 +1,19 @@
 "use client";
 
-/* 두근두근 냥 D-day — 다가오는 접종·검진 하나 (현재 더미) */
+/*
+ * 두근두근 냥 D-day — 다가오는 접종·검진 하나.
+ *
+ * ⚠️ 지금은 접종·재진 데이터 소스가 없어 **홈에서 렌더하지 않는다** (T-53에서 제외).
+ * 영수증 OCR(T-47)로 vet_visits가 생기면 그 데이터를 받아 다시 붙인다.
+ * 더미 날짜를 계속 보여주면 "우리 애 접종이 D-7?"이라는 가짜 알림이 된다.
+ */
 
-import { DDAY } from "@/lib/homeMood";
+const DDAY = {
+  glyph: "💉",
+  label: "두근두근 냥 D-day",
+  title: "종합백신 3차 접종",
+  badge: "D-7",
+};
 
 export default function DdayCard() {
   return (

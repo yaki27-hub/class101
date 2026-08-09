@@ -88,6 +88,18 @@ function storeKey(catId: string): string {
   return `jjinjipsa:daily:${catId}:${todayKey()}`;
 }
 
+/** 특정 날짜의 기록 (케어 캘린더 점 찍기용) */
+export function loadDailyOn(catId: string, day: Date): DailyRecord {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(
+      localStorage.getItem(`jjinjipsa:daily:${catId}:${todayKey(day)}`) || "{}",
+    ) as DailyRecord;
+  } catch {
+    return {};
+  }
+}
+
 export function loadDaily(catId: string): DailyRecord {
   if (typeof window === "undefined") return {};
   try {
