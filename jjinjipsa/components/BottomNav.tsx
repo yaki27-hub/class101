@@ -37,7 +37,7 @@ export default function BottomNav() {
     return null;
 
   return (
-    <nav className="pointer-events-none sticky bottom-0 z-40 -mt-[76px] px-5 pb-3">
+    <nav className="pointer-events-none sticky bottom-0 z-40 nav-overlay px-5">
       <div
         className="pointer-events-auto flex h-16 items-center justify-around rounded-full px-2.5 shadow-[0_10px_26px_-8px_rgba(0,0,0,.5)]"
         style={{ background: NAV_BG }}
@@ -51,7 +51,7 @@ export default function BottomNav() {
               key={t.href}
               href={t.href}
               aria-current="page"
-              className="flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-[13.5px] font-bold tracking-[-0.02em] text-rd-ink"
+              className="flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-[13.5px] font-bold tracking-[-0.02em] whitespace-nowrap text-rd-ink"
             >
               <Icon size={19} dotFill={NAV_BG} />
               {t.label}

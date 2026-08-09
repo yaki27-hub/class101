@@ -59,6 +59,13 @@ const STOP = new Set([
  * (시스템 프롬프트도 같은 어휘를 쓰도록 안내하고 있다)
  */
 const SYNONYMS: Record<string, string[]> = {
+  // "토"는 한 글자라 토큰으로 못 잡는다 — 흔한 활용형을 구토로 확장
+  토를: ["구토"],
+  토했: ["구토"],
+  토해: ["구토"],
+  토가: ["구토"],
+  게웠: ["구토"],
+  게워: ["구토"],
   감자: ["소변", "오줌"],
   맛동산: ["대변", "변", "응가"],
   쉬야: ["소변", "오줌"],
@@ -108,54 +115,71 @@ export interface KbHit {
   score: number;
 }
 
+/** 은어 확장 + 정규화한 검색용 문자열 */
+function buildHaystack(source: string): string {
+  let expanded = source;
+  for (const [slang, words] of Object.entries(SYNONYMS)) {
+    if (source.includes(slang)) expanded += ` ${words.join(" ")}`;
+  }
+  return norm(expanded);
+}
+
+/** 한 문서를 한 문자열에 대해 채점 */
+function scoreDoc(doc: KbDoc, haystack: string): number {
+  let score = 0;
+
+  // 질환명 직접 언급 — 가장 강한 신호
+  if (doc.ko && haystack.includes(norm(doc.ko))) score += 10;
+  // 질환명이 "귀진드기 · 외이염"처럼 복합이면 조각으로도 확인
+  for (const part of doc.ko.split(/[·,()]/)) {
+    const p = norm(part);
+    if (p.length >= 2 && !STOP.has(p) && haystack.includes(p)) score += 6;
+  }
+
+  // aliases 문장 통째 일치 — 표현이 그대로 겹치면 확실한 신호
+  for (const a of doc.aliases) {
+    const n = norm(a);
+    if (n.length >= 4 && haystack.includes(n)) score += 5;
+  }
+
+  // 토큰 단위 매칭 — 어미가 달라도("먹었어요" vs "핥았어요") 명사가 겹치면 잡힌다.
+  // 흔한 토큰은 weight()가 걸러서 아무 문서나 딸려오지 않게 한다.
+  for (const t of DOC_TOKENS.get(doc.id) ?? []) {
+    if (haystack.includes(t)) score += weight(t);
+  }
+
+  // urgency_triggers — 위험 신호 문장의 핵심 어절이 겹치면 가점
+  for (const t of doc.triggers) {
+    const words = t.split(/\s+/).filter((w) => w.length >= 3);
+    const matched = words.filter((w) => haystack.includes(norm(w))).length;
+    if (matched >= 2) score += 4;
+  }
+
+  return score;
+}
+
 /**
  * 질문(+증상 태그)에 관련된 KB 문서를 점수순으로 고른다.
+ *
+ * 질문과 힌트는 **분리 채점**한다 — 힌트(과거 증상 태그)만으로 문서가 올라오면
+ * "물을 적게 마셔요" 질문에 지난주 태그(식욕부진)로 치아 문서가 근거로 붙는다
+ * (실사용 제보). 힌트는 질문이 이미 건드린 문서의 순위만 끌어올린다.
+ *
  * @param query 집사의 질문 원문
  * @param extra 증상 태그 등 추가 힌트
  * @param limit 최대 개수
  */
 export function retrieveKb(query: string, extra: string[] = [], limit = 3): KbHit[] {
-  const source = [query, ...extra].join(" ");
-  // 집사 은어를 KB 표현으로 확장해 함께 검색한다
-  let expanded = source;
-  for (const [slang, words] of Object.entries(SYNONYMS)) {
-    if (source.includes(slang)) expanded += ` ${words.join(" ")}`;
-  }
-  const haystack = norm(expanded);
-  if (haystack.length < 2) return [];
+  const qHay = buildHaystack(query);
+  if (qHay.length < 2) return [];
+  const hintHay = extra.length > 0 ? buildHaystack(extra.join(" ")) : "";
 
   const hits: KbHit[] = [];
   for (const doc of DOCS) {
-    let score = 0;
-
-    // 질환명 직접 언급 — 가장 강한 신호
-    if (doc.ko && haystack.includes(norm(doc.ko))) score += 10;
-    // 질환명이 "귀진드기 · 외이염"처럼 복합이면 조각으로도 확인
-    for (const part of doc.ko.split(/[·,()]/)) {
-      const p = norm(part);
-      if (p.length >= 2 && !STOP.has(p) && haystack.includes(p)) score += 6;
-    }
-
-    // aliases 문장 통째 일치 — 표현이 그대로 겹치면 확실한 신호
-    for (const a of doc.aliases) {
-      const n = norm(a);
-      if (n.length >= 4 && haystack.includes(n)) score += 5;
-    }
-
-    // 토큰 단위 매칭 — 어미가 달라도("먹었어요" vs "핥았어요") 명사가 겹치면 잡힌다.
-    // 흔한 토큰은 weight()가 걸러서 아무 문서나 딸려오지 않게 한다.
-    for (const t of DOC_TOKENS.get(doc.id) ?? []) {
-      if (haystack.includes(t)) score += weight(t);
-    }
-
-    // urgency_triggers — 위험 신호 문장의 핵심 어절이 겹치면 가점
-    for (const t of doc.triggers) {
-      const words = t.split(/\s+/).filter((w) => w.length >= 3);
-      const matched = words.filter((w) => haystack.includes(norm(w))).length;
-      if (matched >= 2) score += 4;
-    }
-
-    if (score > 0) hits.push({ doc, score });
+    const qScore = scoreDoc(doc, qHay);
+    if (qScore <= 0) continue; // 질문이 안 건드린 문서는 힌트가 아무리 맞아도 제외
+    const hintScore = hintHay ? scoreDoc(doc, hintHay) : 0;
+    hits.push({ doc, score: qScore + Math.floor(hintScore / 2) });
   }
 
   hits.sort((a, b) => b.score - a.score || a.doc.id.localeCompare(b.doc.id));

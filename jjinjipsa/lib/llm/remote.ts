@@ -4,6 +4,7 @@
  * 라우트 실패(키 없음·네트워크)면 mock으로 폴백해 UI는 항상 동작한다.
  */
 
+import { loadDaily } from "@/lib/dailyStatus";
 import { storage } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 import { MockLlmAdapter } from "./mock";
@@ -85,6 +86,8 @@ export class RemoteLlmAdapter implements LlmAdapter {
           cat: req.cat,
           traits,
           symptoms,
+          // 오늘 상태 기록 — 히스토리 섹션이 "기록 없음"이라고 뭉뚱그리지 않게 (QA #4)
+          todayStatus: loadDaily(req.cat.id),
           weights: weights.slice(-12),
           otherCatNames,
           history: req.history,
@@ -92,15 +95,23 @@ export class RemoteLlmAdapter implements LlmAdapter {
           image: req.image ?? null,
         }),
       });
+      // 서버가 센 오늘 사용량 — 카운터 표시의 단일 출처 (429 응답에도 실려 온다)
+      const usedH = Number(res.headers.get("x-chat-used"));
+      const limitH = Number(res.headers.get("x-chat-limit"));
+      const usage =
+        Number.isFinite(usedH) && usedH > 0 && Number.isFinite(limitH) && limitH > 0
+          ? { used: usedH, limit: limitH }
+          : undefined;
       // 하루 한도 초과 → mock 폴백 대신 안내 메시지
       if (res.status === 429) {
-        return { stream: once(await limitMessage()), model: "limit" };
+        return { stream: once(await limitMessage()), model: "limit", usage };
       }
       if (!res.ok || !res.body) throw new Error(`api/chat ${res.status}`);
       return {
         stream: streamBody(res.body),
         model: res.headers.get("x-model") ?? "gemini",
         kbRefs: decodeRefs(res.headers.get("x-kb-refs")),
+        usage,
       };
     } catch (e) {
       console.warn("[llm] remote 실패 → mock 폴백:", e);

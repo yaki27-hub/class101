@@ -94,10 +94,10 @@ function Home() {
   if (loading) return null;
 
   // 등록된 아이가 없으면 무드를 띄울 근거 자체가 없다 — 기존 빈 화면 유지
-  // pb-28: 하단 알약 내비가 마지막 76px를 덮으므로, 로그인 배너가 그 위에서 끝나야 한다
+  // pb-nav: 하단 알약 내비가 덮는 높이만큼 띄워 로그인 배너가 그 위에서 끝난다
   if (!cat || !cats || cats.length === 0) {
     return (
-      <main className="flex flex-1 flex-col gap-5 px-5 pt-8 pb-28">
+      <main className="flex flex-1 flex-col gap-5 px-5 pt-8 pb-nav">
         <EmptyCatCard />
         <div className="mt-auto pt-1">
           <LoginBanner />
@@ -123,7 +123,7 @@ function Home() {
       <MoodHero view={view} onChipsClick={() => setStatusOpen(true)} />
 
       {/* 카드 스택 — 히어로를 덮으며 올라온다 */}
-      <div className="relative z-[1] flex flex-col gap-3 rounded-t-3xl bg-rd-page px-4 pt-5.5 pb-35">
+      <div className="relative z-[1] flex flex-col gap-3 rounded-t-3xl bg-rd-page px-4 pt-5.5 pb-nav">
         <CareRoutineCard
           done={routines}
           onToggle={(i) => {

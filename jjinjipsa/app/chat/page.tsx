@@ -41,7 +41,7 @@ export default function DoctorTab() {
   // 등록된 고양이가 없으면 먼저 등록부터
   if (cats.length === 0) {
     return (
-      <main className="flex flex-1 flex-col items-center justify-center gap-4 px-5 pb-24 text-center">
+      <main className="flex flex-1 flex-col items-center justify-center gap-4 px-5 pb-nav text-center">
         <Mascot mood="calm" size={92} />
         <h1 className="display text-[20px] text-rd-ink">
           먼저 우리 아이를 알려주세요
@@ -64,7 +64,7 @@ export default function DoctorTab() {
   const selected = cats.find((c) => c.id === selectedId) ?? cats[0];
 
   return (
-    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-28">
+    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-nav">
       <header className="mb-1">
         <h1 className="display text-[22px] text-rd-ink">냥박사</h1>
         <p className="mt-1 text-[13px] text-rd-body">

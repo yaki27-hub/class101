@@ -137,8 +137,8 @@ export default function CatForm({ existing }: { existing?: Cat }) {
     "h-11 w-full rounded-md border border-rd-line bg-rd-page px-4 text-base text-rd-ink placeholder:text-rd-faint focus:border-rd-ink focus:outline-none";
 
   return (
-    // pb-28: 하단 알약 내비가 마지막 76px를 덮으므로 등록 버튼·면책 문구가 그 위에서 끝나야 한다
-    <main className="flex-1 space-y-6 px-5 pt-4 pb-28">
+    // pb-nav: 하단 알약 내비가 덮는 높이만큼 띄워 등록 버튼·면책 문구가 그 위에서 끝난다
+    <main className="flex-1 space-y-6 px-5 pt-4 pb-nav">
       <header>
         {/* 나가기 — 수정 중이면 해당 아이 상세로, 신규 등록이면 우리 아이 목록으로 */}
         <BackButton fallback={existing ? `/cats/${existing.id}` : "/cats"} />

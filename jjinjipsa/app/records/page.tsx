@@ -90,8 +90,16 @@ export default function Records() {
         await navigator.clipboard.writeText(text);
         showToast("요약을 복사했어요");
       }
-    } catch {
-      /* 사용자 취소 */
+    } catch (e) {
+      // 사용자 취소는 조용히. 그 외(인앱 브라우저에서 share가 있는데 실패하는 경우)는
+      // 복사로 폴백한다 — 아무 일도 안 일어난 것처럼 보이면 버튼이 고장난 걸로 보인다
+      if (e instanceof DOMException && e.name === "AbortError") return;
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("공유 대신 요약을 복사했어요");
+      } catch {
+        showToast("공유에 실패했어요");
+      }
     }
   }
 
@@ -112,7 +120,7 @@ export default function Records() {
   if (rows === null) return null;
 
   return (
-    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-28">
+    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-nav">
       <div className="flex items-center justify-between">
         <h1 className="display text-[22px] text-rd-ink">건강 기록</h1>
         {cats.length > 0 && (

@@ -33,7 +33,7 @@ import { detectOtherCatMention } from "@/lib/chat/catMention";
 import { IconCamera, IconClose } from "@/components/icons";
 import BackButton from "@/components/BackButton";
 import AnswerBlocks from "@/components/chat/AnswerBlocks";
-import { bumpChatUsage, loadChatUsage } from "@/lib/chatUsage";
+import { bumpChatUsage, loadChatUsage, syncChatUsage } from "@/lib/chatUsage";
 import { FREE_DAILY_QUESTIONS, GUEST_DAILY_QUESTIONS, getTier } from "@/lib/limits";
 
 /** AI 답변의 마크다운 ** 강조 기호 정리 */
@@ -185,7 +185,6 @@ function ChatPage() {
     setPhoto(null);
     setPendingLog(null);
     setLogSaved(false);
-    setUsed(bumpChatUsage());
 
     // 세션 없으면 생성
     let sid = sessionId;
@@ -237,12 +236,23 @@ function ChatPage() {
       return;
     }
 
-    // 2단계: LLM 호출 + 스트리밍 렌더
+    /*
+     * 2단계: LLM 호출 + 스트리밍 렌더.
+     * 카운터는 AI를 실제로 호출할 때만 올린다 — 룰엔진 응답(위)은 서버가 세지
+     * 않으므로 여기서도 세지 않아야 화면과 차단 시점이 일치한다.
+     * 서버가 실카운트를 보내면(usage) 그 값으로 덮어쓴다.
+     */
+    setUsed(bumpChatUsage());
     const history = messages.map((m) => ({
       role: m.role,
       content: m.content,
     }));
     const res = await llm.ask({ cat, history, question: q, image: img });
+    if (res.usage) {
+      setUsed(res.usage.used);
+      setDailyLimit(res.usage.limit);
+      syncChatUsage(res.usage.used);
+    }
     setStreaming("");
     let full = "";
     for await (const chunk of res.stream) {
@@ -561,7 +571,7 @@ function ChatPage() {
           </button>
         </div>
         <p className="mt-2.5 text-center text-[11px] text-rd-faint">
-          오늘 {used}/{dailyLimit}회 사용 · 진단·처방은 수의사의 영역이에요.
+          오늘 {Math.min(used, dailyLimit)}/{dailyLimit}회 사용 · 진단·처방은 수의사의 영역이에요.
         </p>
       </div>
     </main>

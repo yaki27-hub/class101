@@ -3,8 +3,9 @@
 /*
  * 냥이 생활기록부 (D-20) — 자랑용 카드를 보고, 빈 칸을 그 자리에서 채운다.
  *
- * 입력 경로가 둘인 이유: 홈의 "오늘의 체크"는 하루 한 문항이라 마찰이 없는 대신
- * 다 채우는 데 시간이 걸린다. 지금 당장 뽑고 싶은 사람을 위해 여기서 직접 채울 수도 있게 한다.
+ * 원래 홈의 "오늘의 체크"(하루 한 문항)가 두 번째 입력 경로였지만, 홈 리디자인으로
+ * 그 섹션이 빠져 지금은 여기가 유일한 입력 경로다 (재배치는 T-52). 안내문도
+ * 없는 섹션을 가리키면 안 된다 — QA 제보로 카피에서 참조를 제거했다.
  */
 
 import { useParams } from "next/navigation";
@@ -89,7 +90,7 @@ export default function ReportPage() {
   const empty = rows.filter((r) => !r.answered);
 
   return (
-    <main className="flex-1 space-y-4 px-5 pt-8 pb-24">
+    <main className="flex-1 space-y-4 px-5 pt-8 pb-nav">
       <header className="flex items-center justify-between">
         <BackButton fallback={`/cats/${id}`} />
         <span className="text-[12px] font-semibold text-rd-muted tabular-nums">
@@ -117,7 +118,7 @@ export default function ReportPage() {
         <section className="rounded-3xl bg-rd-card p-5">
           <p className="text-sm font-bold text-rd-ink">아직 비어 있는 칸</p>
           <p className="mt-1 text-[12.5px] leading-relaxed text-rd-muted">
-            홈의 &ldquo;오늘의 체크&rdquo;에서 하루 한 칸씩 채워지지만, 여기서 바로 답해도 돼요.
+            궁금한 칸을 눌러 바로 답하면 기록부에 채워져요.
           </p>
           <ul className="mt-3 space-y-2">
             {empty.map((r) => (

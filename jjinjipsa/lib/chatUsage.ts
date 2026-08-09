@@ -23,3 +23,10 @@ export function bumpChatUsage(): number {
   localStorage.setItem(KEY(), String(next));
   return next;
 }
+
+/** 서버가 센 실카운트로 로컬 추정치를 덮어쓴다 — 다음 진입 때 시작값이 맞도록 */
+export function syncChatUsage(serverCount: number): void {
+  if (typeof window === "undefined") return;
+  if (Number.isFinite(serverCount) && serverCount >= 0)
+    localStorage.setItem(KEY(), String(serverCount));
+}

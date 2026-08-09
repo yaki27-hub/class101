@@ -25,6 +25,8 @@ export interface LlmChunkedResponse {
   model: string;
   /** 이 답변의 프롬프트에 실제로 들어간 KB 문서 (표시용) */
   kbRefs?: KbRefBrief[];
+  /** 서버가 센 오늘 사용량 — 화면 카운터의 단일 출처 (없으면 로컬 추정치 유지) */
+  usage?: { used: number; limit: number };
 }
 
 export interface LlmAdapter {

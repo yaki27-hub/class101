@@ -61,7 +61,7 @@ export default function AccountPage() {
   if (auth === null) return null;
 
   return (
-    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-28">
+    <main className="flex flex-1 flex-col gap-3 px-5 pt-8 pb-nav">
       {/* 하단 탭에서 오는 화면이라 뒤로가기 없이 제목만 둔다 (홈 문법) */}
       <header className="mb-1">
         <h1 className="display text-[22px] text-rd-ink">설정</h1>
@@ -136,14 +136,16 @@ export default function AccountPage() {
         </div>
       </section>
 
-      {/* 계정 탈퇴 */}
-      <button
-        onClick={() => setConfirmDel(true)}
-        disabled={busy}
-        className="mt-2 text-center text-[13px] font-semibold text-[#C4453A] underline disabled:opacity-60"
-      >
-        계정 탈퇴
-      </button>
+      {/* 계정 탈퇴 — 게스트에겐 "탈퇴할 계정"이 없으므로 연결된 계정에만 보인다 */}
+      {auth.linked && (
+        <button
+          onClick={() => setConfirmDel(true)}
+          disabled={busy}
+          className="mt-2 text-center text-[13px] font-semibold text-[#C4453A] underline disabled:opacity-60"
+        >
+          계정 탈퇴
+        </button>
+      )}
 
       <p className="text-center text-[11px] text-rd-faint">
         찐집사 · 내 고양이를 기억하는 건강 챗봇

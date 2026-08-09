@@ -82,11 +82,20 @@ async function hashIp(req: Request): Promise<string | null> {
     .join("");
 }
 
-/** 계정(익명 포함) 기준 사용량 +1 후 초과 여부. 토큰이 없거나 오류면 여기서는 통과시킨다. */
-async function overAccountLimit(authHeader: string | null): Promise<boolean> {
-  if (!Number.isFinite(DAILY_LIMIT) || DAILY_LIMIT <= 0) return false; // 무제한
+/**
+ * 계정(익명 포함) 기준 사용량 +1 후 초과 여부 + 실카운트.
+ * used·limit은 x-chat-used/x-chat-limit 헤더로 내려보내 화면 카운터의
+ * 단일 출처가 된다 — 클라이언트 localStorage 추정치는 룰엔진 응답·기기 차이로
+ * 서버와 어긋난다 (실사용 제보: 0개인데 1/3, 4/3 노출).
+ * 토큰이 없거나 오류면 차단하지 않고 used=null(카운트 미상)로 둔다.
+ */
+async function accountUsage(
+  authHeader: string | null,
+): Promise<{ over: boolean; used: number | null; limit: number }> {
+  const none = { over: false, used: null, limit: GUEST_DAILY_LIMIT };
+  if (!Number.isFinite(DAILY_LIMIT) || DAILY_LIMIT <= 0) return none; // 무제한
   const token = authHeader?.replace(/^Bearer\s+/i, "");
-  if (!token) return false; // 토큰이 없어도 아래 IP 상한이 받아준다
+  if (!token) return none; // 토큰이 없어도 아래 IP 상한이 받아준다
   try {
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       global: { headers: { Authorization: `Bearer ${token}` } },
@@ -97,11 +106,12 @@ async function overAccountLimit(authHeader: string | null): Promise<boolean> {
       sb.auth.getUser(token),
       sb.rpc("bump_chat_usage"),
     ]);
-    if (error || typeof data !== "number") return false;
+    if (error || typeof data !== "number") return none;
     const isMember = userData?.user?.is_anonymous === false;
-    return data > (isMember ? DAILY_LIMIT : GUEST_DAILY_LIMIT);
+    const limit = isMember ? DAILY_LIMIT : GUEST_DAILY_LIMIT;
+    return { over: data > limit, used: data, limit };
   } catch {
-    return false;
+    return none;
   }
 }
 
@@ -141,12 +151,20 @@ export async function POST(req: Request): Promise<Response> {
 
   // 비용 통제(T-17): 하루 한도 초과 시 AI 호출 없이 차단.
   // 계정 한도와 IP 한도를 함께 본다 — 계정 한도만으로는 토큰을 빼고 호출하면 뚫린다.
-  const [accountOver, ipOver] = await Promise.all([
-    overAccountLimit(req.headers.get("Authorization")),
+  const [acct, ipOver] = await Promise.all([
+    accountUsage(req.headers.get("Authorization")),
     overIpLimit(req),
   ]);
-  if (accountOver || ipOver) {
-    return new Response("daily-limit", { status: 429 });
+  // 실카운트 헤더 — 화면 카운터의 단일 출처. 표시값이 한도를 넘지 않게 여기서 자른다
+  const usageHeaders: Record<string, string> =
+    acct.used === null
+      ? {}
+      : {
+          "x-chat-used": String(Math.min(acct.used, acct.limit)),
+          "x-chat-limit": String(acct.limit),
+        };
+  if (acct.over || ipOver) {
+    return new Response("daily-limit", { status: 429, headers: usageHeaders });
   }
 
   const body = (await req.json()) as ChatBody;
@@ -265,6 +283,7 @@ export async function POST(req: Request): Promise<Response> {
 
   return new Response(stream, {
     headers: {
+      ...usageHeaders,
       "Content-Type": "text/plain; charset=utf-8",
       "x-model": model,
       // 실제로 프롬프트에 넣은 자료만 내려보낸다 (화면 표시는 사실과 일치해야 한다).

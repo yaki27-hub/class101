@@ -52,7 +52,7 @@ export default function ManualLogPage() {
   if (cat === undefined) return null;
   if (cat === null)
     return (
-      <main className="flex flex-1 flex-col items-center justify-center gap-3 px-6 pb-28">
+      <main className="flex flex-1 flex-col items-center justify-center gap-3 px-6 pb-nav">
         <p className="text-sm text-rd-body">등록된 아이를 찾을 수 없어요.</p>
         <Link href="/" className="text-sm font-semibold text-rd-ink underline">
           홈으로
@@ -72,12 +72,10 @@ export default function ManualLogPage() {
     }`;
 
   return (
-    <main className="flex-1 space-y-6 px-5 pt-8 pb-28">
+    <main className="flex-1 space-y-6 px-5 pt-8 pb-nav">
       <header className="flex items-center justify-between">
         <BackButton fallback={`/cats/${catId}`} />
-        <p className="text-[12px] font-semibold uppercase tracking-[1.5px] text-rd-muted">
-          Symptom Log
-        </p>
+        <p className="text-[12px] font-semibold text-rd-muted">증상 기록</p>
       </header>
 
       <div>

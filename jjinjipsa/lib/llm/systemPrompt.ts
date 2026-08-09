@@ -5,12 +5,15 @@
 
 import { getCatAge } from "@/lib/catAge";
 import { isPersonalityKey } from "@/lib/personality";
+import type { DailyRecord } from "@/lib/dailyStatus";
 import type { Cat, SymptomLog, TraitAnswer, WeightLog } from "@/lib/storage";
 
 export interface PromptContext {
   cat: Cat;
   traits: TraitAnswer[];
   symptoms: SymptomLog[];
+  /** 오늘 상태 기록 (홈 4항목) — 없으면 "none". 히스토리 섹션의 "기록 없음" 모순 방지 */
+  todayStatus?: DailyRecord;
   /** 체중 기록 (오래된→최신). 프로필 스칼라 대신 최신 측정치+측정일을 인용 근거로 쓴다 */
   weights?: WeightLog[];
   /** 같은 집사의 다른 고양이 이름들 — 개체 혼동 방지(R8)에 쓴다 */
@@ -40,6 +43,10 @@ const TEMPLATE = `너는 한국 고양이 집사들을 위한 건강 케어 서�
 <recent_symptom_logs>
 {{symptom_logs_90d}}
 </recent_symptom_logs>
+
+<today_status>
+{{today_status}}
+</today_status>
 
 <recent_health_events>
 {{health_events}}
@@ -133,6 +140,8 @@ Center, MSD Veterinary Manual, International Cat Care 등의 수의학 자료를
 사진이 첨부되면 시각적으로 확인 가능한 것만 서술한다.
 
 **📖 히스토리** — 이 고양이의 기록과 대조한다. 다음 순서로 확인:
+(0) <today_status>에 오늘 집사가 기록한 상태(식사·음수·배변·활동)가 있으면 그것부터 언급한다 —
+이것도 이 아이의 기록이다. 오늘 기록이 있는데 "기록이 없다"고 말하면 같은 답변 안에서 모순된다.
 (1) <recent_symptom_logs>에 같거나 유사한 증상이 있었나? 있다면 언제였고 기록된 결과가 무엇이었는지 언급한다.
 (2) <habit_baseline>에 이 증상의 "평소값"이 정의돼 있나? 있다면 오늘의 보고가 평소 범위 안인지
 ("평소 패턴 안이에요") 벗어났는지("평소보다 잦아요 — 살펴볼 신호예요")를 명시적으로 말한다.
@@ -292,6 +301,8 @@ R5. 고양이 건강·생활과 무관한 질문(코딩, 정치 등)은 찐집�
 R6. 히스토리를 지어내지 않는다. <recent_symptom_logs>나 <habit_baseline>이 비어 있으면
     과거 기록을 절대 날조하지 않는다. 대신 증상을 기록해두면 다음 답변이 더 정확해진다고
     부드럽게 한 문장만 언급한다 (영업 톤 금지).
+    "기록이 없다"고 말할 때는 무엇이 없는지 특정한다 ("증상 기록은 아직 없어요"처럼).
+    <today_status>가 none이 아닌데 기록이 전혀 없다는 식으로 뭉뚱그리지 않는다.
 
 R7. 사료/간식 질문 — 특정 상용 제품을 "좋다/나쁘다"로 단정하지 않고, 제품 순위를 매기지 않는다.
     대신 이 고양이 맞춤 선택 체크리스트로 답한다: 생애 단계 적합성(키튼/성묘/시니어 표기 확인),
@@ -408,9 +419,29 @@ export function buildSystemPrompt(ctx: PromptContext): string {
           })),
         );
 
+  // 오늘 상태 — unknown(기록 안 함)은 빼고, 한국어 항목명으로 넣는다
+  const STATUS_KO: Record<string, string> = {
+    meal: "식사",
+    water: "음수",
+    toilet: "배변",
+    activity: "활동",
+  };
+  const todayEntries = Object.entries(ctx.todayStatus ?? {}).filter(
+    ([, v]) => v && v.level !== "unknown",
+  );
+  const todayStatus =
+    todayEntries.length === 0
+      ? "none"
+      : JSON.stringify(
+          Object.fromEntries(
+            todayEntries.map(([k, v]) => [STATUS_KO[k] ?? k, v.label]),
+          ),
+        );
+
   return TEMPLATE.replace("{{cat_profile}}", catProfileJson(ctx.cat))
     .replace("{{cat_traits}}", traits)
     .replace("{{symptom_logs_90d}}", symptoms)
+    .replace("{{today_status}}", todayStatus)
     .replace("{{health_events}}", "none")
     .replace("{{kb_references}}", ctx.kbReferences?.trim() || "none")
     .replace("{{mentioned_products}}", ctx.mentionedProducts?.trim() || "none");
