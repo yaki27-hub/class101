@@ -13,6 +13,7 @@
 
 import { IconBowl, IconLitter, IconWater } from "@/components/icons";
 import {
+  RECORD_TOTAL,
   SCENE_SIZE,
   heroBg,
   heroScrim,
@@ -116,31 +117,28 @@ export default function MoodHero({
           {view.wit}
         </p>
 
-        {view.score !== null ? (
-          <div className="flex items-start justify-center gap-2">
+        {/* 점수(98점) 표현은 제거 — 건강 점수처럼 읽힌다 (지시서 P0-1). 기록 수만 보여준다 */}
+        <div className="flex items-center justify-center">
+          <span className="flex items-center gap-2 rounded-full bg-white/15 px-5 py-3 text-[17px] font-extrabold tracking-[-0.02em] backdrop-blur-lg">
             <span
-              className="mt-4 text-[26px] leading-none"
+              className="text-[20px] leading-none"
               style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,.25))" }}
               aria-hidden
             >
               {mood.glyph}
             </span>
-            <span
-              className="text-[68px] leading-none font-extrabold tracking-[-0.03em] tabular-nums"
-              style={{ textShadow: "0 4px 20px rgba(0,0,0,.22)" }}
-            >
-              {view.score}
-            </span>
-            <span className="mt-[34px] text-[20px] font-bold opacity-85">점</span>
-          </div>
-        ) : (
-          /* 기록 전 — 없는 점수를 지어내지 않는다 (T-53) */
-          <div className="flex items-center justify-center">
-            <span className="rounded-full bg-white/15 px-5 py-3 text-[17px] font-extrabold tracking-[-0.02em] backdrop-blur-lg">
-              오늘 기록 전이에요
-            </span>
-          </div>
-        )}
+            {view.recorded === 0 ? (
+              "오늘 기록 전이에요"
+            ) : (
+              <>
+                오늘 기록{" "}
+                <span className="tabular-nums">
+                  {view.recorded}/{RECORD_TOTAL}
+                </span>
+              </>
+            )}
+          </span>
+        </div>
         <p className="mt-3 text-[13.5px] font-medium tracking-[-0.01em] text-white/85">
           {view.sub}
         </p>

@@ -4,7 +4,8 @@
  * 라우트 실패(키 없음·네트워크)면 mock으로 폴백해 UI는 항상 동작한다.
  */
 
-import { loadDaily } from "@/lib/dailyStatus";
+import { loadDaily, loadDailyOn, STATUS_ITEMS } from "@/lib/dailyStatus";
+import { loadHealthNote } from "@/lib/healthNote";
 import { storage } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 import { MockLlmAdapter } from "./mock";
@@ -33,6 +34,34 @@ async function limitMessage(): Promise<string> {
 
 async function* once(text: string): AsyncIterable<string> {
   yield text;
+}
+
+/**
+ * 오늘 이전 7일의 상태 기록 (P0-5) — 기록 있는 날만, 한국어 항목명으로 압축.
+ * 오늘은 todayStatus로 따로 가므로 여기서 뺀다 (이중 전달 방지).
+ */
+function recentDailyHistory(
+  catId: string,
+): Array<{ 날짜: string } & Record<string, string>> {
+  const out: Array<{ 날짜: string } & Record<string, string>> = [];
+  for (let i = 1; i <= 7; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const rec = loadDailyOn(catId, d);
+    const entry: { 날짜: string } & Record<string, string> = {
+      날짜: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`,
+    };
+    let has = false;
+    for (const item of STATUS_ITEMS) {
+      const v = rec[item.key];
+      if (v && v.level !== "unknown") {
+        entry[item.label] = v.label;
+        has = true;
+      }
+    }
+    if (has) out.push(entry);
+  }
+  return out;
 }
 
 async function* streamBody(body: ReadableStream<Uint8Array>): AsyncIterable<string> {
@@ -88,6 +117,9 @@ export class RemoteLlmAdapter implements LlmAdapter {
           symptoms,
           // 오늘 상태 기록 — 히스토리 섹션이 "기록 없음"이라고 뭉뚱그리지 않게 (QA #4)
           todayStatus: loadDaily(req.cat.id),
+          // 지난 7일 상태 이력 + 꼭 기억할 것 (P0-5) — 냥박사가 변화를 짚을 재료
+          dailyHistory: recentDailyHistory(req.cat.id),
+          importantNote: loadHealthNote(req.cat.id) || undefined,
           weights: weights.slice(-12),
           otherCatNames,
           history: req.history,

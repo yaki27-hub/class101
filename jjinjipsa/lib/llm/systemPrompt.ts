@@ -14,6 +14,10 @@ export interface PromptContext {
   symptoms: SymptomLog[];
   /** 오늘 상태 기록 (홈 4항목) — 없으면 "none". 히스토리 섹션의 "기록 없음" 모순 방지 */
   todayStatus?: DailyRecord;
+  /** 오늘 이전 7일의 상태 기록 (P0-5) — 기록 있는 날만, [{날짜, 항목: 라벨}] */
+  dailyHistory?: Array<{ 날짜: string } & Record<string, string>>;
+  /** 꼭 기억할 것 (알레르기·복용약 등 집사 메모, P0-5) — 항상 최우선 참조 */
+  importantNote?: string;
   /** 체중 기록 (오래된→최신). 프로필 스칼라 대신 최신 측정치+측정일을 인용 근거로 쓴다 */
   weights?: WeightLog[];
   /** 같은 집사의 다른 고양이 이름들 — 개체 혼동 방지(R8)에 쓴다 */
@@ -47,6 +51,18 @@ const TEMPLATE = `너는 한국 고양이 집사들을 위한 건강 케어 서�
 <today_status>
 {{today_status}}
 </today_status>
+
+<recent_daily_status>
+{{recent_daily_status}}
+</recent_daily_status>
+
+<important_notes>
+{{important_notes}}
+</important_notes>
+
+<important_notes>는 집사가 직접 적은 "꼭 기억할 것"(알레르기·복용약·주의사항)이다.
+**모든 답변에서 항상 최우선으로 참조한다** — 예: 복용약과 상충할 수 있는 안내를 하기 전에
+반드시 여기 내용을 확인하고, 관련이 있으면 답변에서 명시적으로 언급한다.
 
 <recent_health_events>
 {{health_events}}
@@ -142,6 +158,8 @@ Center, MSD Veterinary Manual, International Cat Care 등의 수의학 자료를
 **📖 히스토리** — 이 고양이의 기록과 대조한다. 다음 순서로 확인:
 (0) <today_status>에 오늘 집사가 기록한 상태(식사·음수·배변·활동)가 있으면 그것부터 언급한다 —
 이것도 이 아이의 기록이다. 오늘 기록이 있는데 "기록이 없다"고 말하면 같은 답변 안에서 모순된다.
+(0-1) <recent_daily_status>(지난 7일)와 오늘을 비교해 **변화가 있으면 짚는다**
+("그저께까지는 잘 먹었는데 오늘 기록은 적게 먹었다고 돼 있어요"). 날짜가 붙은 기록만 근거로 쓴다.
 (1) <recent_symptom_logs>에 같거나 유사한 증상이 있었나? 있다면 언제였고 기록된 결과가 무엇이었는지 언급한다.
 (2) <habit_baseline>에 이 증상의 "평소값"이 정의돼 있나? 있다면 오늘의 보고가 평소 범위 안인지
 ("평소 패턴 안이에요") 벗어났는지("평소보다 잦아요 — 살펴볼 신호예요")를 명시적으로 말한다.
@@ -303,6 +321,15 @@ R6. 히스토리를 지어내지 않는다. <recent_symptom_logs>나 <habit_base
     부드럽게 한 문장만 언급한다 (영업 톤 금지).
     "기록이 없다"고 말할 때는 무엇이 없는지 특정한다 ("증상 기록은 아직 없어요"처럼).
     <today_status>가 none이 아닌데 기록이 전혀 없다는 식으로 뭉뚱그리지 않는다.
+    **기록의 부재는 사건의 부재가 아니다**: "최근 설사했어?"에 기록이 없으면
+    "최근 기록에서는 설사 기록을 찾지 못했어요"라고 말한다 — "설사를 하지 않았어요"라고
+    단정하지 않는다. 반대로 기록 며칠이 정상이었다고 "계속 좋았다"고 일반화하지 않는다
+    ("기록된 3일은 모두 평소 수준이었어요"처럼 기록 범위를 밝힌다).
+
+R6-1. 답변의 근거 우선순위 — ① 지금 질문 내용 ② 오늘 기록(<today_status>)
+    ③ 과거 관련 기록(<recent_symptom_logs>·<recent_daily_status>·체중)
+    ④ 변화 여부(과거 대비 오늘) ⑤ 관찰 포인트 ⑥ 필요 시 진료 검토 기준.
+    <important_notes>는 순서와 무관하게 항상 확인한다.
 
 R7. 사료/간식 질문 — 특정 상용 제품을 "좋다/나쁘다"로 단정하지 않고, 제품 순위를 매기지 않는다.
     대신 이 고양이 맞춤 선택 체크리스트로 답한다: 생애 단계 적합성(키튼/성묘/시니어 표기 확인),
@@ -356,14 +383,24 @@ R8. **개체 확인 — 현재 상담 대상은 <cat_profile>의 고양이뿐이
 /*
  * 체중 표기 — 스칼라가 아니라 "값 + 측정일"로 준다 (지시서 P0-2).
  * 날짜가 없으면 모델이 대화 히스토리의 낡은 수치를 재인용해도 바로잡을 근거가 없다.
+ * P0-5: 전회 측정치와 변화량도 함께 — "최근 체중 어때?"에 추세로 답할 수 있게.
  */
 function weightInfo(cat: Cat, weights?: WeightLog[]) {
   const latest = weights && weights.length > 0 ? weights[weights.length - 1] : null;
   if (latest) {
+    const prev = weights && weights.length > 1 ? weights[weights.length - 2] : null;
+    const delta = prev ? Number((latest.weightKg - prev.weightKg).toFixed(2)) : null;
     return {
       체중_kg: latest.weightKg,
       체중_측정일: latest.measuredAt,
       체중_인용형식: `${latest.weightKg}kg(${latest.measuredAt.slice(5).replace("-", "/")} 기준)`,
+      ...(prev
+        ? {
+            직전_체중_kg: prev.weightKg,
+            직전_측정일: prev.measuredAt,
+            변화_kg: delta,
+          }
+        : {}),
     };
   }
   return { 체중_kg: cat.weightKg, 체중_측정일: null };
@@ -438,10 +475,20 @@ export function buildSystemPrompt(ctx: PromptContext): string {
           ),
         );
 
-  return TEMPLATE.replace("{{cat_profile}}", catProfileJson(ctx.cat))
+  // 지난 7일 상태 이력 (P0-5) — 기록 있는 날만 온다. 빈 배열이면 "none"
+  const dailyHistory =
+    ctx.dailyHistory && ctx.dailyHistory.length > 0
+      ? JSON.stringify(ctx.dailyHistory)
+      : "none";
+
+  const importantNote = ctx.importantNote?.trim() || "none";
+
+  return TEMPLATE.replace("{{cat_profile}}", catProfileJson(ctx.cat, ctx.weights))
     .replace("{{cat_traits}}", traits)
     .replace("{{symptom_logs_90d}}", symptoms)
     .replace("{{today_status}}", todayStatus)
+    .replace("{{recent_daily_status}}", dailyHistory)
+    .replace("{{important_notes}}", importantNote)
     .replace("{{health_events}}", "none")
     .replace("{{kb_references}}", ctx.kbReferences?.trim() || "none")
     .replace("{{mentioned_products}}", ctx.mentionedProducts?.trim() || "none");

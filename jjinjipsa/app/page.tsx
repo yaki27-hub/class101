@@ -20,6 +20,7 @@ import CareCalendarCard from "@/components/home/CareCalendarCard";
 import DoctorTipCard from "@/components/home/DoctorTipCard";
 import AdCard from "@/components/home/AdCard";
 import EmptyCatCard from "@/components/home/EmptyCatCard";
+import QuickSymptomCard from "@/components/home/QuickSymptomCard";
 import LoginBanner from "@/components/home/LoginBanner";
 import CatSelectorSheet from "@/components/home/CatSelectorSheet";
 import TodayStatusSheet from "@/components/home/TodayStatusSheet";
@@ -124,6 +125,8 @@ function Home() {
 
       {/* 카드 스택 — 히어로를 덮으며 올라온다 */}
       <div className="relative z-[1] flex flex-col gap-3 rounded-t-3xl bg-rd-page px-4 pt-5.5 pb-nav">
+        {/* 이상 기록 진입점 (P0-2) — 상태 기록 바로 아래, 핵심 루프의 분기점 */}
+        <QuickSymptomCard catId={cat.id} />
         <CareRoutineCard
           done={routines}
           onToggle={(i) => {

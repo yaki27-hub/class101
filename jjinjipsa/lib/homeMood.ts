@@ -262,10 +262,13 @@ export interface HomeInput {
   now?: Date;
 }
 
+/** 오늘 기록 가능한 항목 수 — 식사·음수·화장실·활동 */
+export const RECORD_TOTAL = 4;
+
 export interface HomeView {
   mood: Mood;
-  /** null = 아직 기록 전 (숫자 대신 "기록 전"을 보여준다) */
-  score: number | null;
+  /** 오늘 기록한 항목 수 (0~4). 0 = 아직 기록 전 */
+  recorded: number;
   wit: string;
   sub: string;
   chipMeal: string;
@@ -274,17 +277,16 @@ export interface HomeView {
 }
 
 /**
- * 오늘 상태 기록 → 무드·점수·칩.
+ * 오늘 상태 기록 → 무드·기록 수·칩.
  *
  * 판정 순서 — **아픈 신호가 시간대를 이긴다**:
  *   danger 항목 ≥1 → sick
  *   warning 항목 ≥1 또는 체중 진료 권고 → warning
  *   밤(21시~새벽 5시) → night
- *   그 외 → 점수 85 이상 sunny / 미만 cloudy
+ *   그 외 → 기록 3항목 이상 sunny / 미만 cloudy
  *
- * 점수는 의학 지표가 아니라 **오늘 기록의 상태 요약**이다: 58 + 기록 항목×10
- * − 주의×14 − 이상×30 (15~99). 4항목 모두 정상이면 98, 기록 전이면 null.
- * 수의학적 건강 점수처럼 읽히지 않게, 기록이 없으면 숫자를 아예 보여주지 않는다.
+ * "98점" 같은 점수 표현은 제거했다 (개선 지시서 P0-1) — 숫자가 수의학적 건강
+ * 점수처럼 읽힌다. 히어로에는 "오늘 기록 n/4"만 보여준다.
  */
 export function computeHome(input: HomeInput): HomeView {
   const now = input.now ?? new Date();
@@ -296,11 +298,6 @@ export function computeHome(input: HomeInput): HomeView {
   const danger = entries.filter((x) => x.e.level === "danger").length;
   const recorded = entries.length;
 
-  const score =
-    recorded === 0
-      ? null
-      : Math.max(15, Math.min(99, 58 + recorded * 10 - warn * 14 - danger * 30));
-
   const hour = now.getHours();
   const night = hour >= 21 || hour < 5;
 
@@ -308,7 +305,7 @@ export function computeHome(input: HomeInput): HomeView {
   if (danger > 0) id = "sick";
   else if (warn > 0 || input.weightNeedsVisit) id = "warning";
   else if (night) id = "night";
-  else if (score !== null && score >= 85) id = "sunny";
+  else if (recorded >= 3) id = "sunny";
   else id = "cloudy";
 
   const mood = getMood(id);
@@ -332,7 +329,7 @@ export function computeHome(input: HomeInput): HomeView {
 
   return {
     mood,
-    score,
+    recorded,
     wit: recorded === 0 ? "오늘은 어떤 하루였나요?" : witOf(mood),
     sub,
     chipMeal: chip("meal"),
@@ -345,7 +342,8 @@ export function computeHome(input: HomeInput): HomeView {
 export function previewHome(mood: Mood): HomeView {
   return {
     mood,
-    score: mood.score,
+    // 미리보기 더미 — sunny·night는 다 채운 날, cloudy는 반쯤 기록한 날의 모습
+    recorded: mood.id === "cloudy" ? 2 : mood.id === "sunny" || mood.id === "night" ? 4 : 3,
     wit: witOf(mood),
     sub: mood.sub,
     chipMeal: mood.chipMeal,

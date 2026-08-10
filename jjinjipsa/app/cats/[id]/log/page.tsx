@@ -1,27 +1,55 @@
 "use client";
 
-/* F-05 증상 수동 기록 (T-11) — 3탭 이내: 진입 → 태그 선택 → 저장 */
+/*
+ * F-05 증상 수동 기록 (T-11) — 3탭 이내: 진입 → 태그 선택 → 저장.
+ * P0-2: 홈 Quick Action의 ?tags=로 태그가 미리 선택된 채 열린다.
+ * P0-4: 저장 후 "냥박사에게 이 기록 물어보기"로 이어진다 — 기록이 상담의 재료가 된다.
+ */
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import { newId, storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { EMERGENCY_TAG_LIST, SYMPTOM_TAG_LIST } from "@/lib/symptomTags";
 import { EMERGENCY_MAP_URL } from "@/lib/redFlags";
 import BackButton from "@/components/BackButton";
+import Mascot from "@/components/Mascot";
 
 export default function ManualLogPage() {
+  // useSearchParams(태그 프리셀렉트)는 서스펜스 경계가 필요하다
+  return (
+    <Suspense fallback={null}>
+      <ManualLog />
+    </Suspense>
+  );
+}
+
+function ManualLog() {
   const { id: catId } = useParams<{ id: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [cat, setCat] = useState<Cat | null | undefined>(undefined);
   const [tags, setTags] = useState<string[]>([]);
   const [memo, setMemo] = useState("");
   const [showEmergency, setShowEmergency] = useState(false);
   const [error, setError] = useState("");
+  /** 저장된 기록 — 저장 후 "냥박사에게 물어보기" 화면으로 전환 (P0-4) */
+  const [saved, setSaved] = useState<SymptomLog | null>(null);
 
   useEffect(() => {
     void storage.getCat(catId).then(setCat);
   }, [catId]);
+
+  // 홈 Quick Action에서 넘어온 태그 미리 선택 (P0-2) — 아는 태그만 받는다
+  useEffect(() => {
+    const preset = searchParams.get("tags");
+    if (!preset) return;
+    const valid = preset
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => SYMPTOM_TAG_LIST.includes(t));
+    if (valid.length > 0) setTags((prev) => [...new Set([...prev, ...valid])]);
+  }, [searchParams]);
 
   function toggle(tag: string, emergency: boolean) {
     setError("");
@@ -46,7 +74,7 @@ export default function ManualLogPage() {
       createdAt: new Date().toISOString(),
     };
     await storage.addSymptom(log);
-    router.push(`/cats/${cat.id}`);
+    setSaved(log); // 바로 떠나지 않는다 — 기록을 상담으로 잇는 것이 핵심 루프다 (P0-4)
   }
 
   if (cat === undefined) return null;
@@ -59,6 +87,55 @@ export default function ManualLogPage() {
         </Link>
       </main>
     );
+
+  /*
+   * 저장 완료 — 냥박사 연결 CTA (P0-4).
+   * 질문을 다시 타이핑하게 하지 않는다: 기록 요약을 질문으로 미리 채운다.
+   * 방금 저장한 기록 자체는 <recent_symptom_logs>로 프롬프트에 이미 들어간다.
+   */
+  if (saved) {
+    const memoPart = memo.trim() ? ` (${memo.trim().slice(0, 80)})` : "";
+    const q = `방금 ${saved.tags.join("·")} 증상을 기록했어요${memoPart}. 어떻게 지켜보면 될까요?`;
+    return (
+      <main className="flex flex-1 flex-col items-center justify-center gap-3 px-6 pb-nav text-center">
+        <Mascot mood="complete" size={92} />
+        <h1 className="display text-[20px] text-rd-ink">기록했어요</h1>
+        <p className="flex flex-wrap justify-center gap-1">
+          {saved.tags.map((t) => (
+            <span
+              key={t}
+              className="rounded-full bg-rd-mint-soft px-2.5 py-1 text-[12px] font-semibold text-rd-forest"
+            >
+              #{t}
+            </span>
+          ))}
+        </p>
+        <p className="text-sm leading-relaxed text-rd-body">
+          이 기록은 {cat.name}의 히스토리에 남아
+          <br />
+          다음 상담에서도 냥박사가 기억해요.
+        </p>
+        <div className="mt-2 flex w-full max-w-[300px] flex-col gap-2">
+          <button
+            type="button"
+            onClick={() =>
+              router.push(`/cats/${cat.id}/chat?q=${encodeURIComponent(q)}`)
+            }
+            className="h-12 w-full rounded-[14px] bg-rd-ink text-[15px] font-bold text-white active:scale-[0.99]"
+          >
+            냥박사에게 이 기록 물어보기
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/")}
+            className="h-11 w-full rounded-[14px] border border-rd-line bg-white text-sm font-semibold text-rd-body"
+          >
+            홈으로 돌아가기
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   const chip = (tag: string, selected: boolean, emergency: boolean) =>
     `rounded-full px-3.5 py-2 text-[13px] font-medium ${
