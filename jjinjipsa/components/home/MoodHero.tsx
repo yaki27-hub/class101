@@ -17,12 +17,12 @@ import { SCENE_SIZE, heroBg, heroScrim, type HomeView } from "@/lib/homeMood";
 const HERO_H = 720;
 const SCENE_H = 440;
 /*
- * 콘텐츠를 씬 위로 끌어올리는 양. 720 - 435 = 285px 지점에서 멘트가 시작한다.
+ * 콘텐츠를 씬 위로 끌어올리는 양. 720 - 420 = 300px 지점에서 멘트가 시작한다.
  * 씬(440px)이 끝나기 전이라 글이 그림 아래쪽에 겹치는데, 그 구간은 스크림이 이미
  * 무드색 80%까지 덮은 자리(76% ≈ 334px)라 흰 글자가 읽힌다.
- * 그림이 화면을 너무 많이 먹는다는 피드백으로 275 → 435.
+ * 그림이 화면을 너무 많이 먹는다는 피드백으로 275 → 420 (실기기에서 맞춰본 값).
  */
-const CONTENT_PULL = 435;
+const CONTENT_PULL = 420;
 
 function Chip({
   children,
