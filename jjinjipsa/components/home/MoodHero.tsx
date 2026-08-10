@@ -12,13 +12,7 @@
  */
 
 import { IconBowl, IconLitter, IconWater } from "@/components/icons";
-import {
-  RECORD_TOTAL,
-  SCENE_SIZE,
-  heroBg,
-  heroScrim,
-  type HomeView,
-} from "@/lib/homeMood";
+import { SCENE_SIZE, heroBg, heroScrim, type HomeView } from "@/lib/homeMood";
 
 const HERO_H = 720;
 const SCENE_H = 440;
@@ -127,16 +121,7 @@ export default function MoodHero({
             >
               {mood.glyph}
             </span>
-            {view.recorded === 0 ? (
-              "오늘 기록 전이에요"
-            ) : (
-              <>
-                오늘 기록{" "}
-                <span className="tabular-nums">
-                  {view.recorded}/{RECORD_TOTAL}
-                </span>
-              </>
-            )}
+            <span className="tabular-nums">{view.statusLine}</span>
           </span>
         </div>
         <p className="mt-3 text-[13.5px] font-medium tracking-[-0.01em] text-white/85">

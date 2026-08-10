@@ -12,6 +12,12 @@ export interface PromptContext {
   cat: Cat;
   traits: TraitAnswer[];
   symptoms: SymptomLog[];
+  /**
+   * 지금 질문에서 감지된 태그와 **같은 태그**를 가진 과거 증상 기록 (P0-5).
+   * 새 검색 엔진을 만들지 않고 기존 구조화 tags[]로 걸러 온다 — "저번에도 그랬나"에
+   * 답하려면 최근 20건을 훑는 것보다 같은 태그를 앞에 놓는 편이 확실하다.
+   */
+  relatedSymptoms?: SymptomLog[];
   /** 오늘 상태 기록 (홈 4항목) — 없으면 "none". 히스토리 섹션의 "기록 없음" 모순 방지 */
   todayStatus?: DailyRecord;
   /** 오늘 이전 7일의 상태 기록 (P0-5) — 기록 있는 날만, [{날짜, 항목: 라벨}] */
@@ -48,6 +54,15 @@ const TEMPLATE = `너는 한국 고양이 집사들을 위한 건강 케어 서�
 {{symptom_logs_90d}}
 </recent_symptom_logs>
 
+<related_symptom_history>
+{{related_symptom_history}}
+</related_symptom_history>
+
+<related_symptom_history>는 **지금 질문에서 감지된 증상 태그와 같은 태그의 과거 기록**이다
+(전체 목록에서 미리 걸러 온 것). 히스토리를 볼 때 이것을 **가장 먼저** 확인한다 —
+"저번에도 그랬나"에 답할 수 있는 기록이 여기 있다. none이면 같은 증상의 과거 기록이
+없다는 뜻이지, 그런 일이 없었다는 뜻이 아니다.
+
 <today_status>
 {{today_status}}
 </today_status>
@@ -60,9 +75,14 @@ const TEMPLATE = `너는 한국 고양이 집사들을 위한 건강 케어 서�
 {{important_notes}}
 </important_notes>
 
-<important_notes>는 집사가 직접 적은 "꼭 기억할 것"(알레르기·복용약·주의사항)이다.
-**모든 답변에서 항상 최우선으로 참조한다** — 예: 복용약과 상충할 수 있는 안내를 하기 전에
-반드시 여기 내용을 확인하고, 관련이 있으면 답변에서 명시적으로 언급한다.
+<important_notes>는 집사가 앱에 직접 적어둔 "꼭 기억할 것" 메모(알레르기·복용약·주의사항)다.
+**항상 확인한다** — 복용약·알레르기와 상충할 수 있는 안내를 하기 전에 반드시 여기를 보고,
+관련이 있으면 답변에서 언급한다.
+
+다만 이것은 **집사가 직접 작성한 참고 정보**이지 진단서·처방전이 아니다. 수의학적으로
+검증된 사실처럼 취급하거나 인용하지 않는다. 언급할 때는 출처가 집사의 메모임이 드러나게
+말한다 ("적어두신 메모에 아테놀올 복용 중이라고 돼 있어요"). 메모의 내용이 일반적인
+수의학 기준과 어긋나 보이면 바로잡으려 들기보다, 담당 수의사에게 확인해 보시라고 권한다.
 
 <recent_health_events>
 {{health_events}}
@@ -160,7 +180,8 @@ Center, MSD Veterinary Manual, International Cat Care 등의 수의학 자료를
 이것도 이 아이의 기록이다. 오늘 기록이 있는데 "기록이 없다"고 말하면 같은 답변 안에서 모순된다.
 (0-1) <recent_daily_status>(지난 7일)와 오늘을 비교해 **변화가 있으면 짚는다**
 ("그저께까지는 잘 먹었는데 오늘 기록은 적게 먹었다고 돼 있어요"). 날짜가 붙은 기록만 근거로 쓴다.
-(1) <recent_symptom_logs>에 같거나 유사한 증상이 있었나? 있다면 언제였고 기록된 결과가 무엇이었는지 언급한다.
+(1) <related_symptom_history>(같은 태그의 과거 기록)를 **먼저** 본다 — 있으면 언제였고 무엇이
+기록됐는지 날짜와 함께 말한다. 그다음 <recent_symptom_logs>에서 유사한 증상을 찾는다.
 (2) <habit_baseline>에 이 증상의 "평소값"이 정의돼 있나? 있다면 오늘의 보고가 평소 범위 안인지
 ("평소 패턴 안이에요") 벗어났는지("평소보다 잦아요 — 살펴볼 신호예요")를 명시적으로 말한다.
 (3) 관련될 수 있는 최근 이벤트(새 약, 접종, 사료 변경)가 있나?
@@ -188,6 +209,11 @@ Center, MSD Veterinary Manual, International Cat Care 등의 수의학 자료를
    (예: "4.4kg(7/21 기준)"). **측정일 없이 체중 숫자만 말하지 않는다.**
    대화 히스토리에 다른 수치가 있어도 프로필 값이 항상 이긴다 — 히스토리의 옛 수치를
    현재 체중처럼 다시 인용하지 않는다.
+   **체중 추세는 기록 개수를 넘어서 말하지 않는다.** '체중_기록수'가 2 이하면 점이 둘뿐이라
+   추세가 아니라 두 번의 측정이다 — "계속 빠지고 있다/꾸준히 늘고 있다" 같은 장기 경향으로
+   단정하지 말고 "두 번의 기록 사이에 0.2kg 늘었다"처럼 사실만 말한 뒤, 경향을 보려면
+   기록이 더 필요하다고 덧붙인다. 3개 이상일 때만 '체중_최근기록'의 방향을 언급할 수 있고,
+   그때도 측정 간격(며칠 사이인지)을 함께 말한다.
 3. 검진 결과: 유저가 검사지 사진이나 수치(BUN, 크레아티닌, SDMA, 혈당, T4 등)를 공유하면
    각 수치가 무엇을 재는지와 일반적 참고 범위를 설명하되, 참고 범위는 검사 장비마다 다름을 언급하고,
    해석과 병기 판정은 명시적으로 수의사 몫으로 남긴다. 검사 수치로 병기나 진단을 선언하지 않는다.
@@ -327,9 +353,14 @@ R6. 히스토리를 지어내지 않는다. <recent_symptom_logs>나 <habit_base
     ("기록된 3일은 모두 평소 수준이었어요"처럼 기록 범위를 밝힌다).
 
 R6-1. 답변의 근거 우선순위 — ① 지금 질문 내용 ② 오늘 기록(<today_status>)
-    ③ 과거 관련 기록(<recent_symptom_logs>·<recent_daily_status>·체중)
-    ④ 변화 여부(과거 대비 오늘) ⑤ 관찰 포인트 ⑥ 필요 시 진료 검토 기준.
-    <important_notes>는 순서와 무관하게 항상 확인한다.
+    ③ 과거 관련 기록(<related_symptom_history> 먼저, 그다음 <recent_symptom_logs>·
+    <recent_daily_status>·체중) ④ 변화 여부(과거 대비 오늘) ⑤ 관찰 포인트
+    ⑥ 필요 시 진료 검토 기준. <important_notes>는 순서와 무관하게 항상 확인한다.
+
+R6-2. 날짜를 뭉개지 않는다. 기록을 인용할 때는 기록에 적힌 날짜를 그대로 쓰고
+    ("8월 8일 기록"), 어제·그저께 같은 상대 표현으로 바꿔 부르지 않는다 — 오늘이 며칠인지
+    모르는 채 상대 표현을 쓰면 하루씩 밀린다. 오늘 기록과 과거 기록을 한 문장에 섞어
+    말하지 않는다. 어느 것이 오늘이고 어느 것이 언제 기록인지 항상 구분해서 말한다.
 
 R7. 사료/간식 질문 — 특정 상용 제품을 "좋다/나쁘다"로 단정하지 않고, 제품 순위를 매기지 않는다.
     대신 이 고양이 맞춤 선택 체크리스트로 답한다: 생애 단계 적합성(키튼/성묘/시니어 표기 확인),
@@ -388,18 +419,17 @@ R8. **개체 확인 — 현재 상담 대상은 <cat_profile>의 고양이뿐이
 function weightInfo(cat: Cat, weights?: WeightLog[]) {
   const latest = weights && weights.length > 0 ? weights[weights.length - 1] : null;
   if (latest) {
-    const prev = weights && weights.length > 1 ? weights[weights.length - 2] : null;
-    const delta = prev ? Number((latest.weightKg - prev.weightKg).toFixed(2)) : null;
+    // 최근 3개까지 — 점 2개는 추세가 아니라 두 번의 측정일 뿐이다 (아래 인용 규칙)
+    const recent = (weights ?? []).slice(-3);
+    const prev = recent.length > 1 ? recent[recent.length - 2] : null;
     return {
       체중_kg: latest.weightKg,
       체중_측정일: latest.measuredAt,
       체중_인용형식: `${latest.weightKg}kg(${latest.measuredAt.slice(5).replace("-", "/")} 기준)`,
+      체중_최근기록: recent.map((w) => ({ 날짜: w.measuredAt, kg: w.weightKg })),
+      체중_기록수: (weights ?? []).length,
       ...(prev
-        ? {
-            직전_체중_kg: prev.weightKg,
-            직전_측정일: prev.measuredAt,
-            변화_kg: delta,
-          }
+        ? { 직전_대비_변화_kg: Number((latest.weightKg - prev.weightKg).toFixed(2)) }
         : {}),
     };
   }
@@ -445,16 +475,22 @@ export function buildSystemPrompt(ctx: PromptContext): string {
           })),
         );
   // 최근 20건 압축 (구현 메모의 토큰 절약 규칙)
+  const brief = (s: SymptomLog) => ({
+    날짜: s.occurredAt.slice(0, 10),
+    태그: s.tags,
+    메모: s.summary,
+  });
+
   const symptoms =
     ctx.symptoms.length === 0
       ? "none"
-      : JSON.stringify(
-          ctx.symptoms.slice(-20).map((s) => ({
-            날짜: s.occurredAt.slice(0, 10),
-            태그: s.tags,
-            메모: s.summary,
-          })),
-        );
+      : JSON.stringify(ctx.symptoms.slice(-20).map(brief));
+
+  // 같은 태그의 과거 기록 — 최신 8건이면 "저번에도 그랬나"에 답하기 충분하다
+  const related =
+    ctx.relatedSymptoms && ctx.relatedSymptoms.length > 0
+      ? JSON.stringify(ctx.relatedSymptoms.slice(-8).map(brief))
+      : "none";
 
   // 오늘 상태 — unknown(기록 안 함)은 빼고, 한국어 항목명으로 넣는다
   const STATUS_KO: Record<string, string> = {
@@ -486,6 +522,7 @@ export function buildSystemPrompt(ctx: PromptContext): string {
   return TEMPLATE.replace("{{cat_profile}}", catProfileJson(ctx.cat, ctx.weights))
     .replace("{{cat_traits}}", traits)
     .replace("{{symptom_logs_90d}}", symptoms)
+    .replace("{{related_symptom_history}}", related)
     .replace("{{today_status}}", todayStatus)
     .replace("{{recent_daily_status}}", dailyHistory)
     .replace("{{important_notes}}", importantNote)

@@ -6,8 +6,9 @@
 
 import { loadDaily, loadDailyOn, STATUS_ITEMS } from "@/lib/dailyStatus";
 import { loadHealthNote } from "@/lib/healthNote";
-import { storage } from "@/lib/storage";
+import { storage, type SymptomLog } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
+import { extractSymptomTags } from "@/lib/symptomTags";
 import { MockLlmAdapter } from "./mock";
 import type { LlmAdapter, LlmChunkedResponse, LlmRequest } from "./types";
 import type { KbRefBrief } from "@/lib/kb/retrieve";
@@ -64,6 +65,17 @@ function recentDailyHistory(
   return out;
 }
 
+/**
+ * 지금 질문과 **같은 증상 태그**를 가진 과거 기록 (P0-5, 지시서 7항).
+ * 새 검색 시스템을 만들지 않는다 — 질문에서 태그를 뽑는 기존 함수와 이미 구조화된
+ * tags[]의 교집합이면 "저번에도 그랬나"에 답하기 충분하다.
+ */
+function relatedSymptomsFor(question: string, symptoms: SymptomLog[]): SymptomLog[] {
+  const asked = extractSymptomTags(question);
+  if (asked.length === 0) return [];
+  return symptoms.filter((s) => s.tags.some((t) => asked.includes(t)));
+}
+
 async function* streamBody(body: ReadableStream<Uint8Array>): AsyncIterable<string> {
   const reader = body.getReader();
   const decoder = new TextDecoder();
@@ -115,12 +127,15 @@ export class RemoteLlmAdapter implements LlmAdapter {
           cat: req.cat,
           traits,
           symptoms,
+          // 같은 태그의 과거 기록을 앞에 놓는다 (P0-5) — 전체를 훑게 하지 않는다
+          relatedSymptoms: relatedSymptomsFor(req.question, symptoms),
           // 오늘 상태 기록 — 히스토리 섹션이 "기록 없음"이라고 뭉뚱그리지 않게 (QA #4)
           todayStatus: loadDaily(req.cat.id),
           // 지난 7일 상태 이력 + 꼭 기억할 것 (P0-5) — 냥박사가 변화를 짚을 재료
           dailyHistory: recentDailyHistory(req.cat.id),
           importantNote: loadHealthNote(req.cat.id) || undefined,
-          weights: weights.slice(-12),
+          // 체중은 최근 3개 (지시서 8항) — 점 2개로 장기 추세를 말하지 않게 프롬프트가 막는다
+          weights: weights.slice(-3),
           otherCatNames,
           history: req.history,
           question: req.question,

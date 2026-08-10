@@ -90,12 +90,13 @@ function ManualLog() {
 
   /*
    * 저장 완료 — 냥박사 연결 CTA (P0-4).
-   * 질문을 다시 타이핑하게 하지 않는다: 기록 요약을 질문으로 미리 채운다.
-   * 방금 저장한 기록 자체는 <recent_symptom_logs>로 프롬프트에 이미 들어간다.
+   *
+   * 질문에는 **무엇에 대해 묻는지만** 담는다. 증상 본문(메모)을 q에 복사해 보내면
+   * 같은 내용이 질문과 <recent_symptom_logs> 양쪽에 실려 모델이 두 사건으로 읽는다.
+   * 실제 데이터는 프롬프트가 기록에서 읽는다 (지시서 P0 6항).
    */
   if (saved) {
-    const memoPart = memo.trim() ? ` (${memo.trim().slice(0, 80)})` : "";
-    const q = `방금 ${saved.tags.join("·")} 증상을 기록했어요${memoPart}. 어떻게 지켜보면 될까요?`;
+    const q = `방금 기록한 ${cat.name}의 ${saved.tags.join("·")}, 기존 기록과 같이 봐줘`;
     return (
       <main className="flex flex-1 flex-col items-center justify-center gap-3 px-6 pb-nav text-center">
         <Mascot mood="complete" size={92} />

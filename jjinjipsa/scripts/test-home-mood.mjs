@@ -41,22 +41,53 @@ const CASES = [
     { meal: ["unknown", "기록하지 않음"] }, false, 14, "cloudy", 0],
 ];
 
+/*
+ * 문구 분기 (지시서 P0 4항) — "오늘은 평소와 비슷해요"는 4항목을 다 기록하고
+ * 이상값이 없을 때만 나와야 한다. 기록 안 한 항목을 정상으로 읽히게 하면 안 된다.
+ * [설명, record, weightNeedsVisit, sub에 있어야 할 것, sub에 없어야 할 것]
+ */
+const N = ["normal", "평소와 같아요"];
+const COPY_CASES = [
+  ["기록 전 → 안내 문구", {}, false, "기록을 남기면", "평소와 비슷"],
+  ["2/4만 기록 → '평소와 비슷' 금지",
+    { meal: N, water: N }, false, "비어 있어요", "평소와 비슷해요"],
+  ["3/4 기록 → 아직 '평소와 비슷' 금지",
+    { meal: N, water: N, toilet: N }, false, "1개 항목", "평소와 비슷해요"],
+  ["4/4 정상 → '오늘은 평소와 비슷해요'",
+    { meal: N, water: N, toilet: N, activity: N }, false, "오늘은 평소와 비슷해요", "비어 있어요"],
+  ["4/4지만 주의 있음 → 이상 항목을 짚는다",
+    { meal: ["warning", "평소보다 적어요"], water: N, toilet: N, activity: N },
+    false, "식사 기록이 평소와 달라요", "평소와 비슷해요"],
+  ["4/4 정상이지만 체중 경고 → 체중을 짚는다",
+    { meal: N, water: N, toilet: N, activity: N }, true, "체중을 살펴봐", "오늘은 평소와 비슷해요"],
+];
+
 const src = `
 import { computeHome } from "./lib/homeMood.ts";
 const cases = ${JSON.stringify(CASES)};
+const copyCases = ${JSON.stringify(COPY_CASES)};
+const toRecord = (rec) => Object.fromEntries(
+  Object.entries(rec).map(([k, [level, label]]) => [k, { level, label }]),
+);
 let fail = 0;
 for (const [name, rec, weightNeedsVisit, hour, expMood, expRecorded] of cases) {
-  const record = Object.fromEntries(
-    Object.entries(rec).map(([k, [level, label]]) => [k, { level, label }]),
-  );
   const now = new Date(2026, 7, 9, hour, 0, 0);
-  const v = computeHome({ record, weightNeedsVisit, now });
+  const v = computeHome({ record: toRecord(rec), weightNeedsVisit, now });
   const ok = v.mood.id === expMood && v.recorded === expRecorded;
   if (!ok) fail++;
   console.log((ok ? "  OK  " : "  FAIL") + " " + name + " → " + v.mood.id + " / " + v.recorded +
     (ok ? "" : " (기대: " + expMood + " / " + expRecorded + ")"));
 }
-console.log("\\n총 " + cases.length + "건 중 실패 " + fail + "건");
+console.log("\\n── 문구 분기 ──");
+for (const [name, rec, weightNeedsVisit, must, mustNot] of copyCases) {
+  const now = new Date(2026, 7, 9, 14, 0, 0);
+  const v = computeHome({ record: toRecord(rec), weightNeedsVisit, now });
+  const ok = v.sub.includes(must) && !v.sub.includes(mustNot);
+  if (!ok) fail++;
+  console.log((ok ? "  OK  " : "  FAIL") + " " + name + " → \\"" + v.sub + "\\" / " + v.statusLine);
+}
+const total = cases.length + copyCases.length;
+console.log("\\n총 " + total + "건 중 실패 " + fail + "건");
 if (fail > 0) process.exit(1);
 `;
 

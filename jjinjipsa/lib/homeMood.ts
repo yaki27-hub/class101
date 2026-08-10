@@ -269,6 +269,8 @@ export interface HomeView {
   mood: Mood;
   /** 오늘 기록한 항목 수 (0~4). 0 = 아직 기록 전 */
   recorded: number;
+  /** 히어로 알약 문구 — "오늘 상태 3/4 기록했어요" */
+  statusLine: string;
   wit: string;
   sub: string;
   chipMeal: string;
@@ -319,17 +321,35 @@ export function computeHome(input: HomeInput): HomeView {
   const ITEM_KO: Record<string, string> = {
     meal: "식사", water: "음수", toilet: "화장실", activity: "활동",
   };
-  const sub =
-    recorded === 0
-      ? "기록을 남기면 오늘의 무드가 채워져요"
-      : entries
-          .slice(0, 3)
-          .map((x) => `${ITEM_KO[x.key]} ${CHIP_SHORT[x.e.label] ?? x.e.label}`)
-          .join(" · ") + (input.weightNeedsVisit ? " · 체중 살펴보기" : "");
+  /*
+   * 요약 한 줄 — "오늘은 평소와 비슷해요"는 **4항목을 다 기록했고 이상값이 없을 때만**
+   * 쓴다. 두 항목만 적고 나머지를 안 적은 날을 "평소와 비슷"이라고 부르면, 기록하지 않은
+   * 것을 정상이라고 말하는 셈이 된다 (지시서 '절대 하지 말 것' 4항).
+   * 우선순위: 이상값 > 체중 경고 > 미입력 > 정상.
+   */
+  const abnormal = entries.filter(
+    (x) => x.e.level === "warning" || x.e.level === "danger",
+  );
+  let sub: string;
+  if (recorded === 0) {
+    sub = "기록을 남기면 오늘 상태를 한눈에 볼 수 있어요";
+  } else if (abnormal.length > 0) {
+    sub = `${abnormal.map((x) => ITEM_KO[x.key]).join(" · ")} 기록이 평소와 달라요`;
+  } else if (input.weightNeedsVisit) {
+    sub = "기록은 평소와 비슷해요 · 체중을 살펴봐 주세요";
+  } else if (recorded < RECORD_TOTAL) {
+    sub = `${RECORD_TOTAL - recorded}개 항목이 아직 비어 있어요`;
+  } else {
+    sub = "오늘은 평소와 비슷해요";
+  }
 
   return {
     mood,
     recorded,
+    statusLine:
+      recorded === 0
+        ? "오늘 상태 기록 전이에요"
+        : `오늘 상태 ${recorded}/${RECORD_TOTAL} 기록했어요`,
     wit: recorded === 0 ? "오늘은 어떤 하루였나요?" : witOf(mood),
     sub,
     chipMeal: chip("meal"),
@@ -340,10 +360,13 @@ export function computeHome(input: HomeInput): HomeView {
 
 /** ?mood= 미리보기 — 시안 더미 값 그대로 (개발·시연용) */
 export function previewHome(mood: Mood): HomeView {
+  // 미리보기 더미 — sunny·night는 다 채운 날, cloudy는 반쯤 기록한 날의 모습
+  const recorded =
+    mood.id === "cloudy" ? 2 : mood.id === "sunny" || mood.id === "night" ? 4 : 3;
   return {
     mood,
-    // 미리보기 더미 — sunny·night는 다 채운 날, cloudy는 반쯤 기록한 날의 모습
-    recorded: mood.id === "cloudy" ? 2 : mood.id === "sunny" || mood.id === "night" ? 4 : 3,
+    recorded,
+    statusLine: `오늘 상태 ${recorded}/${RECORD_TOTAL} 기록했어요`,
     wit: witOf(mood),
     sub: mood.sub,
     chipMeal: mood.chipMeal,

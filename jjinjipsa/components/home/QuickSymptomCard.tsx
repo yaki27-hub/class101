@@ -10,6 +10,12 @@
 
 import { useRouter } from "next/navigation";
 
+/*
+ * 화면 문구(label)와 저장되는 태그(tag)는 **분리한다** (지시서 P0 5항).
+ * label은 집사가 읽기 쉬운 말로 바꿔도 되지만, tag는 lib/symptomTags의 기존
+ * tags[] 명칭 그대로여야 한다 — 태그가 바뀌면 과거 기록과 매칭이 끊기고
+ * 냥박사의 "저번에도 그랬나"가 침묵한다.
+ */
 const ACTIONS: Array<{ label: string; tag: string | null }> = [
   { label: "구토", tag: "구토" },
   { label: "식욕 저하", tag: "식욕 변화" },
