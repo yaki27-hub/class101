@@ -1,13 +1,13 @@
 "use client";
 
 /*
- * 건강 기록 탭 — 선택 고양이의 오늘 상태 + 건강 카드(공유) + 증상 기록 목록.
+ * 건강 기록 탭 — 선택 고양이의 오늘 상태 + 진료 준비 카드(공유) + 증상 기록 목록.
  * 기록 추가를 탭 안에서 바로 할 수 있게 한다(이전엔 우리 아이→상세까지 들어가야 했음).
  */
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { storage, type Cat, type SymptomLog } from "@/lib/storage";
+import { storage, type Cat, type SymptomLog, type WeightLog } from "@/lib/storage";
 import { resolveSelectedCat, setSelectedCatId } from "@/lib/selectedCat";
 import { loadDaily, type DailyRecord } from "@/lib/dailyStatus";
 import { IconRecord, IconTrash } from "@/components/icons";
@@ -29,6 +29,8 @@ export default function Records() {
   const [rows, setRows] = useState<{ cat: Cat; log: SymptomLog }[] | null>(null);
   const [today, setToday] = useState<{ cat: Cat; record: DailyRecord } | null>(null);
   const [note, setNote] = useState("");
+  /** 선택 고양이의 체중 기록 — 진료 준비 카드의 체중 줄 (P1-4) */
+  const [weights, setWeights] = useState<WeightLog[]>([]);
   /** 등록 순서 기반 고양이별 색 (같은 화면에서 색 중복 없음) */
   const [accents, setAccents] = useState<Record<string, CatAccent>>({});
   const [pickOpen, setPickOpen] = useState(false);
@@ -49,7 +51,10 @@ export default function Records() {
     setRows(all);
     const sel = await resolveSelectedCat();
     setToday(sel ? { cat: sel, record: loadDaily(sel.id) } : null);
-    if (sel) setNote(loadHealthNote(sel.id));
+    if (sel) {
+      setNote(loadHealthNote(sel.id));
+      setWeights(await storage.listWeights(sel.id).catch(() => []));
+    }
   }
 
   useEffect(() => {
@@ -82,10 +87,11 @@ export default function Records() {
       note,
       today.record,
       todayLogs.map((r) => r.log),
+      weights,
     );
     try {
       if (navigator.share)
-        await navigator.share({ title: `${today.cat.name} 건강 카드`, text });
+        await navigator.share({ title: `${today.cat.name} 진료 준비 카드`, text });
       else {
         await navigator.clipboard.writeText(text);
         showToast("요약을 복사했어요");
@@ -109,8 +115,8 @@ export default function Records() {
     setBusy(true);
     const r = await shareNodeAsImage(
       node,
-      `${today.cat.name}_건강카드.png`,
-      `${today.cat.name} 건강 카드`,
+      `${today.cat.name}_진료준비카드.png`,
+      `${today.cat.name} 진료 준비 카드`,
     );
     if (r === "downloaded") showToast("이미지를 저장했어요");
     if (r === "failed") showToast("이미지 생성에 실패했어요");
@@ -133,15 +139,15 @@ export default function Records() {
         )}
       </div>
 
-      {/* 건강 카드 — 오늘 상태·최근 증상이 이 안에 모두 담긴다 (별도 요약 섹션 없음) */}
+      {/* 진료 준비 카드 — 기본 정보·체중·메모·오늘 상태·최근 30일 증상이 이 안에 모두 담긴다 */}
       {today && (
         <section className="space-y-2 pt-1">
           <div className="flex items-center justify-between px-1">
             <p className="text-[16px] font-extrabold tracking-[-0.02em] text-rd-ink">
-              건강 카드
+              진료 준비 카드
             </p>
             <span className="text-[12px] font-semibold text-rd-muted">
-              병원·펫시터에게 한 장으로
+              병원 갈 때 이 한 장만
             </span>
           </div>
           <HealthCard
@@ -150,6 +156,7 @@ export default function Records() {
             note={note}
             record={today.record}
             logs={todayLogs.map((r) => r.log)}
+            weights={weights}
             dateStr={todayLabel()}
           />
           <div className="flex gap-2">

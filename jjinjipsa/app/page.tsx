@@ -21,6 +21,7 @@ import DoctorTipCard from "@/components/home/DoctorTipCard";
 import AdCard from "@/components/home/AdCard";
 import EmptyCatCard from "@/components/home/EmptyCatCard";
 import QuickSymptomCard from "@/components/home/QuickSymptomCard";
+import WeeklyReportCard from "@/components/home/WeeklyReportCard";
 import LoginBanner from "@/components/home/LoginBanner";
 import CatSelectorSheet from "@/components/home/CatSelectorSheet";
 import TodayStatusSheet from "@/components/home/TodayStatusSheet";
@@ -30,7 +31,8 @@ import { storage } from "@/lib/storage";
 import { analyzeWeights } from "@/lib/weightTrend";
 import { getCatAge } from "@/lib/catAge";
 import { loadDailyOn } from "@/lib/dailyStatus";
-import { loadRoutine, saveRoutine } from "@/lib/careRoutine";
+import { brushStreak, loadRoutine, saveRoutine } from "@/lib/careRoutine";
+import { MIN_RECORD_DAYS, WEEK_DAYS } from "@/lib/weeklyReport";
 import {
   buildCalendar,
   computeHome,
@@ -63,10 +65,23 @@ function Home() {
   );
   const searchParams = useSearchParams();
 
-  // 아이별 부가 데이터 — 루틴 토글, 체중 경고, 캘린더 기록일
+  /** 최근 7일 중 기록이 있는 날 — 주간 리포트 진입점 노출 조건 (P1-2) */
+  const [weekRecordedDays, setWeekRecordedDays] = useState(0);
+  /** 양치 연속 일수 (P1-3) */
+  const [streak, setStreak] = useState(0);
+
+  // 아이별 부가 데이터 — 루틴 토글, 체중 경고, 캘린더 기록일, 주간 기록일 수
   useEffect(() => {
     if (!cat) return;
     setRoutines(loadRoutine(cat.id));
+    setStreak(brushStreak(cat.id));
+    setWeekRecordedDays(
+      Array.from({ length: WEEK_DAYS }, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        return Object.keys(loadDailyOn(cat.id, d)).length > 0 ? 1 : 0;
+      }).reduce<number>((a, b) => a + b, 0),
+    );
     void storage
       .listWeights(cat.id)
       .then((w) => {
@@ -127,12 +142,23 @@ function Home() {
       <div className="relative z-[1] flex flex-col gap-3 rounded-t-3xl bg-rd-page px-4 pt-5.5 pb-nav">
         {/* 이상 기록 진입점 (P0-2) — 상태 기록 바로 아래, 핵심 루프의 분기점 */}
         <QuickSymptomCard catId={cat.id} />
+
+        {/* 주간 리포트 (P1-2) — 기록이 쌓였을 때만. 빈 리포트를 열게 하지 않는다 */}
+        {weekRecordedDays >= MIN_RECORD_DAYS && (
+          <WeeklyReportCard
+            catId={cat.id}
+            catName={cat.name}
+            recordedDays={weekRecordedDays}
+          />
+        )}
         <CareRoutineCard
           done={routines}
+          brushStreak={streak}
           onToggle={(i) => {
             const next = routines.map((v, j) => (j === i ? !v : v));
             setRoutines(next);
             saveRoutine(cat.id, next);
+            if (i === 0) setStreak(brushStreak(cat.id)); // 양치 토글 즉시 반영
           }}
         />
         <CareCalendarCard days={calendar.days} range={calendar.range} />

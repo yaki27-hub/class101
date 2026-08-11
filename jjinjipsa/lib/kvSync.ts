@@ -9,8 +9,24 @@
  * 0007 미적용·비로그인·localStorage 모드에서는 조용히 아무것도 하지 않는다.
  */
 
-import { supabase } from "@/lib/supabase";
-import { USE_SUPABASE } from "@/lib/storage";
+/*
+ * 동기화 플래그를 lib/storage에서 import하지 않고 env를 직접 읽는다.
+ * lib/storage는 Supabase 어댑터 전체를 끌고 오는데, 이 모듈은 dailyStatus·careRoutine
+ * 같은 "읽고 쓰기만 하는" 곳에서 import된다. 값의 정의는 lib/storage의 USE_SUPABASE와
+ * 같아야 한다 (같은 환경변수 — 바꿀 일이 생기면 둘 다 본다).
+ */
+const USE_SUPABASE = process.env.NEXT_PUBLIC_USE_SUPABASE === "1";
+
+/*
+ * supabase 클라이언트는 **쓸 때만** 불러온다.
+ * dailyStatus·careRoutine이 이 모듈을 import하는데, 최상위에서 supabase를 끌어오면
+ * "오늘 상태를 읽기만 하는" 경로까지 인증 클라이언트를 동반하게 된다
+ * (집계 로직 테스트가 supabase 해석에 걸려 넘어진 것도 같은 이유).
+ */
+async function client() {
+  const { supabase } = await import("@/lib/supabase");
+  return supabase;
+}
 
 /** 동기화 대상 키 접두사 — 이 밖의 로컬 키(캐시·플래그)는 올리지 않는다 */
 const SYNC_PREFIXES = [
@@ -30,9 +46,10 @@ export function pushKv(key: string): void {
   if (value === null) return;
   void (async () => {
     try {
-      const { data } = await supabase.auth.getUser();
+      const sb = await client();
+      const { data } = await sb.auth.getUser();
       if (!data.user) return;
-      await supabase.from("user_kv").upsert({
+      await sb.from("user_kv").upsert({
         user_id: data.user.id,
         key,
         value,
@@ -56,7 +73,8 @@ export async function hydrateKv(uid: string): Promise<void> {
   // 계정이 바뀌면 다시 내려받아야 하므로 uid를 플래그에 포함한다
   if (sessionStorage.getItem(HYDRATED_FLAG) === uid) return;
   try {
-    const { data, error } = await supabase.from("user_kv").select("key,value");
+    const sb = await client();
+    const { data, error } = await sb.from("user_kv").select("key,value");
     if (error) return; // 0007 미적용 등 — 조용히 통과
     for (const row of data ?? []) {
       if (syncable(row.key)) localStorage.setItem(row.key, row.value);
