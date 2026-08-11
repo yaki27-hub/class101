@@ -15,6 +15,7 @@ import { forwardRef } from "react";
 import { getCatAge } from "@/lib/catAge";
 import { STATUS_ITEMS, type DailyRecord } from "@/lib/dailyStatus";
 import { IconCat } from "@/components/icons";
+import { categoryMeta, type ImportantNote } from "@/lib/importantNotes";
 import type { Cat, SymptomLog, WeightLog } from "@/lib/storage";
 
 /** 진료 준비 카드가 훑는 기간 — 30일 (지시서 P1-4) */
@@ -29,9 +30,14 @@ const HealthCard = forwardRef<
     logs: SymptomLog[];
     /** 체중 기록 (오래된→최신). 최신값과 직전 대비 변화를 보여준다 */
     weights?: WeightLog[];
+    /** 꼭 기억할 것 카테고리 항목 (P1-5) — 자유 메모보다 먼저 나온다 */
+    notes?: ImportantNote[];
     dateStr: string;
   }
->(function HealthCard({ cat, note, record, logs, weights = [], dateStr }, ref) {
+>(function HealthCard(
+  { cat, note, record, logs, weights = [], notes = [], dateStr },
+  ref,
+) {
   const age = getCatAge(cat.birthDate);
   const todayItems = STATUS_ITEMS.map((it) => ({ it, v: record[it.key] })).filter(
     (x) => x.v,
@@ -127,8 +133,34 @@ const HealthCard = forwardRef<
           </div>
         )}
 
-        {/* 꼭 기억할 것 */}
-        {note.trim() && (
+        {/* 꼭 기억할 것 — 항목이 먼저 (복용약·알레르기를 접수대에서 먼저 본다) */}
+        {notes.length > 0 && (
+          <div className="rounded-[14px] border border-soft-pink bg-primary-soft p-3.5">
+            <p className="text-[12px] font-bold text-primary-deep">
+              📌 꼭 기억할 것
+            </p>
+            <ul className="mt-1.5 space-y-1">
+              {notes.map((n) => (
+                <li key={n.id} className="flex gap-1.5 text-[13px] leading-relaxed">
+                  <span className="flex-none font-semibold text-secondary">
+                    {categoryMeta(n.category).label}
+                  </span>
+                  <span className="min-w-0 whitespace-pre-wrap text-body">
+                    {n.content}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {note.trim() && (
+              <p className="mt-2 border-t border-soft-pink pt-2 whitespace-pre-wrap text-[12.5px] leading-relaxed text-body">
+                {note.trim()}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* 항목이 하나도 없을 때만 자유 메모를 단독으로 보여준다 */}
+        {notes.length === 0 && note.trim() && (
           <div className="rounded-[14px] border border-soft-pink bg-primary-soft p-3.5">
             <p className="text-[12px] font-bold text-primary-deep">
               📌 꼭 기억할 것 <span className="font-semibold">(복용약 · 알레르기 등)</span>

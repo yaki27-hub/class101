@@ -16,6 +16,7 @@ import CatAvatar from "@/components/CatAvatar";
 import BottomSheet from "@/components/BottomSheet";
 import HealthCard from "@/components/HealthCard";
 import { loadHealthNote, buildHealthText } from "@/lib/healthNote";
+import { loadNotes, type ImportantNote } from "@/lib/importantNotes";
 import { shareNodeAsImage } from "@/lib/shareImage";
 
 function todayLabel(): string {
@@ -31,6 +32,8 @@ export default function Records() {
   const [note, setNote] = useState("");
   /** 선택 고양이의 체중 기록 — 진료 준비 카드의 체중 줄 (P1-4) */
   const [weights, setWeights] = useState<WeightLog[]>([]);
+  /** 꼭 기억할 것 카테고리 항목 (P1-5) */
+  const [notes, setNotes] = useState<ImportantNote[]>([]);
   /** 등록 순서 기반 고양이별 색 (같은 화면에서 색 중복 없음) */
   const [accents, setAccents] = useState<Record<string, CatAccent>>({});
   const [pickOpen, setPickOpen] = useState(false);
@@ -53,6 +56,7 @@ export default function Records() {
     setToday(sel ? { cat: sel, record: loadDaily(sel.id) } : null);
     if (sel) {
       setNote(loadHealthNote(sel.id));
+      setNotes(loadNotes(sel.id));
       setWeights(await storage.listWeights(sel.id).catch(() => []));
     }
   }
@@ -88,6 +92,7 @@ export default function Records() {
       today.record,
       todayLogs.map((r) => r.log),
       weights,
+      notes,
     );
     try {
       if (navigator.share)
@@ -157,6 +162,7 @@ export default function Records() {
             record={today.record}
             logs={todayLogs.map((r) => r.log)}
             weights={weights}
+            notes={notes}
             dateStr={todayLabel()}
           />
           <div className="flex gap-2">

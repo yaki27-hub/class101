@@ -6,6 +6,7 @@
 import { getCatAge } from "@/lib/catAge";
 import { STATUS_ITEMS, type DailyRecord } from "@/lib/dailyStatus";
 import { pushKv } from "@/lib/kvSync";
+import { categoryMeta, type ImportantNote } from "@/lib/importantNotes";
 import type { Cat, SymptomLog, WeightLog } from "@/lib/storage";
 
 function noteKey(catId: string) {
@@ -31,6 +32,8 @@ export function buildHealthText(
   logs: SymptomLog[],
   /** 체중 기록 (오래된→최신) — 최신값과 직전 대비 변화를 넣는다 (P1-4) */
   weights: WeightLog[] = [],
+  /** 꼭 기억할 것 카테고리 항목 (P1-5) — 자유 메모보다 먼저 */
+  notes: ImportantNote[] = [],
 ): string {
   const age = getCatAge(cat.birthDate);
   const lines: string[] = [];
@@ -62,10 +65,13 @@ export function buildHealthText(
     lines.push(`· 체중: ${latestW.weightKg}kg (${latestW.measuredAt} 기준)${tail}`);
   }
 
-  if (note.trim()) {
+  if (notes.length > 0 || note.trim()) {
     lines.push("");
     lines.push("📌 꼭 기억할 것");
-    lines.push(note.trim());
+    for (const n of notes) {
+      lines.push(`· ${categoryMeta(n.category).label}: ${n.content.trim()}`);
+    }
+    if (note.trim()) lines.push(note.trim());
   }
 
   const today = STATUS_ITEMS.map((it) => {

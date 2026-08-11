@@ -6,6 +6,7 @@
 
 import { loadDaily, loadDailyOn, STATUS_ITEMS } from "@/lib/dailyStatus";
 import { loadHealthNote } from "@/lib/healthNote";
+import { formatNotesForPrompt, loadNotes } from "@/lib/importantNotes";
 import { storage, type SymptomLog } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 import { extractSymptomTags } from "@/lib/symptomTags";
@@ -133,7 +134,10 @@ export class RemoteLlmAdapter implements LlmAdapter {
           todayStatus: loadDaily(req.cat.id),
           // 지난 7일 상태 이력 + 꼭 기억할 것 (P0-5) — 냥박사가 변화를 짚을 재료
           dailyHistory: recentDailyHistory(req.cat.id),
-          importantNote: loadHealthNote(req.cat.id) || undefined,
+          // 카테고리 항목이 먼저, 자유 메모가 뒤 (P1-5)
+          importantNote:
+            formatNotesForPrompt(loadNotes(req.cat.id), loadHealthNote(req.cat.id)) ||
+            undefined,
           // 체중은 최근 3개 (지시서 8항) — 점 2개로 장기 추세를 말하지 않게 프롬프트가 막는다
           weights: weights.slice(-3),
           otherCatNames,

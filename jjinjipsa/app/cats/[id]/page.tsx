@@ -11,7 +11,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { storage, type Cat, type SymptomLog, type TraitAnswer } from "@/lib/storage";
+import { newId, storage, type Cat, type SymptomLog, type TraitAnswer } from "@/lib/storage";
 import { buildReport, TOTAL_QUESTIONS } from "@/lib/personality";
 import { CLOCK_SEGMENTS, getCatAge } from "@/lib/catAge";
 import { setSelectedCatId } from "@/lib/selectedCat";
@@ -22,6 +22,14 @@ import WeightSection from "@/components/WeightSection";
 import AdCard from "@/components/home/AdCard";
 import CatAvatar from "@/components/CatAvatar";
 import { loadHealthNote, saveHealthNote } from "@/lib/healthNote";
+import {
+  categoryMeta,
+  loadNotes,
+  saveNotes,
+  NOTE_CATEGORIES,
+  type ImportantNote,
+  type NoteCategory,
+} from "@/lib/importantNotes";
 import { IconChat, IconPencil } from "@/components/icons";
 
 /*
@@ -49,6 +57,14 @@ export default function CatDetailPage() {
   const [note, setNote] = useState("");
   const [noteOpen, setNoteOpen] = useState(false);
   const [noteDraft, setNoteDraft] = useState("");
+  /** 카테고리 항목 (P1-5) — 자유 메모와 별개로 쌓인다 */
+  const [notes, setNotes] = useState<ImportantNote[]>([]);
+  /** 편집 중인 항목. id가 없으면 새로 추가 */
+  const [editNote, setEditNote] = useState<{
+    id: string | null;
+    category: NoteCategory;
+    content: string;
+  } | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   // 오늘 상태는 홈이 소유한다 — 여기서는 한 줄 요약만 쓴다
   const { summary } = useTodayStatus(id);
@@ -61,6 +77,7 @@ export default function CatDetailPage() {
     void storage.listSymptoms(id).then(setLogs);
     void storage.listTraits(id).then(setTraits);
     setNote(loadHealthNote(id));
+    setNotes(loadNotes(id));
   }, [id]);
 
   function showToast(m: string) {
@@ -73,6 +90,34 @@ export default function CatDetailPage() {
     setNote(noteDraft.trim());
     setNoteOpen(false);
     showToast("메모를 저장했어요");
+  }
+
+  /** 항목 저장 — 내용이 비면 삭제로 본다 (삭제 버튼을 따로 두지 않는다) */
+  function commitNote() {
+    if (!editNote) return;
+    const content = editNote.content.trim();
+    let next: ImportantNote[];
+    if (!content) {
+      next = notes.filter((n) => n.id !== editNote.id);
+    } else if (editNote.id) {
+      next = notes.map((n) =>
+        n.id === editNote.id ? { ...n, category: editNote.category, content } : n,
+      );
+    } else {
+      next = [
+        ...notes,
+        {
+          id: newId(),
+          category: editNote.category,
+          content,
+          createdAt: new Date().toISOString(),
+        },
+      ];
+    }
+    saveNotes(id, next);
+    setNotes(loadNotes(id));
+    setEditNote(null);
+    showToast(content ? "저장했어요" : "항목을 지웠어요");
   }
 
   async function deleteCat() {
@@ -248,25 +293,81 @@ export default function CatDetailPage() {
           ))}
         </section>
 
-        {/* 꼭 기억할 것 — 이 아이 고유 정보라 상세가 소유한다 */}
+        {/* 꼭 기억할 것 — 이 아이 고유 정보라 상세가 소유한다 (P1-5: 카테고리 항목) */}
         <section className="rounded-3xl bg-rd-card p-5">
-          <div className="mb-2 flex items-center justify-between">
+          <div className="mb-1 flex items-center justify-between">
             <h2 className="text-[16px] font-extrabold tracking-[-0.02em] text-rd-ink">
               꼭 기억할 것
             </h2>
             <button
-              onClick={() => {
-                setNoteDraft(note);
-                setNoteOpen(true);
-              }}
+              onClick={() => setEditNote({ id: null, category: "medication", content: "" })}
               className="-my-2 -mr-2 flex min-h-11 items-center gap-1 px-2 text-[12px] font-bold text-rd-forest"
             >
-              <IconPencil size={13} /> {note ? "수정" : "추가"}
+              + 항목 추가
             </button>
           </div>
-          <p className="text-[13.5px] leading-[1.65] tracking-[-0.01em] whitespace-pre-wrap text-rd-body text-pretty">
-            {note || "알레르기, 복용 중인 약, 병원에 꼭 알려야 할 것을 적어두세요."}
+          <p className="text-[12.5px] text-rd-muted">
+            복용약·알레르기는 냥박사와 진료 준비 카드가 항상 먼저 참고해요.
           </p>
+
+          {notes.length > 0 && (
+            <ul className="mt-3 divide-y divide-rd-line-soft">
+              {notes.map((n) => {
+                const meta = categoryMeta(n.category);
+                return (
+                  <li key={n.id}>
+                    <button
+                      onClick={() =>
+                        setEditNote({ id: n.id, category: n.category, content: n.content })
+                      }
+                      className="flex w-full items-start gap-2.5 py-3 text-left active:opacity-70"
+                    >
+                      <span className="flex-none text-[15px]" aria-hidden>
+                        {meta.glyph}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[12px] font-bold text-rd-muted">
+                          {meta.label}
+                        </span>
+                        <span className="mt-0.5 block text-[13.5px] leading-[1.6] whitespace-pre-wrap text-rd-ink text-pretty">
+                          {n.content}
+                        </span>
+                      </span>
+                      <span aria-hidden className="mt-0.5 flex-none text-rd-faint">
+                        ›
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
+          {/* 자유 메모 — 항목으로 나누기 애매한 것들. 기존 데이터가 여기 그대로 남는다 */}
+          <div className="mt-3 rounded-2xl bg-rd-well p-3.5">
+            <div className="mb-1 flex items-center justify-between">
+              <p className="text-[12px] font-bold text-rd-muted">그 밖에 적어둔 것</p>
+              <button
+                onClick={() => {
+                  setNoteDraft(note);
+                  setNoteOpen(true);
+                }}
+                className="-my-2 -mr-2 flex min-h-11 items-center gap-1 px-2 text-[12px] font-bold text-rd-forest"
+              >
+                <IconPencil size={13} /> {note ? "수정" : "추가"}
+              </button>
+            </div>
+            <p className="text-[13px] leading-[1.6] whitespace-pre-wrap text-rd-body text-pretty">
+              {note || "이동장을 무서워해요, 낯선 사람 앞에서 숨어요 같은 메모."}
+            </p>
+          </div>
+
+          {notes.length === 0 && !note && (
+            <p className="mt-3 text-[12.5px] leading-relaxed text-rd-faint">
+              아직 적어둔 게 없어요. 복용 중인 약이나 알레르기부터 적어두면
+              상담이 훨씬 정확해져요.
+            </p>
+          )}
         </section>
 
         {/* 광고 자리 — 프로필 정보와 연동된 네이티브 카드 */}
@@ -335,6 +436,55 @@ export default function CatDetailPage() {
         >
           저장
         </button>
+      </BottomSheet>
+
+      {/* 항목 추가·수정 (P1-5) */}
+      <BottomSheet
+        open={editNote !== null}
+        onClose={() => setEditNote(null)}
+        title={editNote?.id ? "항목 수정" : "항목 추가"}
+      >
+        {editNote && (
+          <>
+            <div className="flex flex-wrap gap-1.5">
+              {NOTE_CATEGORIES.map((c) => {
+                const on = c.key === editNote.category;
+                return (
+                  <button
+                    key={c.key}
+                    onClick={() => setEditNote({ ...editNote, category: c.key })}
+                    className={`min-h-10 rounded-full px-3 text-[13px] font-semibold ${
+                      on
+                        ? "bg-rd-ink text-white"
+                        : "border border-rd-line bg-white text-rd-body"
+                    }`}
+                  >
+                    {c.glyph} {c.label}
+                  </button>
+                );
+              })}
+            </div>
+            <textarea
+              value={editNote.content}
+              onChange={(e) => setEditNote({ ...editNote, content: e.target.value })}
+              rows={3}
+              maxLength={200}
+              placeholder={categoryMeta(editNote.category).placeholder}
+              className="mt-3 w-full rounded-[14px] border border-rd-line bg-rd-page p-3 text-base leading-relaxed text-rd-ink focus:border-rd-ink focus:bg-white focus:outline-none"
+            />
+            <p className="mt-1.5 text-[11.5px] text-rd-faint">
+              {editNote.id
+                ? "내용을 비우고 저장하면 이 항목이 지워져요."
+                : "진단·처방은 수의사 몫이에요. 여기 적은 건 참고 메모로만 쓰여요."}
+            </p>
+            <button
+              onClick={commitNote}
+              className="mt-3 h-12 w-full rounded-[14px] bg-rd-ink text-sm font-bold text-white"
+            >
+              저장
+            </button>
+          </>
+        )}
       </BottomSheet>
 
       {toast && (

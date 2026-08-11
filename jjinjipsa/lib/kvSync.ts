@@ -33,6 +33,7 @@ const SYNC_PREFIXES = [
   "jjinjipsa:daily:",
   "jjinjipsa:routine:",
   "jjinjipsa:healthnote:",
+  "jjinjipsa:notes:", // 꼭 기억할 것 카테고리 항목 (P1-5)
 ];
 
 function syncable(key: string): boolean {
