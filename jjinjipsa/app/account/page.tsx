@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { storage } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
+import { resolveAccountEmail } from "@/lib/auth/kakao";
 import { IconCat } from "@/components/icons";
 
 const APP_VERSION = "v1.0 (오픈 테스트)";
@@ -38,14 +39,8 @@ export default function AccountPage() {
        * 이메일은 반드시 찾아서 보여준다 — 카카오 계정이 여러 개면 이 화면이
        * "지금 어느 계정인가"를 확인할 유일한 곳이다 (실사례: 재로그인 때 카카오가
        * 다른 계정으로 자동 진입 → 기록이 초기화된 것처럼 보임).
-       * 카카오는 u.email을 비워 두고 identity_data로만 이메일을 주는 경우가 있다.
        */
-      const kakao = u?.identities?.find((i) => i.provider === "kakao");
-      const email =
-        u?.email ||
-        (kakao?.identity_data?.email as string | undefined) ||
-        ((u?.user_metadata?.email as string | undefined) ?? null);
-      setAuth({ linked, nick, email, avatarUrl });
+      setAuth({ linked, nick, email: resolveAccountEmail(u), avatarUrl });
     });
   }, []);
 

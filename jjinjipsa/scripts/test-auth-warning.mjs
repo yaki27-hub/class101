@@ -1,10 +1,15 @@
 /*
- * 게스트 기록 유실 경고 판정 테스트 — lib/auth/kakao.ts shouldWarnBeforeKakao
+ * 계정 경고 판정 테스트 — lib/auth/kakao.ts
  *
- * 이 규칙이 흔들리면 둘 중 하나가 된다:
- *  - 너무 자주 물으면(잃을 게 없는데 경고) 로그인 앞에 겁주는 벽이 생기고,
- *  - 너무 안 물으면(잃을 게 있는데 조용히 진행) "로그인했더니 기록이 사라졌다"가 된다.
- * 후자가 훨씬 나쁘므로, 모르는 상태에서는 경고하는 쪽으로 기울인다.
+ * 1) shouldWarnBeforeKakao (게스트 기록 유실 경고)
+ *    이 규칙이 흔들리면 둘 중 하나가 된다:
+ *     - 너무 자주 물으면(잃을 게 없는데 경고) 로그인 앞에 겁주는 벽이 생기고,
+ *     - 너무 안 물으면(잃을 게 있는데 조용히 진행) "로그인했더니 기록이 사라졌다"가 된다.
+ *    후자가 훨씬 나쁘므로, 모르는 상태에서는 경고하는 쪽으로 기울인다.
+ *
+ * 2) classifyAccountSwitch (계정 바뀜 경고)
+ *    카카오가 재로그인 때 다른 계정으로 자동 진입하는 사고를 잡는다.
+ *    익명 uid는 기기마다 갈리는 값이라 비교하면 항상 "바뀜"이 되므로 뺀다.
  *
  * 실행: npm run test:authwarn
  */
@@ -27,18 +32,35 @@ const CASES = [
     { isAnonymous: true, catCount: 1, linkUnavailable: true }, true],
 ];
 
+/** [설명, 입력, 기대] — classifyAccountSwitch */
+const SWITCH_CASES = [
+  ["익명 세션은 비교하지 않는다 (uid가 기기마다 갈린다)",
+    { isAnonymous: true, prevUid: "aaa", uid: "bbb" }, "guest"],
+  ["이 기기 첫 정식 로그인 → 기록만 한다 (경고 없음)",
+    { isAnonymous: false, prevUid: null, uid: "aaa" }, "first"],
+  ["같은 계정 재로그인 → 조용히 통과",
+    { isAnonymous: false, prevUid: "aaa", uid: "aaa" }, "same"],
+  ["다른 계정으로 들어옴 → 경고 (달이 체크 증발 사례)",
+    { isAnonymous: false, prevUid: "aaa", uid: "bbb" }, "switched"],
+];
+
 const src = `
-import { shouldWarnBeforeKakao } from "./lib/auth/kakao.ts";
+import { shouldWarnBeforeKakao, classifyAccountSwitch } from "./lib/auth/kakao.ts";
 const cases = ${JSON.stringify(CASES)};
+const switchCases = ${JSON.stringify(SWITCH_CASES)};
 let fail = 0;
-for (const [name, input, expected] of cases) {
-  const got = shouldWarnBeforeKakao(input);
+const check = (name, got, expected) => {
   const ok = got === expected;
   if (!ok) fail++;
   console.log((ok ? "  OK  " : "  FAIL") + " " + name +
     (ok ? "" : " (기대: " + expected + ", 실제: " + got + ")"));
-}
-console.log("\\n총 " + cases.length + "건 중 실패 " + fail + "건");
+};
+for (const [name, input, expected] of cases)
+  check(name, shouldWarnBeforeKakao(input), expected);
+for (const [name, input, expected] of switchCases)
+  check(name, classifyAccountSwitch(input), expected);
+const total = cases.length + switchCases.length;
+console.log("\\n총 " + total + "건 중 실패 " + fail + "건");
 if (fail > 0) process.exit(1);
 `;
 

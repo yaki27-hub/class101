@@ -11,6 +11,7 @@
 
 import { supabase } from "@/lib/supabase";
 import { storage } from "@/lib/storage";
+import type { User } from "@supabase/supabase-js";
 
 export type KakaoSignInResult =
   | { ok: true; mode: "linked" | "signed-in" }
@@ -233,4 +234,82 @@ export async function recoverFromOAuthError(): Promise<OAuthRecovery> {
 /** 로그인에 성공했으면 재시도 플래그를 비운다 (링크 불가 표시는 사실이므로 유지) */
 export function clearSignInRetryFlag(): void {
   if (typeof window !== "undefined") sessionStorage.removeItem(RETRY_FLAG);
+}
+
+/* ────────────────────────────────────────────────────────────────
+ * 계정 바뀜 감지
+ *
+ * 카카오는 브라우저에 카카오계정 세션이 남아 있으면 계정 선택 화면 없이
+ * 그 계정으로 바로 로그인시킨다. 카카오 계정이 여러 개인 집사가 로그아웃 후
+ * 다시 로그인하면 **다른 계정으로 조용히 들어와서**, 고양이는 같은 이름으로
+ * 보이는데 기록만 사라진 것처럼 보인다 (실사례: 오늘 상태 체크 증발 —
+ * 실은 아침 계정과 재로그인 계정이 달랐다).
+ *
+ * 그래서 이 기기의 마지막 정식 로그인 계정을 기억해 두고, 다른 계정으로
+ * 들어오면 알린다. 막지는 않는다 — 일부러 계정을 바꾸는 경우도 있다.
+ * ──────────────────────────────────────────────────────────────── */
+
+/** 이 기기의 마지막 정식 로그인 (localStorage — 로그아웃해도 남는다. 탈퇴 시엔 함께 지워진다) */
+const LAST_ACCOUNT = "jjinjipsa:lastAccount";
+
+type LastAccount = { uid: string; email: string | null };
+
+export type AccountSwitch = "guest" | "first" | "same" | "switched";
+
+/**
+ * 지난 로그인과 비교한다 (순수 함수 — scripts/test-auth-warning.mjs가 고정한다).
+ * 익명 세션은 비교 대상이 아니다 — 익명 uid는 기기·브라우저마다 갈리는 값이라
+ * "바뀌었다"가 아무 정보도 주지 않는다.
+ */
+export function classifyAccountSwitch(input: {
+  isAnonymous: boolean;
+  prevUid: string | null;
+  uid: string;
+}): AccountSwitch {
+  if (input.isAnonymous) return "guest";
+  if (!input.prevUid) return "first";
+  return input.prevUid === input.uid ? "same" : "switched";
+}
+
+/**
+ * 표시용 이메일 — 카카오는 u.email을 비워 두고 identity_data로만 주는 경우가
+ * 있어서 세 곳을 순서대로 본다 (설정 화면과 같은 규칙).
+ */
+export function resolveAccountEmail(u: User | null): string | null {
+  if (!u) return null;
+  const kakao = u.identities?.find((i) => i.provider === "kakao");
+  return (
+    u.email ||
+    ((kakao?.identity_data?.email as string | undefined) || null) ||
+    ((u.user_metadata?.email as string | undefined) || null)
+  );
+}
+
+/**
+ * 정식 로그인을 이 기기에 기록하고, 지난번과 다른 계정이면 알려준다.
+ * 반환이 null이 아니면 화면(AuthGate)이 경고를 띄운다.
+ */
+export function noteAccountSwitch(
+  u: User | null,
+): { prevEmail: string | null; email: string | null } | null {
+  if (typeof window === "undefined" || !u || u.is_anonymous !== false) return null;
+  let prev: LastAccount | null = null;
+  try {
+    const raw = localStorage.getItem(LAST_ACCOUNT);
+    prev = raw ? (JSON.parse(raw) as LastAccount) : null;
+  } catch {
+    prev = null; // 깨진 값은 첫 로그인처럼 다룬다 — 기록만 하고 경고하지 않는다
+  }
+  const email = resolveAccountEmail(u);
+  const cls = classifyAccountSwitch({
+    isAnonymous: false,
+    prevUid: prev?.uid ?? null,
+    uid: u.id,
+  });
+  try {
+    localStorage.setItem(LAST_ACCOUNT, JSON.stringify({ uid: u.id, email }));
+  } catch {
+    /* 기록을 못 남기면 다음 로그인 때 경고를 못 할 뿐 — 화면을 막지 않는다 */
+  }
+  return cls === "switched" ? { prevEmail: prev?.email ?? null, email } : null;
 }

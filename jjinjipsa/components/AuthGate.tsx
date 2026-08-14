@@ -15,9 +15,11 @@ import { hydrateKv } from "@/lib/kvSync";
 import { trackOncePerDay } from "@/lib/analytics";
 import {
   clearSignInRetryFlag,
+  noteAccountSwitch,
   recoverFromOAuthError,
   signInWithKakao,
 } from "@/lib/auth/kakao";
+import type { User } from "@supabase/supabase-js";
 import GuestDataWarning from "@/components/auth/GuestDataWarning";
 
 /**
@@ -81,7 +83,11 @@ export default function AuthGate({
   useEffect(() => {
     if (!USE_SUPABASE) return;
     let done = false;
-    const run = async (uid: string) => {
+    const run = async (user: User) => {
+      const uid = user.id;
+      // 계정 바뀜 감지는 먼저 하되(기록을 빨리 남긴다), 토스트는 이관 안내 뒤에
+      // 띄운다 — 하나만 보여줄 수 있다면 "다른 계정입니다"가 더 중요한 쪽이다
+      const sw = noteAccountSwitch(user);
       try {
         const r = await migrateLocalToServer(uid);
         if (r.ran && (r.cats || r.failed)) {
@@ -102,6 +108,14 @@ export default function AuthGate({
         await hydrateKv(uid);
         // 리텐션의 기준선 — "그날 앱을 열었는가" 하루 한 번 (0008, docs/지표.md)
         trackOncePerDay("app_open");
+        // 계정 바뀜 경고 (lib/auth/kakao 주석) — "기록이 사라졌다"고 느끼기 전에 이유를 보여준다
+        if (sw) {
+          setNotice(
+            `지난번${sw.prevEmail ? `(${sw.prevEmail})` : ""}과 다른 카카오 계정으로 로그인했어요${
+              sw.email ? ` — ${sw.email}` : ""
+            }. 이전 기록이 안 보이면 설정에서 계정을 확인해 주세요.`,
+          );
+        }
       } catch (e) {
         // 실패해도 화면은 열어준다 — 완료 표시를 안 남기므로 다음 실행에 재시도한다
         console.warn("[migrate] 실패 — 다음 실행에 재시도", e);
@@ -114,12 +128,12 @@ export default function AuthGate({
     };
 
     void supabase.auth.getUser().then(({ data }) => {
-      if (data.user) void run(data.user.id);
+      if (data.user) void run(data.user);
       else setMigrating(false); // 아직 세션이 없으면 아래 onAuthStateChange가 받는다
     });
     // 카카오 승격 직후에도 한 번 더 (uid가 그대로여도 세션 교체 시점을 놓치지 않게)
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (session?.user) void run(session.user.id);
+      if (session?.user) void run(session.user);
     });
     // 서버가 느리거나 응답이 없어도 화면이 영원히 막히지 않게 상한을 둔다
     const timer = setTimeout(() => {
