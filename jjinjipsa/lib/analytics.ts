@@ -107,6 +107,24 @@ export function buildEvent(
   return { name: name as EventName, props: sanitizeProps(props), day };
 }
 
+/** 실제 전송 — 성공했으면 true. 던지지 않는다 */
+async function send(row: AnalyticsRow): Promise<boolean> {
+  try {
+    const { supabase } = await import("@/lib/supabase");
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) return false; // 세션 전이면 버린다 (RLS가 uid를 요구한다)
+    const { error } = await supabase.from("analytics_events").insert({
+      user_id: data.user.id,
+      name: row.name,
+      props: row.props,
+      day: row.day,
+    });
+    return !error;
+  } catch {
+    return false; // 0008 미적용·오프라인 등 — 지표는 화면보다 중요하지 않다
+  }
+}
+
 /**
  * 이벤트 한 줄 기록 (fire-and-forget).
  *
@@ -118,36 +136,48 @@ export function track(name: EventName, props?: EventProps): void {
   if (!USE_SUPABASE || typeof window === "undefined") return;
   const row = buildEvent(name, props);
   if (!row) return;
-  void (async () => {
-    try {
-      const { supabase } = await import("@/lib/supabase");
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) return; // 세션 전이면 이번 건은 버린다 (RLS가 uid를 요구한다)
-      await supabase.from("analytics_events").insert({
-        user_id: data.user.id,
-        name: row.name,
-        props: row.props,
-        day: row.day,
-      });
-    } catch {
-      // 0008 미적용·오프라인 등 — 지표는 화면보다 중요하지 않다
-    }
-  })();
+  void send(row);
 }
 
 /**
+ * 하루 한 번만 보내는 이벤트 표시 — 날짜별 플래그를 쌓지 않고 마지막 성공일 하나만 든다.
+ *
+ * 키 이름이 `sent`인 이유: 이전 구현은 보내기 **전에** `once:` 키를 찍어서,
+ * 전송이 실패한 날도 "보냈다"로 남았다 (0008 적용 전에 앱을 연 사용자의
+ * app_open이 통째로 유실됨 — 실제로 발생). 그 신뢰 못 할 플래그를 다시 읽지
+ * 않으려고 키를 갈았다.
+ */
+const sentKey = (name: EventName) => `jjinjipsa:analytics:sent:${name}`;
+
+/** 이 탭에서 전송 중인 이벤트 — 성공 확인 전에 중복으로 나가지 않게 */
+const inFlight = new Set<string>();
+
+/**
  * 하루 한 번만 (app_open처럼 "그날 열었는가"를 세는 이벤트용).
- * 날짜별 플래그를 쌓지 않고 마지막 기록일 하나만 들고 있는다.
+ *
+ * **성공했을 때만** 오늘 보냈다고 표시한다. 실패한 날을 보냈다고 적으면 그
+ * 사용자의 그날 리텐션이 사라지는데, 리텐션은 이 수집의 존재 이유라 그게 제일 아프다.
+ * 실패하면 표시를 남기지 않으므로 다음 진입에서 다시 시도한다.
  */
 export function trackOncePerDay(name: EventName, props?: EventProps): void {
   if (!USE_SUPABASE || typeof window === "undefined") return;
-  const key = `jjinjipsa:analytics:once:${name}`;
-  const today = todayKey();
+  const row = buildEvent(name, props);
+  if (!row) return;
+  if (inFlight.has(name)) return;
   try {
-    if (localStorage.getItem(key) === today) return;
-    localStorage.setItem(key, today);
+    if (localStorage.getItem(sentKey(name)) === row.day) return;
   } catch {
     return; // 저장이 막힌 환경이면 중복을 보내느니 거른다
   }
-  track(name, props);
+  inFlight.add(name);
+  void send(row).then((ok) => {
+    if (ok) {
+      try {
+        localStorage.setItem(sentKey(name), row.day);
+      } catch {
+        /* 표시를 못 남기면 다음 진입에 한 번 더 갈 뿐이다 */
+      }
+    }
+    inFlight.delete(name);
+  });
 }
