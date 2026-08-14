@@ -11,12 +11,22 @@
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { newId, storage, type Cat, type TraitAnswer } from "@/lib/storage";
+import { loadHealthNote } from "@/lib/healthNote";
+import { loadNotes } from "@/lib/importantNotes";
+import {
+  checkReadiness,
+  collectEvidenceTexts,
+  LOOKBACK_DAYS,
+  type Readiness,
+} from "@/lib/reportReadiness";
+import { loadDailyOn } from "@/lib/dailyStatus";
 import { todayStr } from "@/lib/dailyCheck";
 import {
   buildReport,
   summarize,
   traitKey,
   GRADE_STYLE,
+  PERSONALITY_QUESTIONS,
   TOTAL_QUESTIONS,
   type PersonalityQuestion,
 } from "@/lib/personality";
@@ -31,6 +41,13 @@ export default function ReportPage() {
   const [traits, setTraits] = useState<TraitAnswer[] | null>(null);
   const [editing, setEditing] = useState<PersonalityQuestion | null>(null);
   const [busy, setBusy] = useState(false);
+  /** 초안 제안 (P2-1) — 집사가 쓴 문장에서 뽑은 것. 적용 전에는 저장하지 않는다 */
+  const [readiness, setReadiness] = useState<Readiness | null>(null);
+  const [evidence, setEvidence] = useState<string[]>([]);
+  const [drafts, setDrafts] = useState<
+    Array<{ key: string; label: string; evidence: string }> | null
+  >(null);
+  const [drafting, setDrafting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +55,77 @@ export default function ReportPage() {
     void storage.getCat(id).then(setCat);
     void storage.listTraits(id).then(setTraits);
   }, [id]);
+
+  // 준비 상태 + 초안 근거 — 집사가 쓴 문장만 모은다 (건강 수치는 넣지 않는다)
+  useEffect(() => {
+    void (async () => {
+      let recordDays = 0;
+      for (let i = 0; i < LOOKBACK_DAYS; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        if (Object.keys(loadDailyOn(id, d)).length > 0) recordDays++;
+      }
+      const [symptoms, sessions] = await Promise.all([
+        storage.listSymptoms(id).catch(() => []),
+        storage.listSessions(id).catch(() => []),
+      ]);
+      const chatQuestions: string[] = [];
+      for (const s of sessions.slice(-8)) {
+        const msgs = await storage.listMessages(s.id).catch(() => []);
+        for (const m of msgs) if (m.role === "user") chatQuestions.push(m.content);
+      }
+      const texts = collectEvidenceTexts({
+        chatQuestions,
+        symptomNotes: symptoms.map((s) => s.summary),
+        noteTexts: [
+          ...loadNotes(id).map((n) => n.content),
+          loadHealthNote(id),
+        ].filter(Boolean),
+      });
+      setEvidence(texts);
+      setReadiness(checkReadiness({ recordDays, texts }));
+    })();
+  }, [id]);
+
+  /** 초안 요청 — 제안만 받아온다. 저장은 [적용]을 눌러야 일어난다 */
+  async function requestDrafts() {
+    setDrafting(true);
+    try {
+      const res = await fetch("/api/report-draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          catName: cat?.name ?? "",
+          texts: evidence,
+          answeredKeys: (traits ?? [])
+            .map((t) => t.questionKey.replace(/^성격:/, ""))
+            .filter(Boolean),
+        }),
+      });
+      if (!res.ok) {
+        showToast(res.status === 429 ? "오늘은 초안을 더 못 만들어요" : "초안을 만들지 못했어요");
+        setDrafts([]);
+        return;
+      }
+      const json = (await res.json()) as {
+        suggestions: Array<{ key: string; label: string; evidence: string }>;
+      };
+      setDrafts(json.suggestions ?? []);
+    } catch {
+      showToast("초안을 만들지 못했어요");
+      setDrafts([]);
+    } finally {
+      setDrafting(false);
+    }
+  }
+
+  /** 제안 적용 — 여기서 처음 저장된다 */
+  async function applyDraft(d: { key: string; label: string }) {
+    const q = PERSONALITY_QUESTIONS.find((x) => x.key === d.key);
+    if (!q) return;
+    await answer(q, d.label);
+    setDrafts((prev) => prev?.filter((x) => x.key !== d.key) ?? null);
+  }
 
   function showToast(m: string) {
     setToast(m);
@@ -118,6 +206,81 @@ export default function ReportPage() {
           summary={summary}
           onEdit={setEditing}
         />
+
+        {/*
+          기록으로 초안 만들기 (P2-1) — 집사가 쓴 문장에서만 근거를 찾는다.
+          제안은 제안일 뿐이라 [적용]을 눌러야 저장된다. 근거 문장을 함께 보여주는 이유는,
+          왜 이 답이 나왔는지 집사가 검증할 수 있어야 하기 때문이다.
+        */}
+        {empty.length > 0 && readiness && (
+          <section className="rounded-3xl bg-white p-5">
+            <p className="text-[15px] font-extrabold tracking-[-0.02em] text-rd-ink">
+              기록으로 초안 만들기
+            </p>
+
+            {!readiness.ready ? (
+              <p className="mt-1.5 text-[12.5px] leading-relaxed text-rd-muted">
+                {readiness.hint} (지금까지 {readiness.recordDays}일 기록)
+              </p>
+            ) : !readiness.canDraft ? (
+              <p className="mt-1.5 text-[12.5px] leading-relaxed text-rd-muted">
+                근거로 삼을 이야기가 아직 적어요. 냥박사에게 물어보거나 증상 메모를
+                남기면 그 문장에서 성격을 찾아볼 수 있어요.
+              </p>
+            ) : drafts === null ? (
+              <>
+                <p className="mt-1.5 text-[12.5px] leading-relaxed text-rd-muted">
+                  냥박사에게 물어본 말, 증상 메모, 꼭 기억할 것에서 성격 단서를 찾아
+                  빈 칸의 답을 제안해요. <b className="text-rd-body">근거 문장을 함께 보여주고,
+                  적용을 눌러야 기록됩니다.</b>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => void requestDrafts()}
+                  disabled={drafting}
+                  className="mt-3 h-12 w-full rounded-[14px] bg-rd-forest text-sm font-bold text-white disabled:opacity-60"
+                >
+                  {drafting ? "기록을 읽는 중…" : `내 기록 ${readiness.textCount}줄에서 초안 찾기`}
+                </button>
+              </>
+            ) : drafts.length === 0 ? (
+              <p className="mt-1.5 text-[12.5px] leading-relaxed text-rd-muted">
+                성격을 알 만한 단서를 찾지 못했어요. 지어내지 않고 그대로 비워둘게요 —
+                아래에서 직접 답해 주세요.
+              </p>
+            ) : (
+              <ul className="mt-3 space-y-2">
+                {drafts.map((d) => (
+                  <li key={d.key} className="rounded-2xl bg-rd-well p-3.5">
+                    <p className="text-[12px] font-bold text-rd-muted">{d.key}</p>
+                    <p className="mt-0.5 text-[14px] font-bold text-rd-ink">{d.label}</p>
+                    <p className="mt-1.5 border-l-2 border-rd-mint-line pl-2 text-[12.5px] leading-relaxed text-rd-body">
+                      “{d.evidence}”
+                    </p>
+                    <div className="mt-2.5 flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => void applyDraft(d)}
+                        className="h-10 flex-1 rounded-[12px] bg-rd-ink text-[13px] font-bold text-white"
+                      >
+                        맞아요, 이걸로
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setDrafts((prev) => prev?.filter((x) => x.key !== d.key) ?? null)
+                        }
+                        className="h-10 flex-1 rounded-[12px] border border-rd-line bg-white text-[13px] font-semibold text-rd-body"
+                      >
+                        아니에요
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
 
         {/* 비어 있는 칸 — 칩 한 뭉치. 채울수록 담임 의견이 정확해진다 */}
         {empty.length > 0 && (
