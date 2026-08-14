@@ -32,6 +32,7 @@ import {
 } from "@/lib/personality";
 import { shareNodeAsImage } from "@/lib/shareImage";
 import ReportCard from "@/components/ReportCard";
+import SquareReportCard from "@/components/SquareReportCard";
 import BottomSheet from "@/components/BottomSheet";
 import BackButton from "@/components/BackButton";
 
@@ -49,7 +50,10 @@ export default function ReportPage() {
   >(null);
   const [drafting, setDrafting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  /** 공유 형식 고르기 — 긴 기록부 / SNS 1:1 (P2-3) */
+  const [shareOpen, setShareOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const squareRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     void storage.getCat(id).then(setCat);
@@ -150,13 +154,15 @@ export default function ReportPage() {
     }
   }
 
-  async function share() {
-    const node = cardRef.current;
+  /** @param square 정사각(SNS) 카드로 뽑을지 — 긴 기록부는 문서, 정사각은 피드용 */
+  async function share(square: boolean) {
+    const node = square ? squareRef.current : cardRef.current;
     if (!node || !cat) return;
+    setShareOpen(false);
     setBusy(true);
     const r = await shareNodeAsImage(
       node,
-      `${cat.name}_생활기록부.png`,
+      square ? `${cat.name}_생활기록부_카드.png` : `${cat.name}_생활기록부.png`,
       `${cat.name} 생활기록부`,
     );
     if (r === "downloaded") showToast("이미지를 저장했어요");
@@ -317,7 +323,7 @@ export default function ReportPage() {
       {/* 스티키 CTA */}
       <div className="fixed inset-x-4 bottom-[max(26px,env(safe-area-inset-bottom))] z-40 mx-auto max-w-[388px]">
         <button
-          onClick={() => void share()}
+          onClick={() => setShareOpen(true)}
           disabled={busy || summary.filled === 0}
           className="flex h-[54px] w-full items-center justify-center gap-2 rounded-2xl bg-rd-ink text-[15px] font-extrabold tracking-[-0.02em] text-white shadow-[0_10px_26px_-10px_rgba(0,0,0,.5)] disabled:opacity-50"
         >
@@ -333,6 +339,49 @@ export default function ReportPage() {
           </p>
         )}
       </div>
+
+      {/*
+        캡처용 정사각 카드 — 화면에는 안 보이지만 레이아웃은 잡혀 있어야 한다.
+        display:none이면 html-to-image가 크기를 못 재서 빈 이미지가 나온다.
+      */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed top-0 left-0 -z-10 w-[380px] opacity-0"
+      >
+        <SquareReportCard ref={squareRef} cat={cat} rows={rows} summary={summary} />
+      </div>
+
+      {/* 공유 형식 고르기 (P2-3) */}
+      <BottomSheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title="어떤 카드로 저장할까요?"
+      >
+        <div className="grid gap-2">
+          <button
+            onClick={() => void share(true)}
+            className="rounded-[14px] border-[1.5px] border-rd-ink bg-[#F7F8F5] p-4 text-left"
+          >
+            <span className="block text-[14.5px] font-extrabold text-rd-ink">
+              SNS용 정사각 카드
+            </span>
+            <span className="mt-0.5 block text-[12.5px] text-rd-muted">
+              유형 · 별점 · 담임 의견 한 줄. 피드에 올리기 좋아요
+            </span>
+          </button>
+          <button
+            onClick={() => void share(false)}
+            className="rounded-[14px] border border-rd-line bg-white p-4 text-left"
+          >
+            <span className="block text-[14.5px] font-extrabold text-rd-ink">
+              전체 기록부
+            </span>
+            <span className="mt-0.5 block text-[12.5px] text-rd-muted">
+              12항목이 다 담긴 긴 카드
+            </span>
+          </button>
+        </div>
+      </BottomSheet>
 
       {/* 문항 답하기 시트 — 선택 즉시 저장·닫힘 (확인 버튼 없음) */}
       <BottomSheet

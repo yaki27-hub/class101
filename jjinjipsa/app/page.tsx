@@ -21,6 +21,7 @@ import DoctorTipCard from "@/components/home/DoctorTipCard";
 import AdCard from "@/components/home/AdCard";
 import EmptyCatCard from "@/components/home/EmptyCatCard";
 import QuickSymptomCard from "@/components/home/QuickSymptomCard";
+import BrushMilestoneCard from "@/components/home/BrushMilestoneCard";
 import WeeklyReportCard from "@/components/home/WeeklyReportCard";
 import LoginBanner from "@/components/home/LoginBanner";
 import CatSelectorSheet from "@/components/home/CatSelectorSheet";
@@ -31,7 +32,7 @@ import { storage } from "@/lib/storage";
 import { analyzeWeights } from "@/lib/weightTrend";
 import { getCatAge } from "@/lib/catAge";
 import { loadDailyOn } from "@/lib/dailyStatus";
-import { brushStreak, loadRoutine, saveRoutine } from "@/lib/careRoutine";
+import { BRUSH_MILESTONES, brushStreak, loadRoutine, saveRoutine } from "@/lib/careRoutine";
 import { MIN_RECORD_DAYS, WEEK_DAYS } from "@/lib/weeklyReport";
 import {
   buildCalendar,
@@ -150,6 +151,10 @@ function Home() {
             catName={cat.name}
             recordedDays={weekRecordedDays}
           />
+        )}
+        {/* 양치 마일스톤 (P2-4) — 7·15·30일 그날에만. 루틴 카드 바로 위에서 축하한다 */}
+        {BRUSH_MILESTONES.includes(streak) && (
+          <BrushMilestoneCard streak={streak} catName={cat.name} />
         )}
         <CareRoutineCard
           done={routines}
