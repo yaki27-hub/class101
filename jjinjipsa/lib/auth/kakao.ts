@@ -14,7 +14,31 @@ import { storage } from "@/lib/storage";
 
 export type KakaoSignInResult =
   | { ok: true; mode: "linked" | "signed-in" }
-  | { ok: false; message: string };
+  /** 승격 불가 + 잃을 기록 있음 — 화면이 먼저 물어봐야 한다 */
+  | { ok: false; needsConfirm: true; guestCats: number }
+  | { ok: false; needsConfirm?: false; message: string };
+
+/**
+ * 로그인 전에 경고해야 하는가 (순수 함수 — scripts/test-auth-warning.mjs가 고정한다).
+ *
+ * 세 조건이 **모두** 맞을 때만 묻는다:
+ *  - 지금 게스트(익명) 세션이고
+ *  - 이 기기에 잃을 기록이 있고 (고양이 ≥ 1)
+ *  - 이 브라우저에서 승격이 불가능하다고 이미 확인됐다
+ *
+ * 잃을 게 없으면 묻지 않는다 — 아무 일도 안 일어나는데 겁을 주는 꼴이다.
+ * 승격이 될지 모르는 상태(첫 시도)에서도 묻지 않는다 — 대부분은 그냥 성공하고,
+ * 실패는 리다이렉트 뒤에 recoverFromOAuthError가 받아서 그때 묻는다.
+ */
+export function shouldWarnBeforeKakao(input: {
+  isAnonymous: boolean;
+  catCount: number;
+  linkUnavailable: boolean;
+  force?: boolean;
+}): boolean {
+  if (input.force) return false;
+  return input.isAnonymous && input.catCount > 0 && input.linkUnavailable;
+}
 
 /** 이 카카오 계정이 이미 다른 계정에 붙어 있을 때 서버가 주는 신호 */
 function isAlreadyLinked(message: string): boolean {
@@ -32,7 +56,10 @@ function isAlreadyLinked(message: string): boolean {
  * 성공 시 브라우저가 카카오로 리다이렉트되므로, 이 함수 뒤의 코드는
  * 대개 실행되지 않는다(반환값은 실패 처리를 위해 존재).
  */
-export async function signInWithKakao(redirectTo?: string): Promise<KakaoSignInResult> {
+export async function signInWithKakao(
+  redirectTo?: string,
+  opts?: { force?: boolean },
+): Promise<KakaoSignInResult> {
   const options = { redirectTo: redirectTo ?? window.location.origin };
 
   const { data } = await supabase.auth.getUser();
@@ -43,14 +70,27 @@ export async function signInWithKakao(redirectTo?: string): Promise<KakaoSignInR
    * 이 카카오 계정이 이미 다른 계정에 붙어 있으면 승격은 실패하는데,
    * 지킬 게 없다면 그 실패를 감수할 이유가 없다 — 일반 로그인이 항상 통한다.
    */
-  let hasDataToPreserve = false;
+  let catCount = 0;
   if (isAnonymous) {
     try {
-      hasDataToPreserve = (await storage.listCats()).length > 0;
+      catCount = (await storage.listCats()).length;
     } catch {
-      // 조회 실패 시엔 안전하게 '있다'로 보고 승격을 시도한다
-      hasDataToPreserve = true;
+      // 조회 실패 시엔 안전하게 '있다'로 본다 (승격 시도 + 경고 대상)
+      catCount = 1;
     }
+  }
+  const hasDataToPreserve = catCount > 0;
+
+  // 잃을 기록이 있는데 승격이 안 되는 상황이면, 조용히 갈아타지 않고 먼저 묻는다
+  if (
+    shouldWarnBeforeKakao({
+      isAnonymous,
+      catCount,
+      linkUnavailable: linkKnownUnavailable(),
+      force: opts?.force,
+    })
+  ) {
+    return { ok: false, needsConfirm: true, guestCats: catCount };
   }
 
   const skipLink =
@@ -134,33 +174,49 @@ export function clearOAuthErrorFromUrl(): void {
   window.history.replaceState({}, "", url.toString());
 }
 
+export type OAuthRecovery =
+  | { kind: "retrying" }
+  /** 승격 불가 + 이 기기에 게스트 기록 있음 — 화면이 물어봐야 한다 */
+  | { kind: "link-blocked"; guestCats: number }
+  | null;
+
 /**
- * 앱 진입 시 호출. 링크 실패로 돌아온 경우 **한 번만** 일반 로그인으로 재시도한다.
+ * 앱 진입 시 호출. 링크 실패로 돌아온 경우를 처리한다.
  *
  * `identity_already_exists` = 이 카카오 계정이 이미 다른(예전) 계정에 붙어 있다는 뜻.
- * 이 경우 승격은 불가하므로 그 계정으로 그냥 로그인시켜 준다.
+ * 승격이 불가하므로 그 계정으로 로그인하는 수밖에 없는데, **그러면 지금 게스트 세션에
+ * 쌓인 기록은 주인 없이 남는다.**
  *
- * @returns 재시도를 걸었으면 true (곧 리다이렉트된다)
+ * 예전에는 여기서 조용히 일반 로그인으로 갈아탔다. 그 결과 집사 눈에는 "로그인했더니
+ * 기록이 사라졌다"로만 보였다("나비" 사례). 그래서 **잃을 것이 있으면 자동으로 넘어가지
+ * 않고 멈춰서 알린다.** 잃을 게 없으면(고양이 0마리) 예전처럼 한 번 자동 재시도한다 —
+ * 아무 일도 안 일어나는데 확인 창을 띄울 이유가 없다.
  */
-export async function recoverFromOAuthError(): Promise<boolean> {
+export async function recoverFromOAuthError(): Promise<OAuthRecovery> {
   const err = readOAuthError();
-  if (!err) return false;
+  if (!err) return null;
 
   clearOAuthErrorFromUrl();
 
   const alreadyLinked = isAlreadyLinked(err.code) || isAlreadyLinked(err.description);
+  if (!alreadyLinked) {
+    console.warn("[auth] 카카오 로그인 실패", err.code, err.description);
+    return null;
+  }
 
-  // 링크가 불가하다는 걸 알았으니 기록해 둔다.
-  // 이후에는 버튼을 눌러도 linkIdentity를 건너뛰고 바로 일반 로그인으로 간다.
-  if (alreadyLinked) markLinkUnavailable();
+  // 링크가 불가하다는 걸 알았으니 기록해 둔다 (다음부터는 시도조차 하지 않는다)
+  markLinkUnavailable();
+
+  let guestCats = 0;
+  try {
+    guestCats = (await storage.listCats()).length;
+  } catch {
+    guestCats = 1; // 모르면 '있다'로 본다 — 조용히 잃는 쪽으로 기울지 않는다
+  }
+  if (guestCats > 0) return { kind: "link-blocked", guestCats };
 
   const retried = sessionStorage.getItem(RETRY_FLAG) === "1";
-  if (!alreadyLinked || retried) {
-    // 다른 에러이거나 이미 한 번 자동 재시도했으면 여기서 멈춘다.
-    // (수동으로 버튼을 누르면 위 플래그 덕분에 일반 로그인으로 정상 진행된다)
-    console.warn("[auth] 카카오 로그인 실패", err.code, err.description);
-    return false;
-  }
+  if (retried) return null;
 
   sessionStorage.setItem(RETRY_FLAG, "1");
   const { error } = await supabase.auth.signInWithOAuth({
@@ -169,9 +225,9 @@ export async function recoverFromOAuthError(): Promise<boolean> {
   });
   if (error) {
     console.warn("[auth] 폴백 로그인도 실패", error.message);
-    return false;
+    return null;
   }
-  return true;
+  return { kind: "retrying" };
 }
 
 /** 로그인에 성공했으면 재시도 플래그를 비운다 (링크 불가 표시는 사실이므로 유지) */

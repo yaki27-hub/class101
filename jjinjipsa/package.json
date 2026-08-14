@@ -16,7 +16,8 @@
     "products:index": "node scripts/build-product-index.mjs",
     "test:weight": "node scripts/test-weight-trend.mjs",
     "test:recall": "node scripts/test-recall.mjs",
-    "test:weekly": "node scripts/test-weekly.mjs"
+    "test:weekly": "node scripts/test-weekly.mjs",
+    "test:authwarn": "node scripts/test-auth-warning.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.7",

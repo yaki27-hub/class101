@@ -12,7 +12,12 @@ import { ALLOW_GUEST, supabase } from "@/lib/supabase";
 import { USE_SUPABASE } from "@/lib/storage";
 import { migrateLocalToServer } from "@/lib/storage/migrateLocal";
 import { hydrateKv } from "@/lib/kvSync";
-import { clearSignInRetryFlag, recoverFromOAuthError } from "@/lib/auth/kakao";
+import {
+  clearSignInRetryFlag,
+  recoverFromOAuthError,
+  signInWithKakao,
+} from "@/lib/auth/kakao";
+import GuestDataWarning from "@/components/auth/GuestDataWarning";
 
 /**
  * 임시(D-07): 카카오 로그인 검증이 끝날 때까지 게이트를 기본 OFF.
@@ -28,6 +33,9 @@ export default function AuthGate({
   const pathname = usePathname();
   const router = useRouter();
   const [ready, setReady] = useState(false);
+  /** 승격 불가로 멈춘 상태 — 게스트 기록을 잃기 전에 물어본다 */
+  const [linkBlocked, setLinkBlocked] = useState<number | null>(null);
+  const [proceeding, setProceeding] = useState(false);
 
   // 동기화용 Supabase 신원 확보: 세션 없으면 익명 로그인 (D-09).
   // 단, OAuth 콜백 처리 중(URL에 토큰/코드)에는 건너뛴다 — 카카오 로그인이
@@ -41,8 +49,9 @@ export default function AuthGate({
 
     // 링크 실패로 돌아온 경우 먼저 복구한다.
     // (linkIdentity는 바로 리다이렉트되므로 실패가 URL로 온다 — lib/auth/kakao 참고)
-    void recoverFromOAuthError().then((retrying) => {
-      if (retrying) return; // 곧 카카오로 다시 넘어간다
+    void recoverFromOAuthError().then((r) => {
+      if (r?.kind === "link-blocked") setLinkBlocked(r.guestCats);
+      if (r?.kind === "retrying") return; // 곧 카카오로 다시 넘어간다
       void supabase.auth.getSession().then(({ data }) => {
         if (!data.session) void supabase.auth.signInAnonymously().catch(() => {});
         // 정식 계정으로 들어왔으면 재시도 플래그를 비워 다음 로그인에 영향 없게 한다
@@ -152,6 +161,19 @@ export default function AuthGate({
   return (
     <>
       {children}
+      {linkBlocked !== null && (
+        <GuestDataWarning
+          guestCats={linkBlocked}
+          busy={proceeding}
+          onCancel={() => setLinkBlocked(null)}
+          onProceed={() => {
+            setProceeding(true);
+            void signInWithKakao(undefined, { force: true }).then((res) => {
+              if (!res.ok) setProceeding(false);
+            });
+          }}
+        />
+      )}
       {notice && (
         <div
           role="status"

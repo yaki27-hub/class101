@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ALLOW_GUEST, supabase } from "@/lib/supabase";
 import { signInWithKakao } from "@/lib/auth/kakao";
+import GuestDataWarning from "@/components/auth/GuestDataWarning";
 import { USE_SUPABASE } from "@/lib/storage";
 
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
+  const [warnCats, setWarnCats] = useState<number | null>(null);
 
   // 이미 '진짜(비익명)' 로그인돼 있으면 홈으로.
   // 익명 세션은 누구에게나 있으므로 그것만으론 튕기지 않는다 (그래야 카카오 버튼을 누를 수 있음).
@@ -20,11 +22,13 @@ export default function LoginPage() {
     });
   }, [router]);
 
-  async function onKakao() {
+  async function onKakao(force = false) {
     setError("");
     // 익명 세션이면 linkIdentity로 승격해 기존 기록을 그대로 가져간다 (lib/auth/kakao)
-    const res = await signInWithKakao();
-    if (!res.ok) setError(`로그인에 실패했어요: ${res.message}`);
+    const res = await signInWithKakao(undefined, { force });
+    if (res.ok) return;
+    if (res.needsConfirm) return setWarnCats(res.guestCats); // 잃을 게 있으면 먼저 묻는다
+    setError(`로그인에 실패했어요: ${res.message}`);
   }
 
   return (
@@ -72,6 +76,17 @@ export default function LoginPage() {
           <br />이 서비스의 정보는 참고용이며, 진단·처방은 수의사의 영역입니다.
         </p>
       </div>
+
+      {warnCats !== null && (
+        <GuestDataWarning
+          guestCats={warnCats}
+          onCancel={() => setWarnCats(null)}
+          onProceed={() => {
+            setWarnCats(null);
+            void onKakao(true);
+          }}
+        />
+      )}
     </main>
   );
 }

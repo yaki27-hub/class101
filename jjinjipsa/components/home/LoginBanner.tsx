@@ -9,6 +9,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { signInWithKakao } from "@/lib/auth/kakao";
+import GuestDataWarning from "@/components/auth/GuestDataWarning";
 import { USE_SUPABASE } from "@/lib/storage";
 import { IconClose } from "@/components/icons";
 
@@ -19,6 +20,8 @@ export default function LoginBanner() {
   const [guest, setGuest] = useState<boolean | null>(null);
   const [dismissed, setDismissed] = useState(false);
   const [error, setError] = useState("");
+  /** 승격 불가 경고 — 게스트 기록을 잃기 전에 묻는다 */
+  const [warnCats, setWarnCats] = useState<number | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -41,11 +44,13 @@ export default function LoginBanner() {
     };
   }, []);
 
-  async function onKakao() {
+  async function onKakao(force = false) {
     setError("");
     // 익명 세션이면 승격(linkIdentity)해 지금까지의 기록을 그대로 가져간다
-    const res = await signInWithKakao();
-    if (!res.ok) setError("로그인에 실패했어요. 잠시 후 다시 시도해 주세요.");
+    const res = await signInWithKakao(undefined, { force });
+    if (res.ok) return;
+    if (res.needsConfirm) return setWarnCats(res.guestCats); // 잃을 게 있으면 먼저 묻는다
+    setError("로그인에 실패했어요. 잠시 후 다시 시도해 주세요.");
   }
 
   function close() {
@@ -87,6 +92,17 @@ export default function LoginBanner() {
 
       {error && (
         <p className="mt-2 text-center text-[12px] text-[#C4453A]">{error}</p>
+      )}
+
+      {warnCats !== null && (
+        <GuestDataWarning
+          guestCats={warnCats}
+          onCancel={() => setWarnCats(null)}
+          onProceed={() => {
+            setWarnCats(null);
+            void onKakao(true);
+          }}
+        />
       )}
     </section>
   );
