@@ -36,6 +36,7 @@ import AnswerBlocks from "@/components/chat/AnswerBlocks";
 import { bumpChatUsage, loadChatUsage, syncChatUsage } from "@/lib/chatUsage";
 import { FREE_DAILY_QUESTIONS, GUEST_DAILY_QUESTIONS, getTier } from "@/lib/limits";
 import { supabase } from "@/lib/supabase";
+import { track } from "@/lib/analytics";
 
 /** AI 답변의 마크다운 ** 강조 기호 정리 */
 function clean(text: string) {
@@ -101,6 +102,11 @@ function ChatPage() {
   const nearBottomRef = useRef(true);
   const [showJump, setShowJump] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  /*
+   * 다음 질문이 어디서 왔는지 (지표용, 0008). 질문 내용은 보내지 않고 이 구분값만 남긴다.
+   * prefill = 다른 화면에서 ?q=로 넘어온 것, suggested = 추천 질문, input = 직접 입력.
+   */
+  const sourceRef = useRef<"input" | "suggested" | "prefill">("input");
 
   function showToast(m: string) {
     setToast(m);
@@ -189,7 +195,10 @@ function ChatPage() {
   // 홈/사진진단의 빠른 질문(?q=)·사진 요청(?photo=1)
   useEffect(() => {
     const q = searchParams.get("q");
-    if (q) setDraft(q);
+    if (q) {
+      setDraft(q);
+      sourceRef.current = "prefill";
+    }
     if (searchParams.get("photo") === "1")
       setTimeout(() => fileRef.current?.click(), 300);
   }, [searchParams]);
@@ -302,6 +311,12 @@ function ChatPage() {
      * 서버가 실카운트를 보내면(usage) 그 값으로 덮어쓴다.
      */
     setUsed(bumpChatUsage(usageScope));
+    // 재사용률 지표 (0008) — 카운터와 같은 시점(AI 실호출)에 센다. 질문 본문은 안 보낸다
+    track("chat_asked", {
+      scope: usageScope === "guest" ? "guest" : "account",
+      source: sourceRef.current,
+    });
+    sourceRef.current = "input";
     const history = messages.map((m) => ({
       role: m.role,
       content: m.content,
@@ -432,7 +447,10 @@ function ChatPage() {
             {getSuggestedQuestions(cat).map((q) => (
               <button
                 key={q}
-                onClick={() => void send(q)}
+                onClick={() => {
+                  sourceRef.current = "suggested";
+                  void send(q);
+                }}
                 className="flex w-full items-center gap-2.5 rounded-[18px] bg-white px-4 py-3.5 text-left active:scale-[0.99]"
               >
                 <span className="size-1.5 flex-none rounded-full bg-rd-mint" aria-hidden />

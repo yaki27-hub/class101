@@ -12,6 +12,7 @@ import { ALLOW_GUEST, supabase } from "@/lib/supabase";
 import { USE_SUPABASE } from "@/lib/storage";
 import { migrateLocalToServer } from "@/lib/storage/migrateLocal";
 import { hydrateKv } from "@/lib/kvSync";
+import { trackOncePerDay } from "@/lib/analytics";
 import {
   clearSignInRetryFlag,
   recoverFromOAuthError,
@@ -99,6 +100,8 @@ export default function AuthGate({
         }
         // 오늘 상태·루틴·메모를 계정에서 내려받는다 (기기 간 동기화, 0007)
         await hydrateKv(uid);
+        // 리텐션의 기준선 — "그날 앱을 열었는가" 하루 한 번 (0008, docs/지표.md)
+        trackOncePerDay("app_open");
       } catch (e) {
         // 실패해도 화면은 열어준다 — 완료 표시를 안 남기므로 다음 실행에 재시도한다
         console.warn("[migrate] 실패 — 다음 실행에 재시도", e);

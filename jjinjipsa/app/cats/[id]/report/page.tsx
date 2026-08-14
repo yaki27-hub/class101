@@ -31,6 +31,7 @@ import {
   type PersonalityQuestion,
 } from "@/lib/personality";
 import { shareNodeAsImage } from "@/lib/shareImage";
+import { track } from "@/lib/analytics";
 import ReportCard from "@/components/ReportCard";
 import SquareReportCard from "@/components/SquareReportCard";
 import BottomSheet from "@/components/BottomSheet";
@@ -94,6 +95,9 @@ export default function ReportPage() {
   /** 초안 요청 — 제안만 받아온다. 저장은 [적용]을 눌러야 일어난다 */
   async function requestDrafts() {
     setDrafting(true);
+    // 초안이 실제로 쓰이는지 (0008) — 요청 대비 적용 비율을 보려고 요청 쪽도 센다.
+    // 근거 문장 수만 보내고 문장 자체는 절대 보내지 않는다
+    track("report_draft_requested", { texts: evidence.length });
     try {
       const res = await fetch("/api/report-draft", {
         method: "POST",
@@ -128,6 +132,7 @@ export default function ReportPage() {
     const q = PERSONALITY_QUESTIONS.find((x) => x.key === d.key);
     if (!q) return;
     await answer(q, d.label);
+    track("report_draft_applied", { count: 1 });
     setDrafts((prev) => prev?.filter((x) => x.key !== d.key) ?? null);
   }
 
@@ -167,6 +172,8 @@ export default function ReportPage() {
     );
     if (r === "downloaded") showToast("이미지를 저장했어요");
     if (r === "failed") showToast("이미지 생성에 실패했어요");
+    // 어느 카드가 실제로 저장까지 가는지 (0008) — 긴 기록부 vs 정사각 SNS 카드
+    if (r !== "failed") track("share_card_saved", { kind: square ? "square" : "report" });
     setBusy(false);
   }
 

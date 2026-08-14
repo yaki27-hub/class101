@@ -14,6 +14,7 @@ import { storage, type Cat } from "@/lib/storage";
 import { buildWeeklyReport, type WeeklyReport } from "@/lib/weeklyReport";
 import BackButton from "@/components/BackButton";
 import Mascot from "@/components/Mascot";
+import { track } from "@/lib/analytics";
 
 export default function WeeklyPage() {
   const { id } = useParams<{ id: string }>();
@@ -29,7 +30,11 @@ export default function WeeklyPage() {
         storage.listSymptoms(id).catch(() => []),
         storage.listWeights(id).catch(() => []),
       ]);
-      setReport(buildWeeklyReport({ catId: id, catName: c.name, symptoms, weights }));
+      const r = buildWeeklyReport({ catId: id, catName: c.name, symptoms, weights });
+      setReport(r);
+      // 조회율 지표 (0008) — 몇 일치 기록을 들고 열었는지까지 봐야 "빈 리포트를
+      // 열게 하고 있지는 않은가"를 확인할 수 있다
+      track("weekly_report_viewed", { days: r.recordedDays });
     })();
   }, [id]);
 

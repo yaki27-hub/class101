@@ -34,6 +34,7 @@ import { getCatAge } from "@/lib/catAge";
 import { loadDailyOn } from "@/lib/dailyStatus";
 import { BRUSH_MILESTONES, brushStreak, loadRoutine, saveRoutine } from "@/lib/careRoutine";
 import { MIN_RECORD_DAYS, WEEK_DAYS } from "@/lib/weeklyReport";
+import { track } from "@/lib/analytics";
 import {
   buildCalendar,
   computeHome,
@@ -186,7 +187,17 @@ function Home() {
       <TodayStatusSheet
         open={statusOpen}
         record={record}
-        onSet={setStatus}
+        onSet={(type, level, label) => {
+          setStatus(type, level, label);
+          /*
+           * 오늘냥 기록률 지표 (0008). 항목을 누를 때마다 한 줄 남기고
+           * 집계는 (user, day) 기준으로 센다 — items는 이 시점에 채워진 항목 수라
+           * 하루 최댓값이 "4개를 다 채웠는가"가 된다. 무엇을 골랐는지는 보내지 않는다.
+           */
+          track("daily_status_saved", {
+            items: Object.keys({ ...record, [type]: true }).length,
+          });
+        }}
         onClose={() => setStatusOpen(false)}
       />
 

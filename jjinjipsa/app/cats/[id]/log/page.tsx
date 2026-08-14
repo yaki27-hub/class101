@@ -14,6 +14,7 @@ import { EMERGENCY_TAG_LIST, SYMPTOM_TAG_LIST } from "@/lib/symptomTags";
 import { EMERGENCY_MAP_URL } from "@/lib/redFlags";
 import BackButton from "@/components/BackButton";
 import Mascot from "@/components/Mascot";
+import { track } from "@/lib/analytics";
 
 export default function ManualLogPage() {
   // useSearchParams(태그 프리셀렉트)는 서스펜스 경계가 필요하다
@@ -74,6 +75,16 @@ function ManualLog() {
       createdAt: new Date().toISOString(),
     };
     await storage.addSymptom(log);
+    /*
+     * 지표 (0008) — 개수와 진입 경로만. 태그 이름·메모는 보내지 않는다.
+     * from=quick 은 홈 Quick Action(?tags=)에서 넘어온 경우 — 그 버튼이
+     * 실제로 기록을 만들어 내는지 보려고 나눈다.
+     */
+    track("symptom_saved", {
+      tags: tags.length,
+      memo: memo.trim().length > 0,
+      from: searchParams.get("tags") ? "quick" : "direct",
+    });
     setSaved(log); // 바로 떠나지 않는다 — 기록을 상담으로 잇는 것이 핵심 루프다 (P0-4)
   }
 
@@ -119,9 +130,11 @@ function ManualLog() {
         <div className="mt-2 flex w-full max-w-[300px] flex-col gap-2">
           <button
             type="button"
-            onClick={() =>
-              router.push(`/cats/${cat.id}/chat?q=${encodeURIComponent(q)}`)
-            }
+            onClick={() => {
+              // 증상 기록 → 냥박사 연결률 (0008) — 이 서비스 핵심 루프의 마지막 칸
+              track("symptom_to_chat", { tags: saved.tags.length });
+              router.push(`/cats/${cat.id}/chat?q=${encodeURIComponent(q)}`);
+            }}
             className="h-12 w-full rounded-[14px] bg-rd-ink text-[15px] font-bold text-white active:scale-[0.99]"
           >
             냥박사에게 이 기록 물어보기

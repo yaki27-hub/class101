@@ -16,8 +16,9 @@
  * 정확히 그 숫자일 때만 걸린다(BRUSH_MILESTONES 포함 여부).
  */
 
-import { forwardRef, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { shareNodeAsImage } from "@/lib/shareImage";
+import { track, trackOncePerDay } from "@/lib/analytics";
 
 type Tier = "stamp" | "card" | "memorial";
 
@@ -98,6 +99,11 @@ export default function BrushMilestoneCard({
   const [saved, setSaved] = useState<string | null>(null);
   const tier = tierOf(streak);
 
+  // 도달률 지표 (0008) — 카드가 뜬 날 하루 한 번. 홈을 여러 번 들러도 한 줄이다
+  useEffect(() => {
+    trackOncePerDay("brush_milestone_shown", { streak });
+  }, [streak]);
+
   async function save() {
     const node = artRef.current;
     if (!node) return;
@@ -109,6 +115,7 @@ export default function BrushMilestoneCard({
     );
     if (r === "downloaded") setSaved("이미지를 저장했어요");
     if (r === "failed") setSaved("이미지 생성에 실패했어요");
+    if (r !== "failed") track("share_card_saved", { kind: "milestone" });
     setBusy(false);
     if (r !== "failed") window.setTimeout(() => setSaved(null), 1800);
   }
