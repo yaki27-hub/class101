@@ -21,14 +21,21 @@ export async function shareNodeAsImage(
   node: HTMLElement,
   filename: string,
   title: string,
+  opts?: {
+    /** 캡처 바탕색 — 칠판 캡처처럼 흰 바탕이면 안 되는 카드가 넘긴다 */
+    background?: string;
+  },
 ): Promise<ShareResult> {
   let dataUrl: string;
   try {
     const { toPng } = await import("html-to-image");
     dataUrl = await toPng(node, {
       pixelRatio: 2,
-      backgroundColor: "#ffffff",
+      backgroundColor: opts?.background ?? "#ffffff",
       cacheBust: true,
+      // data-noncapture: 화면에는 있지만 사진에는 안 담는 것 (초안 도구 박스 등 —
+      // 앱 UI지 기록부 내용이 아니다). 캡처 대상 전체를 나눠 찍는 화면(칠판)용.
+      filter: (n) => !(n instanceof HTMLElement && n.dataset.noncapture !== undefined),
     });
   } catch {
     return "failed";

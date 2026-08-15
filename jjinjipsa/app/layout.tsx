@@ -47,9 +47,10 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
           crossOrigin="anonymous"
         />
+        {/* Jua: 홈 디스플레이 / Gaegu: 생활기록부 칠판 제목 한 줄 전용 */}
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&display=swap"
         />
       </head>
       <body className="min-h-full bg-[#E9EBE6] text-rd-ink">

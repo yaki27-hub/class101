@@ -1,22 +1,30 @@
 "use client";
 
 /*
- * 성격 오각 레이더 (생활기록부 리디자인) — 12줄을 다 읽지 않아도 성격이 한눈에.
+ * 성격 오각 레이더 — 칠판 버전 (생활기록부 리디자인 A안).
  *
- * 기하는 핸드오프 스펙 그대로: 278×214 고정 캔버스, 0번 축이 12시, 시계방향.
- * 이미지 캡처 대상(ReportCard) 안에 들어가므로 색은 hex로 자체 완결이어야 한다.
- * 라벨이 잘리면 컨테이너를 키우지 말고 LABEL_R을 줄인다 (스펙 지침).
+ * 판에 분필로 그린 보조선이라는 신호로 **눈금·스포크는 전부 점선**이다.
+ * 실선으로 바꾸면 인쇄된 차트처럼 보인다 (핸드오프 "하지 말 것").
+ * 데이터 폴리곤만 실선 + 두께 2.6으로 구분된다.
+ *
+ * 기하는 핸드오프 스펙: R_MAX 56, R_MIN 8, LABEL_R 70, 0번 축이 12시, 시계방향.
+ * 캔버스는 라벨("호기심 A+")이 잘리지 않는 최소 크기로 잡았다 — 라벨이 잘리면
+ * 캔버스를 키우지 말고 LABEL_R을 줄인다.
+ *
+ * 색은 hex 자체 완결 — 판 전체가 이미지 캡처 대상이다.
  */
 
 import type { RadarAxis } from "@/lib/personality";
 
-const W = 278;
-const H = 214;
-const CX = 139;
-const CY = 103;
-const R_MAX = 68;
-const R_MIN = 9;
-const LABEL_R = 94;
+const W = 216;
+const H = 152;
+const CX = 108;
+const CY = 82;
+const R_MAX = 56;
+const R_MIN = 8;
+const LABEL_R = 70;
+
+const ACCENT = "#F5E04A";
 
 /** i번째 축의 각도 — 0번이 12시, 시계방향 */
 function angle(i: number): number {
@@ -28,8 +36,9 @@ function pt(i: number, r: number): [number, number] {
 }
 
 function ring(r: number): string {
-  return Array.from({ length: 5 }, (_, i) => pt(i, r).map((v) => v.toFixed(1)).join(","))
-    .join(" ");
+  return Array.from({ length: 5 }, (_, i) =>
+    pt(i, r).map((v) => v.toFixed(1)).join(","),
+  ).join(" ");
 }
 
 export default function PersonalityRadar({ axes }: { axes: RadarAxis[] }) {
@@ -38,74 +47,72 @@ export default function PersonalityRadar({ axes }: { axes: RadarAxis[] }) {
   const dataPoints = axes.map((a, i) => pt(i, radius(a.avg)));
 
   return (
-    <div>
-      <div className="relative mx-auto" style={{ width: W, height: H }}>
-        <svg
-          viewBox={`0 0 ${W} ${H}`}
-          width={W}
-          height={H}
-          className="absolute inset-0"
-          aria-hidden
-        >
-          {/* 눈금 오각형 4겹 + 스포크 */}
-          {[1, 2, 3, 4].map((l) => (
-            <polygon
-              key={l}
-              points={ring(R_MIN + (l / 4) * (R_MAX - R_MIN))}
-              fill="none"
-              stroke="#D9DEDA"
-              strokeWidth="1"
-            />
-          ))}
-          {axes.map((_, i) => {
-            const [x, y] = pt(i, R_MAX);
-            return (
-              <line
-                key={i}
-                x1={CX}
-                y1={CY}
-                x2={x}
-                y2={y}
-                stroke="#D9DEDA"
-                strokeWidth="1"
-              />
-            );
-          })}
-          {/* 데이터 폴리곤 + 꼭짓점 */}
+    <div className="relative" style={{ width: W, height: H }}>
+      <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} className="absolute inset-0" aria-hidden>
+        {/* 눈금 오각형 3겹 — 분필 보조선 (점선 유지) */}
+        {[1, 2, 3].map((l) => (
           <polygon
-            points={dataPoints.map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" ")}
-            fill="#0E5B41"
-            fillOpacity="0.78"
-            stroke="#0E5B41"
-            strokeWidth="1.5"
+            key={l}
+            points={ring(R_MIN + (l / 3) * (R_MAX - R_MIN))}
+            fill="none"
+            stroke="rgba(242,245,239,.34)"
+            strokeWidth="1.2"
+            strokeDasharray="5 6"
             strokeLinejoin="round"
           />
-          {dataPoints.map(([x, y], i) => (
-            <circle key={i} cx={x} cy={y} r="3.4" fill="#0A3D2B" />
-          ))}
-        </svg>
-
-        {/* 축 라벨 — 이름 + 등급 */}
-        {axes.map((a, i) => {
-          const [x, y] = pt(i, LABEL_R);
+        ))}
+        {axes.map((_, i) => {
+          const [x, y] = pt(i, R_MAX);
           return (
-            <span
-              key={a.axis}
-              className="absolute flex items-center gap-[5px] whitespace-nowrap"
-              style={{ left: x, top: y, transform: "translate(-50%,-50%)" }}
-            >
-              <span className="text-[11.5px] font-semibold text-[#7A7F7B]">
-                {a.axis}
-              </span>
-              <span className="text-[12px] font-extrabold text-[#1A1A1A]">
-                {a.grade}
-              </span>
-            </span>
+            <line
+              key={i}
+              x1={CX}
+              y1={CY}
+              x2={x}
+              y2={y}
+              stroke="rgba(242,245,239,.26)"
+              strokeWidth="1.2"
+              strokeDasharray="3 6"
+            />
           );
         })}
-      </div>
-      <p className="mt-1 text-center text-[11px] text-[#9AA09B]">
-        답한 항목만 반영돼요 · 넓다고 좋은 게 아니에요
+        {/* 데이터 폴리곤 — 유일한 실선 */}
+        <polygon
+          points={dataPoints.map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" ")}
+          fill={ACCENT}
+          fillOpacity="0.2"
+          stroke={ACCENT}
+          strokeWidth="2.6"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          opacity="0.95"
+        />
+        {dataPoints.map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="3.6" fill={ACCENT} />
+        ))}
+      </svg>
+
+      {/* 축 라벨 — 이름 + 등급 */}
+      {axes.map((a, i) => {
+        const [x, y] = pt(i, LABEL_R);
+        return (
+          <span
+            key={a.axis}
+            className="absolute flex items-center gap-[5px] whitespace-nowrap"
+            style={{ left: x, top: y, transform: "translate(-50%,-50%)" }}
+          >
+            <span className="text-[12px] font-semibold" style={{ color: "rgba(242,245,239,.8)" }}>
+              {a.axis}
+            </span>
+            <span className="text-[12.5px] font-extrabold" style={{ color: ACCENT }}>
+              {a.grade}
+            </span>
+          </span>
+        );
+      })}
+      {/* 스크린리더용 — 시각 차트의 텍스트 대체 */}
+      <p className="sr-only">
+        {axes.map((a) => `${a.axis} ${a.grade}`).join(", ")}
       </p>
     </div>
   );

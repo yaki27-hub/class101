@@ -9,11 +9,18 @@ export default function BottomSheet({
   onClose,
   title,
   children,
+  tone = "paper",
 }: {
   open: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
+  /**
+   * board = 칠판 화면(생활기록부)용 어두운 초록 시트.
+   * "쓰는 곳"만 갑자기 밝아지면 판에서 튕겨나가는 느낌이라 판 톤을 유지한다
+   * (핸드오프 결정). 판보다 살짝 밝은 초록이라 위로 떠 보인다.
+   */
+  tone?: "paper" | "board";
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -55,17 +62,34 @@ export default function BottomSheet({
     >
       <button
         aria-label="닫기"
-        className="absolute inset-0 bg-secondary/40"
+        className={`absolute inset-0 ${
+          tone === "board" ? "bg-black/40 backdrop-blur-[4px]" : "bg-secondary/40"
+        }`}
         onClick={onClose}
       />
       <div
         ref={panelRef}
         tabIndex={-1}
-        className="relative w-full max-w-[420px] rounded-t-card bg-white p-5 pb-[max(20px,env(safe-area-inset-bottom))] shadow-[0_-2px_12px_rgba(26,51,0,0.10)] outline-none [animation:sheet-up_.22s_ease]"
+        className={`relative w-full max-w-[420px] p-5 pb-[max(20px,env(safe-area-inset-bottom))] outline-none [animation:sheet-up_.22s_ease] ${
+          tone === "board"
+            ? "rounded-t-3xl bg-[#25411A] shadow-[0_-8px_16px_rgba(0,19,43,.28)]"
+            : "rounded-t-card bg-white shadow-[0_-2px_12px_rgba(26,51,0,0.10)]"
+        }`}
       >
-        <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-hairline" aria-hidden />
+        <div
+          className={`mx-auto mb-4 h-1 w-10 rounded-full ${
+            tone === "board" ? "bg-[rgba(242,245,239,.35)]" : "bg-hairline"
+          }`}
+          aria-hidden
+        />
         {title && (
-          <p className="text-center text-[16px] font-bold text-rd-ink">{title}</p>
+          <p
+            className={`text-center text-[16px] font-bold ${
+              tone === "board" ? "text-[#F2F5EF]" : "text-rd-ink"
+            }`}
+          >
+            {title}
+          </p>
         )}
         <div className="mt-4">{children}</div>
       </div>
