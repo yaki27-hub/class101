@@ -17,8 +17,8 @@ export default function DoctorTipCard({
 }) {
   return (
     <section
-      className="rounded-3xl p-5 text-white"
-      style={{ background: mood.deep }}
+      // 모카 리스킨 — 무드 딥 컬러 대신 모카 그린 고정. 화면에서 유일한 짙은 카드
+      className="rounded-3xl bg-rd-forest p-5 text-white"
     >
       <p className="mb-2 text-[12px] font-semibold text-white/60">냥박사 한마디</p>
       <p className="mb-3.5 text-[15.5px] leading-[1.5] font-semibold tracking-[-0.02em] text-pretty">

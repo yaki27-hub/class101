@@ -14,7 +14,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import MoodHero from "@/components/home/MoodHero";
-import MoodHomeHeader from "@/components/home/MoodHomeHeader";
+import TopBar from "@/components/TopBar";
 import CareRoutineCard from "@/components/home/CareRoutineCard";
 import CareCalendarCard from "@/components/home/CareCalendarCard";
 import DoctorTipCard from "@/components/home/DoctorTipCard";
@@ -132,13 +132,18 @@ function Home() {
 
   return (
     <main className="relative flex-1 bg-rd-page">
-      <MoodHomeHeader
-        cat={cat}
-        catHref={`/cats/${cat.id}`}
-        onOpenSelector={() => setSheetOpen(true)}
-      />
+      {/* 모카 상단바 — 아바타·이름(아이 전환) + 설정 기어 */}
+      <TopBar cat={cat} onTitleClick={() => setSheetOpen(true)} />
 
-      <MoodHero view={view} onChipsClick={() => setStatusOpen(true)} />
+      <MoodHero
+        view={view}
+        days={
+          cat.createdAt
+            ? Math.floor((Date.now() - new Date(cat.createdAt).getTime()) / 86400000) + 1
+            : undefined
+        }
+        onChipsClick={() => setStatusOpen(true)}
+      />
 
       {/* 카드 스택 — 히어로를 덮으며 올라온다 */}
       <div className="relative z-[1] flex flex-col gap-3 rounded-t-3xl bg-rd-page px-4 pt-5.5 pb-nav">

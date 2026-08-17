@@ -486,7 +486,8 @@ function ChatPage() {
             </div>
           ) : m.role === "user" ? (
             <div key={m.id} className="flex justify-end">
-              <div className="max-w-[80%] rounded-[20px] rounded-br-md bg-rd-ink px-3.5 py-2.5 text-[14px] leading-[1.6] tracking-[-0.01em] whitespace-pre-wrap text-white">
+              {/* 모카 문법 — 내 말풍선은 베이지, 잉크 글자 (검정 덩어리가 대화를 누르지 않게) */}
+              <div className="max-w-[80%] rounded-[20px] rounded-br-md bg-[#E6DED8] px-3.5 py-2.5 text-[14px] leading-[1.6] tracking-[-0.01em] whitespace-pre-wrap text-rd-ink">
                 {m.imageUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={m.imageUrl} alt="첨부 사진" className="mb-2 max-h-52 rounded-md" />
@@ -675,7 +676,7 @@ function ChatPage() {
             onClick={() => void send()}
             disabled={!canSend}
             className={`h-11 flex-none rounded-[14px] px-4 text-[14px] font-extrabold whitespace-nowrap active:scale-95 ${
-              canSend ? "bg-rd-ink text-white" : "bg-[#EFF1ED] text-[#B4BAB5]"
+              canSend ? "bg-rd-forest text-white" : "bg-rd-well text-rd-faint"
             }`}
           >
             전송

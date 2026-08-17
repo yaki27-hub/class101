@@ -82,23 +82,28 @@
    * 무드별로 갈리는 색(그라디언트·딥)은 런타임 값이라 토큰이 아니라
    * lib/homeMood.ts 가 들고 있다.
    */
-  --color-rd-page: #f4f5f2; /* 2뎁스 라이트 그레이 — 무드 그라디언트 금지 구역 */
+  /*
+   * 🌾 모카 리스킨 (피그마 "모카 프로토타입 구현" 페이지) — 토큰 이름은 유지하고
+   * 값만 크림/세이지 관찰 톤으로 바꾼다. 이름까지 갈면 수십 파일이 흔들린다.
+   * 시맨틱: 세이지(#8BA88E)=평소대로 · 탄(#D9A87E)=달라진 점 · 그린(#4A654E)=행동.
+   */
+  --color-rd-page: #f5f3ef; /* 크림 — 페이지 바탕 */
   --color-rd-card: #ffffff;
-  --color-rd-ink: #1a1a1a;
-  --color-rd-body: #3f4642;
-  --color-rd-muted: #7a7f7b;
-  --color-rd-faint: #9aa09b;
-  --color-rd-line: #eceee9;
-  --color-rd-line-soft: #f1f2ee;
-  --color-rd-well: #fafbf9;
-  --color-rd-mint: #6fd9c5; /* accent/mint — 토글 on, 기록 점 */
-  --color-rd-mint-soft: #e7f7f2;
-  --color-rd-mint-line: #b9e9de;
-  --color-rd-forest: #0e5b41; /* 링크·보조 CTA */
-  --color-rd-coral: #ff9e8c;
-  --color-rd-lemon: #ffe066;
-  --color-rd-danger: #e5484d;
-  --color-rd-track: #e4e6e2; /* 토글 off */
+  --color-rd-ink: #1b1c1a;
+  --color-rd-body: #4a463f;
+  --color-rd-muted: #625e59; /* 크림 위 5.8:1 — 캡션 하한 */
+  --color-rd-faint: #8a857d; /* 장식·비필수 전용 (본문 캡션 금지) */
+  --color-rd-line: #e6ded8;
+  --color-rd-line-soft: #efebe4;
+  --color-rd-well: #efede8; /* 베이지 웰 */
+  --color-rd-mint: #8ba88e; /* 세이지 — 토글 on, "평소대로" 점 */
+  --color-rd-mint-soft: #e9eee4;
+  --color-rd-mint-line: #c6d3c1;
+  --color-rd-forest: #4a654e; /* 모카 그린 — 링크·CTA */
+  --color-rd-coral: #d9a87e; /* 탄 — "달라진 점" */
+  --color-rd-lemon: #e8c99b;
+  --color-rd-danger: #c0503a; /* 웜 레드 — 응급만 */
+  --color-rd-track: #ddd8d0; /* 토글 off */
 }
 
 /*
@@ -108,9 +113,10 @@
  * 기기가 달라져도 화면 하단 여백과 내비가 함께 움직인다.
  */
 @utility nav-overlay {
-  /* BottomNav 전용 — 자기 높이만큼 위로 겹쳐 콘텐츠 위에 뜬다 */
-  margin-top: calc(-64px - max(12px, env(safe-area-inset-bottom)));
-  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  /* BottomNav 전용 — 자기 높이만큼 위로 겹쳐 콘텐츠 위에 뜬다.
+     모카 리스킨: 흰 바 안쪽이 safe-area까지 흰색으로 이어져야 해서
+     패딩은 바(내부)가 갖고, 여기는 겹침 계산만 한다 */
+  margin-top: calc(-66px - max(10px, env(safe-area-inset-bottom)));
 }
 @utility pb-nav {
   /* 내비가 뜨는 화면의 <main> 하단 여백 — 내비가 덮는 높이 + 숨쉴 틈 24px */
@@ -165,12 +171,15 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
-/* 제목 서체 = Jua (단일 weight) */
+/*
+ * 제목 — 모카 리스킨부터 산세리프 볼드 (피그마 시안).
+ * Jua(--font-title)는 손글씨 감성이 필요한 곳(칠판 등)에서 개별 지정으로만 쓴다.
+ */
 .display {
-  font-family: var(--font-title);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
 @media (prefers-reduced-motion: reduce) {

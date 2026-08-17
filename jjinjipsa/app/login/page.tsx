@@ -36,13 +36,11 @@ export default function LoginPage() {
       <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
         <span aria-hidden className="text-6xl">🐈</span>
         <h1 className="display text-[32px] text-rd-ink">찐집사</h1>
-        <p className="display text-xl leading-snug text-rd-ink">
-          갑자기 시작된 인연도,
+        {/* 피그마 모카 시안 카피 — "기억하는 챗봇"보다 "함께 알아가는" 쪽으로 */}
+        <p className="text-[17px] leading-relaxed font-medium text-rd-body">
+          우리 아이의 건강정보, 평소
           <br />
-          오래도록 걱정 없이.
-        </p>
-        <p className="text-sm text-rd-body">
-          내 고양이를 기억하는 건강 챗봇
+          상태들을 함께 알아가요.
         </p>
       </div>
 
