@@ -13,6 +13,13 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [warnCats, setWarnCats] = useState<number | null>(null);
+  /*
+   * 히어로 이미지는 마운트 후에만 렌더한다 — 이 페이지는 정적 프리렌더라
+   * 하이드레이션 전에 이미지 로드 실패 이벤트가 지나가면 onError가 못 잡아서
+   * 깨진 이미지 아이콘이 남는다. 마운트 후 렌더면 핸들러가 처음부터 붙는다.
+   */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // 이미 '진짜(비익명)' 로그인돼 있으면 홈으로.
   // 익명 세션은 누구에게나 있으므로 그것만으론 튕기지 않는다 (그래야 카카오 버튼을 누를 수 있음).
@@ -32,19 +39,48 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex flex-1 flex-col justify-between px-6 py-12">
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
-        <span aria-hidden className="text-6xl">🐈</span>
-        <h1 className="display text-[32px] text-rd-ink">찐집사</h1>
-        {/* 피그마 모카 시안 카피 — "기억하는 챗봇"보다 "함께 알아가는" 쪽으로 */}
-        <p className="text-[17px] leading-relaxed font-medium text-rd-body">
-          우리 아이의 건강정보, 평소
-          <br />
-          상태들을 함께 알아가요.
-        </p>
+    <main className="flex flex-1 flex-col justify-between pb-12">
+      {/*
+       * 방 일러스트 히어로 (피그마 모카 시안) — 그림이 크림으로 녹고 그 위에 브랜드.
+       * 에셋(/scenes/moka-login.png)이 아직 없으면 이미지만 조용히 사라지고
+       * 크림 배경 위 텍스트 레이아웃은 그대로 동작한다.
+       */}
+      <div className="relative -mx-0">
+        <div className="relative h-[46vh] min-h-[300px] w-full overflow-hidden">
+          {mounted && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src="/scenes/moka-login.png"
+              alt=""
+              aria-hidden
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+              className="absolute inset-0 size-full object-cover"
+              style={{ objectPosition: "center 30%" }}
+            />
+          )}
+          <div
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 h-[45%]"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(245,243,239,0) 0%, rgba(245,243,239,.7) 60%, #f5f3ef 100%)",
+            }}
+          />
+        </div>
+        <div className="px-6 pt-2">
+          <h1 className="display text-[32px] text-rd-ink">찐집사</h1>
+          {/* 피그마 모카 시안 카피 — "기억하는 챗봇"보다 "함께 알아가는" 쪽으로 */}
+          <p className="mt-2 text-[17px] leading-relaxed font-medium text-rd-body">
+            우리 아이의 건강정보, 평소
+            <br />
+            상태들을 함께 알아가요.
+          </p>
+        </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 px-6">
         <button
           onClick={() => void onKakao()}
           className="flex h-13 w-full items-center justify-center gap-2 rounded-[14px] bg-[#FEE500] py-3.5 text-sm font-semibold text-rd-ink active:brightness-95"
