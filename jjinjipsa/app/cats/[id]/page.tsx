@@ -150,6 +150,13 @@ export default function CatDetailPage() {
 
   const rows = [
     {
+      // 평소 모습 (모카) — 이 아이의 베이스라인 서술은 이 화면이 소유한다
+      href: `/cats/${cat.id}/usual`,
+      title: `${cat.name}의 평소 모습`,
+      sub: "보통 어떤지, 요즘 달라진 건 없는지",
+      cta: "보러 가기",
+    },
+    {
       // 리디자인으로 홈의 4항목 입력이 빠져(T-51) "기록"이라 쓰면 거짓말이 된다
       href: "/",
       title: "오늘 상태",

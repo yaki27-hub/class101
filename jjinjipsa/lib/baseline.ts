@@ -71,6 +71,45 @@ function mode<T>(arr: T[]): T | null {
   return best;
 }
 
+/** 한 항목의 "요즘 평소" — 표본이 MIN 미만이어도 그대로 돌려준다 (판단은 호출부가) */
+export interface ItemBaseline {
+  /** unknown 제외, 오늘 제외한 표본 일수 */
+  sampleDays: number;
+  /** 최빈 수준 — 표본 0일이면 null */
+  usualLevel: DailyStatusLevel | null;
+  /** 최빈 수준에서 가장 자주 쓴 라벨 */
+  usualLabel: string | null;
+  /** 표본 중 최빈 수준이었던 날 수 */
+  usualDays: number;
+}
+
+/** 지난 LOOKBACK_DAYS일(오늘 제외)에서 항목 하나의 평소를 집계한다 */
+export function collectItemBaseline(
+  catId: string,
+  key: DailyStatusType,
+  now: Date = new Date(),
+): ItemBaseline {
+  const levels: DailyStatusLevel[] = [];
+  const labelsOfLevel = new Map<DailyStatusLevel, string[]>();
+  for (let ago = 1; ago <= LOOKBACK_DAYS; ago++) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - ago);
+    const rec = loadDailyOn(catId, d)[key];
+    if (!rec || rec.level === "unknown") continue;
+    levels.push(rec.level);
+    const list = labelsOfLevel.get(rec.level) ?? [];
+    list.push(rec.label);
+    labelsOfLevel.set(rec.level, list);
+  }
+  const usualLevel = mode(levels);
+  return {
+    sampleDays: levels.length,
+    usualLevel,
+    usualLabel: usualLevel ? mode(labelsOfLevel.get(usualLevel) ?? []) : null,
+    usualDays: usualLevel ? levels.filter((l) => l === usualLevel).length : 0,
+  };
+}
+
 /**
  * 오늘 기록을 이 아이의 "요즘 평소"와 비교한다.
  * today를 인자로 받는 이유: 홈은 이미 useTodayStatus로 오늘 기록을 들고 있고,
@@ -88,23 +127,10 @@ export function buildBaselineCompare(
     // 오늘 기록 전이거나 "확인하지 못했어요"면 비교할 오늘이 없다 — 항목 자체를 뺀다
     if (!t || t.level === "unknown") continue;
 
-    // 지난 LOOKBACK_DAYS일 표본 (오늘 제외, unknown 제외, 최근부터)
-    const levels: DailyStatusLevel[] = [];
-    const labelsOfLevel = new Map<DailyStatusLevel, string[]>();
-    for (let ago = 1; ago <= LOOKBACK_DAYS; ago++) {
-      const d = new Date(now);
-      d.setDate(d.getDate() - ago);
-      const rec = loadDailyOn(catId, d)[item.key];
-      if (!rec || rec.level === "unknown") continue;
-      levels.push(rec.level);
-      const list = labelsOfLevel.get(rec.level) ?? [];
-      list.push(rec.label);
-      labelsOfLevel.set(rec.level, list);
-    }
-
+    const base = collectItemBaseline(catId, item.key, now);
     const todayLine = `오늘: ${t.label}`;
 
-    if (levels.length < MIN_BASELINE_DAYS) {
+    if (base.sampleDays < MIN_BASELINE_DAYS) {
       items.push({
         key: item.key,
         icon: item.icon,
@@ -112,21 +138,18 @@ export function buildBaselineCompare(
         baselineLine: null,
         todayLine,
         status: "learning",
-        note: `아직 ${item.label}의 평소를 알아가는 중이에요 (기록 ${levels.length}일)`,
+        note: `아직 ${item.label}의 평소를 알아가는 중이에요 (기록 ${base.sampleDays}일)`,
       });
       continue;
     }
 
-    const usualLevel = mode(levels)!;
-    const usualLabel = mode(labelsOfLevel.get(usualLevel) ?? [])!;
-    const usualDays = levels.filter((l) => l === usualLevel).length;
-    const same = t.level === usualLevel;
+    const same = t.level === base.usualLevel;
 
     items.push({
       key: item.key,
       icon: item.icon,
       label: item.label,
-      baselineLine: `평소: ${usualLabel} (${usualDays}/${levels.length}일)`,
+      baselineLine: `평소: ${base.usualLabel} (${base.usualDays}/${base.sampleDays}일)`,
       todayLine,
       status: same ? "same" : "different",
       note: same ? "평소와 비슷해요" : "평소와 조금 달라요",
