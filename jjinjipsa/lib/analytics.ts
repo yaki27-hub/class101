@@ -31,6 +31,7 @@ const USE_SUPABASE = process.env.NEXT_PUBLIC_USE_SUPABASE === "1";
  *   daily_status_saved    → 오늘냥 기록률
  *   symptom_saved         → 이상 기록 사용량
  *   symptom_to_chat       → 증상 기록 → 냥박사 연결률
+ *   followup_answered     → 어제 이야기 후속 질문 응답 (answer: normal·still·new)
  *   chat_asked            → 냥박사 재사용률
  *   weekly_report_viewed  → 주간 리포트 조회율
  *   report_draft_*        → 생활기록부 초안이 실제로 쓰이는지
@@ -42,6 +43,7 @@ export const EVENT_NAMES = [
   "daily_status_saved",
   "symptom_saved",
   "symptom_to_chat",
+  "followup_answered",
   "chat_asked",
   "weekly_report_viewed",
   "report_draft_requested",
@@ -69,6 +71,7 @@ const PROP_KEYS = [
   "texts", // 초안 근거로 쓴 문장 수
   "empty", // 아직 안 채운 항목 수
   "kind", // 카드 종류 (report·milestone)
+  "answer", // 후속 질문 답 (normal·still·new)
 ] as const;
 
 const PROP_KEY_SET = new Set<string>(PROP_KEYS);

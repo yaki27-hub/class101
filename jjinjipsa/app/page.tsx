@@ -21,6 +21,7 @@ import DoctorTipCard from "@/components/home/DoctorTipCard";
 import AdCard from "@/components/home/AdCard";
 import EmptyCatCard from "@/components/home/EmptyCatCard";
 import QuickSymptomCard from "@/components/home/QuickSymptomCard";
+import FollowupCard from "@/components/home/FollowupCard";
 import BaselineCard from "@/components/home/BaselineCard";
 import BrushMilestoneCard from "@/components/home/BrushMilestoneCard";
 import WeeklyReportCard from "@/components/home/WeeklyReportCard";
@@ -44,6 +45,11 @@ import {
   type CalendarDay,
 } from "@/lib/homeMood";
 import { buildBaselineCompare } from "@/lib/baseline";
+import {
+  buildFollowup,
+  loadFollowupAnswer,
+  type FollowupPrompt,
+} from "@/lib/followup";
 
 /** 광고 자리 on/off — 시안 Tweaks의 showAd */
 const SHOW_AD = true;
@@ -73,6 +79,8 @@ function Home() {
   const [weekRecordedDays, setWeekRecordedDays] = useState(0);
   /** 양치 연속 일수 (P1-3) */
   const [streak, setStreak] = useState(0);
+  /** 어제 증상 기록 후속 질문 — 없거나 이미 답했으면 null */
+  const [followup, setFollowup] = useState<FollowupPrompt | null>(null);
 
   // 아이별 부가 데이터 — 루틴 토글, 체중 경고, 캘린더 기록일, 주간 기록일 수
   useEffect(() => {
@@ -96,6 +104,10 @@ function Home() {
     void storage
       .listSymptoms(cat.id)
       .then((logs) => {
+        // 어제 이야기했던 것 — 답한 기록에는 다시 묻지 않는다
+        setFollowup(
+          buildFollowup(cat.name, logs, loadFollowupAnswer(cat.id)?.logId ?? null),
+        );
         const logged = new Set(logs.map((l) => l.occurredAt.slice(0, 10)));
         // 오늘 상태 기록이 있는 날도 점을 찍는다 (지난 11일)
         for (let i = 0; i < 11; i++) {
@@ -154,6 +166,16 @@ function Home() {
 
         {/* 이상 기록 진입점 (P0-2) — 상태 기록 바로 아래, 핵심 루프의 분기점 */}
         <QuickSymptomCard catId={cat.id} />
+
+        {/* 어제 이야기했던 것 (모카) — 어제 증상 기록이 있고 아직 답 전일 때만 */}
+        {followup && (
+          <FollowupCard
+            catId={cat.id}
+            prompt={followup}
+            onAnswered={() => setFollowup(null)}
+            onOpenStatus={() => setStatusOpen(true)}
+          />
+        )}
 
         {/* 주간 리포트 (P1-2) — 기록이 쌓였을 때만. 빈 리포트를 열게 하지 않는다 */}
         {weekRecordedDays >= MIN_RECORD_DAYS && (

@@ -77,6 +77,7 @@ const USED_IN_APP = [
   "daily_status_saved",
   "symptom_saved",
   "symptom_to_chat",
+  "followup_answered",
   "chat_asked",
   "weekly_report_viewed",
   "report_draft_requested",
