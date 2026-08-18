@@ -19,7 +19,8 @@
     "test:weekly": "node scripts/test-weekly.mjs",
     "test:authwarn": "node scripts/test-auth-warning.mjs",
     "test:draft": "node scripts/test-report-draft.mjs",
-    "test:analytics": "node scripts/test-analytics.mjs"
+    "test:analytics": "node scripts/test-analytics.mjs",
+    "test:baseline": "node scripts/test-baseline.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.7",

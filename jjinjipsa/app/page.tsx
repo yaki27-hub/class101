@@ -21,6 +21,7 @@ import DoctorTipCard from "@/components/home/DoctorTipCard";
 import AdCard from "@/components/home/AdCard";
 import EmptyCatCard from "@/components/home/EmptyCatCard";
 import QuickSymptomCard from "@/components/home/QuickSymptomCard";
+import BaselineCard from "@/components/home/BaselineCard";
 import BrushMilestoneCard from "@/components/home/BrushMilestoneCard";
 import WeeklyReportCard from "@/components/home/WeeklyReportCard";
 import LoginBanner from "@/components/home/LoginBanner";
@@ -42,6 +43,7 @@ import {
   previewHome,
   type CalendarDay,
 } from "@/lib/homeMood";
+import { buildBaselineCompare } from "@/lib/baseline";
 
 /** 광고 자리 on/off — 시안 Tweaks의 showAd */
 const SHOW_AD = true;
@@ -147,6 +149,9 @@ function Home() {
 
       {/* 카드 스택 — 히어로를 덮으며 올라온다 */}
       <div className="relative z-[1] flex flex-col gap-3 rounded-t-3xl bg-rd-page px-4 pt-5.5 pb-nav">
+        {/* 오늘 vs 이 아이의 평소 (모카 문법, lib/baseline) — 오늘 기록한 항목만 */}
+        <BaselineCard compare={buildBaselineCompare(cat.id, record)} />
+
         {/* 이상 기록 진입점 (P0-2) — 상태 기록 바로 아래, 핵심 루프의 분기점 */}
         <QuickSymptomCard catId={cat.id} />
 
