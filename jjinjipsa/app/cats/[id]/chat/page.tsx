@@ -33,6 +33,7 @@ import { detectOtherCatMention } from "@/lib/chat/catMention";
 import { IconCamera, IconClose } from "@/components/icons";
 import BackButton from "@/components/BackButton";
 import AnswerBlocks from "@/components/chat/AnswerBlocks";
+import MemoryCard from "@/components/chat/MemoryCard";
 import { bumpChatUsage, loadChatUsage, syncChatUsage } from "@/lib/chatUsage";
 import { FREE_DAILY_QUESTIONS, GUEST_DAILY_QUESTIONS, getTier } from "@/lib/limits";
 import { supabase } from "@/lib/supabase";
@@ -79,6 +80,8 @@ function ChatPage() {
     sessionId: string;
   } | null>(null);
   const [logSaved, setLogSaved] = useState(false);
+  /** 방금 기억한 내용 — pendingLog는 저장 시 비워지므로 확인 카드용으로 따로 든다 */
+  const [lastSavedLog, setLastSavedLog] = useState<{ tags: string[]; summary: string } | null>(null);
   const [photo, setPhoto] = useState<string | null>(null); // 첨부 사진
   /** 다른 아이 지칭 감지 시 확인 카드 (지시서 P0-1). 질문을 들고 있다가 선택에 따라 보낸다 */
   const [mentionCheck, setMentionCheck] = useState<{
@@ -366,6 +369,9 @@ function ChatPage() {
       createdAt: new Date().toISOString(),
     };
     await storage.addSymptom(log);
+    // 대화에서 온 기록도 지표에 잡는다 (0008) — 태그 수만, 본문은 안 보낸다
+    track("symptom_saved", { tags: log.tags.length, memo: false, from: "chat" });
+    setLastSavedLog({ tags: pendingLog.tags, summary: pendingLog.summary });
     setPendingLog(null);
     setLogSaved(true);
   }
@@ -565,45 +571,34 @@ function ChatPage() {
           </div>
         )}
 
-        {/* 대화→증상 기록 원탭 제안 (T-10) */}
+        {/* 대화→증상 기록 제안 (T-10) — 모카 🔖 기억해둘게요 카드 (MemoryCard 주석 참고) */}
         {pendingLog && streaming === null && (
-          <div className="rounded-[20px] border border-rd-mint-line bg-rd-mint-soft p-4">
-            <p className="mb-2.5 text-[14px] font-extrabold tracking-[-0.02em] text-rd-ink">
-              📓 오늘 대화를 {cat.name}의 기록으로 남길까요?
-            </p>
-            <div className="mb-2.5 flex flex-wrap gap-1.5">
-              {pendingLog.tags.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full bg-white px-2.5 py-1 text-[12px] font-bold text-rd-ink"
-                >
-                  #{t}
-                </span>
-              ))}
-            </div>
-            <p className="mb-3.5 text-[12px] leading-[1.6] text-[#5D6862]">
-              기록이 쌓이면 &ldquo;평소랑 다른지&rdquo;를 알려드릴 수 있어요.
-            </p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => void saveSymptomLog()}
-                className="h-11.5 flex-1 rounded-[14px] bg-rd-ink text-[14px] font-extrabold text-white active:scale-[0.99]"
-              >
-                기록 남기기
-              </button>
-              <button
-                onClick={() => setPendingLog(null)}
-                className="h-11.5 rounded-[14px] border border-[#C7D6D0] px-4.5 text-[14px] font-semibold text-rd-body"
-              >
-                괜찮아요
-              </button>
-            </div>
-          </div>
+          <MemoryCard
+            tags={pendingLog.tags}
+            summary={pendingLog.summary}
+            saved={false}
+            onSave={() => void saveSymptomLog()}
+            onEdit={() => {
+              // 편집은 증상 기록 화면이 맡는다 — 태그·메모를 미리 채워 보낸다
+              const q = new URLSearchParams({
+                tags: pendingLog.tags.join(","),
+                memo: pendingLog.summary,
+              });
+              setPendingLog(null);
+              router.push(`/cats/${cat.id}/log?${q.toString()}`);
+            }}
+            onDismiss={() => setPendingLog(null)}
+          />
         )}
-        {logSaved && (
-          <p className="rounded-[14px] bg-rd-mint-soft p-3 text-center text-[13px] font-bold text-rd-ink">
-            🐾 기록했어요! 다음 답변부터 이 기록을 함께 볼게요.
-          </p>
+        {logSaved && lastSavedLog && (
+          <MemoryCard
+            tags={lastSavedLog.tags}
+            summary={lastSavedLog.summary}
+            saved
+            onSave={() => {}}
+            onEdit={() => {}}
+            onDismiss={() => {}}
+          />
         )}
         <div ref={bottomRef} />
       </div>

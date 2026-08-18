@@ -48,8 +48,17 @@ function ManualLog() {
     const valid = preset
       .split(",")
       .map((t) => t.trim())
-      .filter((t) => SYMPTOM_TAG_LIST.includes(t));
+      // 냥박사 기억 카드의 [수정]은 응급 태그(호흡 이상 등)도 넘긴다 — 둘 다 받는다
+      .filter((t) => SYMPTOM_TAG_LIST.includes(t) || EMERGENCY_TAG_LIST.includes(t));
     if (valid.length > 0) setTags((prev) => [...new Set([...prev, ...valid])]);
+  }, [searchParams]);
+
+  // 냥박사 기억 카드의 [수정]에서 넘어온 메모 프리필 — 비어 있을 때만 채운다
+  // (이미 쓰던 메모를 링크 재진입이 덮어쓰지 않게)
+  useEffect(() => {
+    const preset = searchParams.get("memo");
+    if (preset) setMemo((prev) => (prev ? prev : preset));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   function toggle(tag: string, emergency: boolean) {
