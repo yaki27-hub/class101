@@ -13,6 +13,12 @@
 
 import { IconBowl, IconLitter, IconWater } from "@/components/icons";
 import { SCENE_SIZE, type HomeView } from "@/lib/homeMood";
+import {
+  STATUS_ITEMS,
+  type DailyRecord,
+  type DailyStatusLevel,
+  type DailyStatusType,
+} from "@/lib/dailyStatus";
 
 const HERO_H = 720;
 const SCENE_H = 440;
@@ -43,15 +49,29 @@ function Chip({
 export default function MoodHero({
   view,
   days,
+  record,
+  onAnswer,
   onChipsClick,
 }: {
   view: HomeView;
   /** 함께 기록한 지 N일 — 피그마 시안의 히어로 한 줄 */
   days?: number;
+  /**
+   * 오늘 상태 기록 — 있으면 아직 안 답한 항목의 질문 + 답 칩을 시트 대신
+   * 히어로에 바로 띄운다 (모카 프로토타입 "오늘의 첫 질문").
+   * 미리보기(?mood=)처럼 진짜 기록이 아닐 땐 넘기지 않는다 → 요약 칩만 보인다.
+   */
+  record?: DailyRecord;
+  /** 답 칩 탭 — 홈의 setStatus + 지표 (시트의 onSet과 같은 저장 경로) */
+  onAnswer?: (type: DailyStatusType, level: DailyStatusLevel, label: string) => void;
   /** 칩을 누르면 오늘 상태 입력으로 — 표시 전용 칩이 막다른 길이 되지 않게 */
   onChipsClick?: () => void;
 }) {
   const { mood } = view;
+  // 아직 답하지 않은 항목 — "기록하지 않음"(unknown)도 답이다 (같은 질문으로 조르지 않는다)
+  const pending = record && onAnswer ? STATUS_ITEMS.filter((it) => !record[it.key]) : [];
+  const question = pending[0];
+  const answered = STATUS_ITEMS.length - pending.length;
   return (
     <>
       {/* sticky — 카드 스택이 히어로 위를 덮으며 올라온다. 히어로는 뒤에 남는다 */}
@@ -107,21 +127,52 @@ export default function MoodHero({
           {view.sub}
         </p>
 
-        <div
-          className="mt-4 grid grid-cols-3 gap-2.5"
-          onClick={onChipsClick}
-          role={onChipsClick ? "button" : undefined}
-        >
-          <Chip value={view.chipMeal} label="식사">
-            <IconBowl size={24} className="text-rd-forest" />
-          </Chip>
-          <Chip value={view.chipWater} label="음수">
-            <IconWater size={24} className="text-rd-forest" />
-          </Chip>
-          <Chip value={view.chipLitter} label="화장실">
-            <IconLitter size={24} className="text-rd-forest" dotFill="#fff" />
-          </Chip>
-        </div>
+        {question ? (
+          /* 오늘의 질문 — 시트를 열지 않고 히어로에서 바로 답한다 (모카). 한 번에
+             한 항목만 물어서 4×4 칩 바다가 되지 않게 하고, 답하면 다음 질문으로 */
+          <div className="mt-4 rounded-2xl border border-rd-line bg-white p-4">
+            <p className="text-[11.5px] font-extrabold text-rd-muted">
+              {answered === 0
+                ? "☀️ 오늘의 첫 질문"
+                : `오늘의 질문 ${answered + 1}/${STATUS_ITEMS.length}`}
+            </p>
+            <p className="mt-1 text-[15.5px] font-bold tracking-[-0.01em] text-rd-ink">
+              {question.icon} {question.sheetTitle}
+            </p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {question.options.map((o) => (
+                <button
+                  key={o.label}
+                  type="button"
+                  onClick={() => onAnswer?.(question.key, o.level, o.label)}
+                  className={`min-h-11 rounded-[12px] px-2 py-2 text-[13px] font-semibold leading-tight active:scale-[0.98] ${
+                    o.level === "unknown"
+                      ? "bg-rd-well text-rd-muted"
+                      : "bg-rd-well text-rd-ink"
+                  }`}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div
+            className="mt-4 grid grid-cols-3 gap-2.5"
+            onClick={onChipsClick}
+            role={onChipsClick ? "button" : undefined}
+          >
+            <Chip value={view.chipMeal} label="식사">
+              <IconBowl size={24} className="text-rd-forest" />
+            </Chip>
+            <Chip value={view.chipWater} label="음수">
+              <IconWater size={24} className="text-rd-forest" />
+            </Chip>
+            <Chip value={view.chipLitter} label="화장실">
+              <IconLitter size={24} className="text-rd-forest" dotFill="#fff" />
+            </Chip>
+          </div>
+        )}
       </div>
     </>
   );

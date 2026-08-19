@@ -144,6 +144,23 @@ function Home() {
     ? previewHome(getMood(previewId))
     : computeHome({ record, weightNeedsVisit });
 
+  /*
+   * 오늘 상태 저장 — 히어로 답 칩과 시트가 같은 경로를 쓴다.
+   * 오늘냥 기록률 지표 (0008): 항목을 누를 때마다 한 줄 남기고 집계는 (user, day)
+   * 기준 — items는 이 시점 채워진 항목 수라 하루 최댓값이 "4개를 다 채웠는가"가 된다.
+   * 무엇을 골랐는지는 보내지 않는다.
+   */
+  const saveStatus: Parameters<typeof TodayStatusSheet>[0]["onSet"] = (
+    type,
+    level,
+    label,
+  ) => {
+    setStatus(type, level, label);
+    track("daily_status_saved", {
+      items: Object.keys({ ...record, [type]: true }).length,
+    });
+  };
+
   return (
     <main className="relative flex-1 bg-rd-page">
       {/* 모카 상단바 — 아바타·이름(아이 전환) + 설정 기어 */}
@@ -156,6 +173,9 @@ function Home() {
             ? Math.floor((Date.now() - new Date(cat.createdAt).getTime()) / 86400000) + 1
             : undefined
         }
+        /* 미리보기(?mood=)는 시안 확인용이라 진짜 기록에 답 칩을 띄우지 않는다 */
+        record={previewId ? undefined : record}
+        onAnswer={saveStatus}
         onChipsClick={() => setStatusOpen(true)}
       />
 
@@ -219,17 +239,7 @@ function Home() {
       <TodayStatusSheet
         open={statusOpen}
         record={record}
-        onSet={(type, level, label) => {
-          setStatus(type, level, label);
-          /*
-           * 오늘냥 기록률 지표 (0008). 항목을 누를 때마다 한 줄 남기고
-           * 집계는 (user, day) 기준으로 센다 — items는 이 시점에 채워진 항목 수라
-           * 하루 최댓값이 "4개를 다 채웠는가"가 된다. 무엇을 골랐는지는 보내지 않는다.
-           */
-          track("daily_status_saved", {
-            items: Object.keys({ ...record, [type]: true }).length,
-          });
-        }}
+        onSet={saveStatus}
         onClose={() => setStatusOpen(false)}
       />
 
