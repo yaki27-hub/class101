@@ -32,6 +32,7 @@ import Mascot from "@/components/Mascot";
 import { detectOtherCatMention } from "@/lib/chat/catMention";
 import { IconCamera, IconClose } from "@/components/icons";
 import BackButton from "@/components/BackButton";
+import MicButton from "@/components/MicButton";
 import AnswerBlocks from "@/components/chat/AnswerBlocks";
 import MemoryCard from "@/components/chat/MemoryCard";
 import { bumpChatUsage, loadChatUsage, syncChatUsage } from "@/lib/chatUsage";
@@ -658,6 +659,15 @@ function ChatPage() {
           >
             <IconCamera size={21} dotFill="#F4F5F2" />
           </button>
+          {/* 음성 입력 (모카) — 인식 문장이 draft 뒤에 이어 붙는다. 미지원 브라우저면 숨김 */}
+          <MicButton
+            value={draft}
+            onChange={(next) => {
+              setDraft(next);
+              sourceRef.current = "input"; // 음성도 직접 입력이다
+            }}
+            onError={showToast}
+          />
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}

@@ -71,6 +71,16 @@ export function IconCamera({ size = 24, className, dotFill = "#fff" }: P) {
   );
 }
 
+/** 마이크 (음성 입력) */
+export function IconMic({ size = 24, className }: P) {
+  return (
+    <svg {...S(size)} className={className} aria-hidden>
+      <rect x="9" y="2.5" width="6" height="11" rx="3" />
+      <path d="M5.5 11.5a1 1 0 0 1 2 0 4.5 4.5 0 0 0 9 0 1 1 0 0 1 2 0 6.5 6.5 0 0 1-5.5 6.42v2.58h2.5a1 1 0 1 1 0 2h-7a1 1 0 1 1 0-2H11v-2.58a6.5 6.5 0 0 1-5.5-6.42Z" />
+    </svg>
+  );
+}
+
 /** 알림 벨 */
 export function IconBell({ size = 24, className }: P) {
   return (

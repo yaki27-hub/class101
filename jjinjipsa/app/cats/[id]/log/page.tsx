@@ -13,6 +13,7 @@ import { newId, storage, type Cat, type SymptomLog } from "@/lib/storage";
 import { EMERGENCY_TAG_LIST, SYMPTOM_TAG_LIST } from "@/lib/symptomTags";
 import { EMERGENCY_MAP_URL } from "@/lib/redFlags";
 import BackButton from "@/components/BackButton";
+import MicButton from "@/components/MicButton";
 import Mascot from "@/components/Mascot";
 import { track } from "@/lib/analytics";
 
@@ -219,16 +220,28 @@ function ManualLog() {
         </div>
       </section>
 
-      <label className="block space-y-1.5">
-        <span className="text-sm font-semibold text-rd-ink">메모 (선택)</span>
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between">
+          <label htmlFor="log-memo" className="text-sm font-semibold text-rd-ink">
+            메모 (선택)
+          </label>
+          {/* 음성 입력 (모카) — 손으로 적기 번거로운 상황(고양이 붙잡는 중)이 많다 */}
+          <MicButton
+            value={memo}
+            onChange={setMemo}
+            onError={setError}
+            className="-my-2 border border-rd-line bg-white text-rd-muted"
+          />
+        </div>
         <textarea
+          id="log-memo"
           value={memo}
           onChange={(e) => setMemo(e.target.value)}
           rows={3}
           placeholder="예: 아침 사료 먹고 30분 뒤에 토함. 노란 거품."
           className="w-full rounded-[14px] border border-rd-line bg-rd-page px-4 py-3 text-base text-rd-ink placeholder:text-rd-faint focus:border-rd-ink focus:outline-none"
         />
-      </label>
+      </div>
 
       {error && (
         <p className="rounded-md border border-[#F0D5D2] bg-rd-danger/5 px-4 py-3 text-sm text-[#C4453A]">
