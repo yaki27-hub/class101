@@ -45,6 +45,8 @@ export interface BaselineItemView {
   status: BaselineStatus;
   /** ⓘ 줄 — 상태별 한 문장 */
   note: string;
+  /** 표본 일수 — 카드가 learning 항목을 한 줄로 접을 때 "(기록 N일)"에 쓴다 */
+  sampleDays: number;
 }
 
 export interface BaselineCompare {
@@ -139,6 +141,7 @@ export function buildBaselineCompare(
         todayLine,
         status: "learning",
         note: `아직 ${item.label}의 평소를 알아가는 중이에요 (기록 ${base.sampleDays}일)`,
+        sampleDays: base.sampleDays,
       });
       continue;
     }
@@ -153,6 +156,7 @@ export function buildBaselineCompare(
       todayLine,
       status: same ? "same" : "different",
       note: same ? "평소와 비슷해요" : "평소와 조금 달라요",
+      sampleDays: base.sampleDays,
     });
   }
 
